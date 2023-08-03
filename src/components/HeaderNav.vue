@@ -5,19 +5,20 @@ import IconLink from './icons/IconLink.vue'
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import routes from '../router/routes'
-import { createRandomRoute } from "../utils/index";
+import { useAppStore } from "../stores/index";
 onMounted(() => {
 })
 const $router = useRouter()
 const $route = useRoute()
+const store = useAppStore()
+// 随即切换一个不一样的页面
 const changeOther = () => {
-    $router.push(createRandomRoute(routes).path)
+    $router.push(store.createRandomRoute(routes).path)
 }
 const toGithubLink = () => {
     window.open($route.meta.githubCode, '_blank')
 }
 const toArticleLink = () => {
-    console.log(routes);
     let link = $route.meta.articleLink
     if (!link) {
         alert('🐔作者还没写~')
