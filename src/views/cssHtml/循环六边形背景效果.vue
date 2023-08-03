@@ -10,7 +10,7 @@
 export default {};
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 :root {
   // 可配置参数
   --m: 1px; /* margin 六边形之间的间距 */

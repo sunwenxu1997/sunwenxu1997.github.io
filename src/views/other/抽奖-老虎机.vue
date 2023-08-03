@@ -1,5 +1,5 @@
 <template>
-    <div class="app-content-center">
+    <div class="overall">
         <div>
             <div class="cj-box">
                 <div class="cj-block" v-for="item in 3" :key="item">
@@ -90,9 +90,9 @@ export default {
             // 因为动画时间为 3s ，所以这里4s后获取结果，其实结果早就定下了，只是何时显示，告诉用户
             setTimeout(() => {
                 this.loading = false;
-                console.log(
-                    `恭喜你获得了${this.winner}-----------------------------------`
-                );
+                // console.log(
+                //     `恭喜你获得了${this.winner}-----------------------------------`
+                // );
             }, 4000);
         },
         //获取对应的class样式，并储存起来，方便后来的class移除

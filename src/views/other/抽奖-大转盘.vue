@@ -117,7 +117,7 @@ export default {
             // 因为动画时间为 3s ，所以这里3s后获取结果，其实结果早就定下了，只是何时显示，告诉用户
             setTimeout(() => {
                 this.loading = false
-                console.log(`恭喜你获得了${this.winner}`)
+                // console.log(`恭喜你获得了${this.winner}`)
             }, 3000)
         },
         //随机一个整数的方法

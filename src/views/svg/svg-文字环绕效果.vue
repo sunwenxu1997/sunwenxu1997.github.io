@@ -1,10 +1,3 @@
-<script setup>
-import { onMounted } from 'vue';
-
-onMounted(() => {
-    console.log(123);
-})
-</script>
 <template>
     <div class="app-content-center">
         <div class="container">

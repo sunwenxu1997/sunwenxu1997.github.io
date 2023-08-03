@@ -4,7 +4,7 @@ import HeaderNav from './components/HeaderNav.vue';
 </script>
 
 <template>
-    <!-- <HeaderNav /> -->
+    <HeaderNav />
     <RouterView />
 </template>
 

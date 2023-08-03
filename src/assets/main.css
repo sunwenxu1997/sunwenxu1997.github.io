@@ -1,9 +1,16 @@
 @import "./base.css";
 
+body{
+    background-color: #f8f8f8;
+}
 .app-content-center,
 .overall {
     width: 100vw;
     height: 100vh;
     display: grid;
     place-content: center;
+}
+.icon{
+    width: 1rem;
+    height: 1rem;
 }
