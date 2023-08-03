@@ -36,7 +36,7 @@ $gridColor: #5f5f5f;
   height: 100%;
   left: 0;
   top: 0;
-  //  animation: play 15s linear infinite ;
+   animation: play 15s linear infinite ;
 }
 .grid-xu::before {
   /* 从左往右 */
@@ -62,7 +62,7 @@ $gridColor: #5f5f5f;
     linear-gradient(to bottom, $gridColor 0.5px, transparent 0.5px);
   background-size: $gridSizeShi $gridSizeShi;
   background-repeat: repeat;
-  // animation: play 10s linear infinite ;
+  animation: play 10s linear infinite ;
 }
 @keyframes play {
   100% {

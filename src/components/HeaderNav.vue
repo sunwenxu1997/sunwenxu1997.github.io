@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import IconRefresh from './icons/IconRefresh.vue'
 import IconGithub from './icons/IconGithub.vue'
 import IconLink from './icons/IconLink.vue'
@@ -14,23 +14,28 @@ const changeOther = () => {
     $router.push(createRandomRoute(routes).path)
 }
 const toGithubLink = () => {
+    window.open($route.meta.githubCode, '_blank')
+}
+const toArticleLink = () => {
     console.log(routes);
-    
-    console.log($route);
-    window.open(`https://github.com/sunwenxu1997/sunwenxu1997.github.io/tree/main/src/views${decodeURI($route.path)}.vue`, '_blank')
+    let link = $route.meta.articleLink
+    if (!link) {
+        alert('🐔作者还没写~')
+        return
+    }
+    window.open(link, '_blank')
 }
 </script>
 <template>
     <div class="header-nav">
         <div class="nav">
-            <!-- <div class="item">🧻</div> -->
             <div class="item" @click="changeOther" title="换一个">
                 <IconRefresh />
             </div>
             <div class="item" @click="toGithubLink" title="Github地址">
                 <IconGithub />
             </div>
-            <div class="item" title="文章链接">
+            <div class="item" @click="toArticleLink" title="文章链接">
                 <IconLink />
             </div>
         </div>
@@ -42,13 +47,14 @@ const toGithubLink = () => {
     display: flex;
     justify-content: center;
     position: fixed;
-    top: 5vh;
+    top: 2vh;
     left: 0;
     z-index: 99;
     user-select: none;
 
     .nav {
         display: flex;
+        align-items: center;
         // grid-template-columns: repeat(auto, 1fr);
         // grid-gap: 2rem;
         background: transparent;
@@ -71,7 +77,9 @@ const toGithubLink = () => {
             opacity: 0.7;
             color: #3b3b3b;
             font-weight: 500;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.8rem;
+            display: flex;
+            align-items: center;
 
             &:hover {
                 opacity: 1;

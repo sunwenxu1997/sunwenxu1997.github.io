@@ -11,6 +11,7 @@ var
     text;
 
 var smokeParticles;
+var requestAnimationFrameFun;
 const smoke = {
     progress: 0,
     play(containerId) {
@@ -89,9 +90,12 @@ const smoke = {
         }
     },
     animate() {
-        requestAnimationFrame(smoke.animate);
+        requestAnimationFrameFun = requestAnimationFrame(smoke.animate);
         smoke.evolveSmoke();
         smoke.render();
+    },
+    clear() {
+        cancelAnimationFrame(requestAnimationFrameFun)
     },
     //演变的烟雾，烟雾动画执行旋转
     evolveSmoke() {
