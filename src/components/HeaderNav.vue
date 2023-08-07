@@ -2,6 +2,8 @@
 import IconRefresh from './icons/IconRefresh.vue'
 import IconGithub from './icons/IconGithub.vue'
 import IconLink from './icons/IconLink.vue'
+import 'element-plus/es/components/message/style/css'
+import { ElMessage } from 'element-plus'
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import routes from '../router/routes'
@@ -21,7 +23,12 @@ const toGithubLink = () => {
 const toArticleLink = () => {
     let link = $route.meta.articleLink
     if (!link) {
-        alert('🐔作者还没写~')
+        ElMessage({
+            message: '🐔作者还没写~',
+            center: true,
+            grouping: true,
+            type: 'warning',
+        })
         return
     }
     window.open(link, '_blank')
@@ -46,7 +53,7 @@ const toArticleLink = () => {
 .header-nav {
     width: 100vw;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     position: fixed;
     top: 2vh;
     left: 0;
@@ -63,6 +70,7 @@ const toArticleLink = () => {
         box-sizing: border-box;
         border-radius: 0.2rem;
         overflow: hidden;
+        margin: 0 2vw;
 
         &:hover {
             background: white;

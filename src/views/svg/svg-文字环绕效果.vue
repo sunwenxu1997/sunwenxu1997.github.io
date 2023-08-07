@@ -47,6 +47,11 @@
         </div>
     </div>
 </template>
+<script>
+export default {
+    articleLink: 'https://juejin.cn/post/7187585110403711033'
+}
+</script>
 
 <style lang="scss" scoped>
 .container {

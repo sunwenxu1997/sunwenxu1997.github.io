@@ -10,6 +10,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "element-plus": "^2.3.9",
     "gsap": "^3.12.2",
     "pinia": "^2.1.4",
     "three": "^0.148.0",
