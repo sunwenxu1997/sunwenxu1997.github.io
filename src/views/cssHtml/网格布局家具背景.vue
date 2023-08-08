@@ -45,13 +45,18 @@ export default {
 $gw: 50em;
 $gh: 44em;
 
+@media (max-width: 1024px) {
+    .app-content{
+        font-size: 7px !important;
+    }
+}
 .app-content {
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px; //em单位会根据当前父元素进行转换,设置px大小控制窗口背景大小
+    font-size: 14px; //em单位会根据当前父元素进行转换,设置px大小控制窗口背景大小
 }
 
 .grid-box {
@@ -61,8 +66,8 @@ $gh: 44em;
     display: grid;
     align-content: flex-start;
     grid-gap: 0.2em;
-    grid-template-columns: 10fr 11fr 15fr 13.4fr; //0.2em*3+10em+11em+15em+13.4em = 50rem
-    grid-template-rows: 6fr 15fr 15fr 7.4fr; //0.2em*3+6em+15em+15em+7.4em= 44rem
+    grid-template-columns: 10fr 11fr 15fr 13.4fr; //0.2em*3+10em+11em+15em+13.4em = 50em
+    grid-template-rows: 6fr 15fr 15fr 7.4fr; //0.2em*3+6em+15em+15em+7.4em= 44em
     // grid-template: repeat(5, 1fr)/repeat(5, 1fr);
     box-sizing: border-box;
 }
