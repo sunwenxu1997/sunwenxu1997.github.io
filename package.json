@@ -10,6 +10,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "element-plus": "^2.3.9",
     "gsap": "^3.12.2",
     "pinia": "^2.1.4",

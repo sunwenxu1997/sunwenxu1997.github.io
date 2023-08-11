@@ -51,12 +51,11 @@ const toArticleLink = () => {
 </template>
 <style lang="scss" scoped>
 .header-nav {
-    width: 100vw;
     display: flex;
     justify-content: flex-end;
     position: fixed;
     top: 2vh;
-    left: 0;
+    right: 0;
     z-index: 99;
     user-select: none;
 

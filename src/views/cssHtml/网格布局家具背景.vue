@@ -110,15 +110,15 @@ $gh: 44em;
 }
 
 .grid-box .item .title {
-    font-size: 1em;
+    font-size: 1rem;
     font-weight: bold;
 }
 
 .grid-box .item .shop {
-    font-size: 0.8em;
+    font-size: 0.8rem;
     font-weight: 100;
-    margin-top: 0.5em;
-    margin-bottom: -2.5em;
+    margin-top: 0.5rem;
+    margin-bottom: -2rem;
     transition: 0.3s;
     cursor: pointer;
     color: orange;
