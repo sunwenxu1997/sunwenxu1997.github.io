@@ -12,7 +12,6 @@ import uploadImageConfig from './config/uploadImage'
 import editorConfigOptions from './config/editor'
 import toolbarConfigOptions from './config/toolbar'
 import { previewMenu } from './custom/buttonMenus'
-Boot.registerMenu(previewMenu)
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
 const previewShow = ref(false)
@@ -41,6 +40,8 @@ onBeforeUnmount(() => {
 // 记录 editor 实例，重要！
 const handleCreated = (editor) => {
   editorRef.value = editor
+  // 初始化编辑器时注册自定义按钮
+  Boot.registerMenu(previewMenu)
   nextTick(() => {
     /**
      *  DomEditor.getToolbar(editor) 返回了 null #5394
