@@ -1,17 +1,30 @@
-<script>
-defineComponent({
-  name: 'WangEditor'
-})
-</script>
 <script setup>
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
-import { onBeforeUnmount, ref, shallowRef, onMounted, nextTick, defineComponent } from 'vue'
+import {
+  onBeforeUnmount,
+  ref,
+  shallowRef,
+  onMounted,
+  nextTick,
+  defineComponent,
+  defineProps,
+  defineEmits,
+  computed
+} from 'vue'
 import { DomEditor, Boot } from '@wangeditor/editor'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import uploadImageConfig from './config/uploadImage'
 import editorConfigOptions from './config/editor'
 import toolbarConfigOptions from './config/toolbar'
 import { previewMenu } from './custom/buttonMenus'
+defineComponent({
+  name: 'WangEditor'
+})
+const props = defineProps({
+  modelValue: String,
+  disable: Boolean
+})
+const $emit = defineEmits(['update:modelValue'])
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
 const previewShow = ref(false)
@@ -23,13 +36,16 @@ const editorConfig = editorConfigOptions
 editorConfig.MENU_CONF['uploadImage'] = uploadImageConfig
 
 // 内容 HTML
-const valueHtml = ref('')
-// 模拟 ajax 异步获取内容
-onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = '<p>我是一个好用的富文本编辑器~</p>'
-  }, 1500)
+const valueHtml = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    $emit('update:modelValue', value)
+  }
 })
+// 模拟 ajax 异步获取内容
+onMounted(() => {})
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
   const editor = editorRef.value
@@ -43,12 +59,13 @@ const handleCreated = (editor) => {
   // 初始化编辑器时注册自定义按钮
   Boot.registerMenu(previewMenu)
   nextTick(() => {
+    if (props.disable) handleDisable()
     /**
      *  DomEditor.getToolbar(editor) 返回了 null #5394
      * https://github.com/wangeditor-team/wangEditor/issues/5394
      */
-    const toolbar = DomEditor.getToolbar(editor)
-    console.log(toolbar.getConfig().toolbarKeys)
+    // const toolbar = DomEditor.getToolbar(editor)
+    // console.log(toolbar.getConfig().toolbarKeys)
   })
 }
 // 禁用编辑器的方法

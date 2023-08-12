@@ -55,7 +55,7 @@ const toArticleLink = () => {
     justify-content: flex-end;
     position: fixed;
     top: 2vh;
-    right: 0;
+    left: 1vw;
     z-index: 99;
     user-select: none;
 
@@ -69,7 +69,6 @@ const toArticleLink = () => {
         box-sizing: border-box;
         border-radius: 0.2rem;
         overflow: hidden;
-        margin: 0 2vw;
 
         &:hover {
             background: white;
