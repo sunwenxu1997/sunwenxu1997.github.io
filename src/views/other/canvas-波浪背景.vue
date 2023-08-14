@@ -1,6 +1,5 @@
 <template>
    <div id="wave" :style="`height:${waveAllHeight}px`">
-      <h1>波浪效果</h1>
       <div class="wave-box">
         <canvas id="wave1"></canvas>
         <canvas id="wave2"></canvas>

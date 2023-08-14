@@ -30,9 +30,6 @@ const smoke = {
             // 创建一个新的场景对象
             scene = new THREE.Scene();
             var loader = new THREE.TextureLoader();
-            // scene.background = new THREE.Color('0x4831ab');
-            var canvasBackground = loader.load('/images/bg-kv-gray.jpg');
-            // scene.background = canvasBackground
             // 创建透视摄像机
             // https://threejs.org/docs/index.html?q=PerspectiveCamera#api/zh/cameras/PerspectiveCamera
             // PerspectiveCamera( fov : Number, aspect : Number, near : Number, far : Number )
@@ -43,24 +40,6 @@ const smoke = {
             camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
             camera.position.z = 1000;
             scene.add(camera); //场景添加相机
-
-
-            // 一个用于生成平面几何体的类，生成一个300*300的平面
-            // https://threejs.org/docs/index.html?q=PlaneGeometry#api/zh/geometries/PlaneGeometry
-            var textGeo = new THREE.PlaneGeometry(300, 300);
-            // THREE.ImageUtils.crossOrigin = ''; //需要这拉在跨域图像从AWS
-            var textTexture = loader.load('/images/smoke.png');
-            // 网格材质 一种非光泽表面的材质，没有镜面高光
-            // https://threejs.org/docs/index.html?q=MeshLambertMaterial#api/zh/materials/MeshLambertMaterial
-            // , blending: THREE.AdditiveBlending  颜色混合模式
-            var textMaterial = new THREE.MeshLambertMaterial({ color: 0x47de2c, opacity: 1, map: textTexture, transparent: true })
-            // https://threejs.org/docs/index.html?q=Mesh#api/zh/objects/Mesh
-            text = new THREE.Mesh(textGeo, textMaterial);
-            text.position.z = 800;
-            var scale = window.innerWidth / window.innerHeight * 0.6
-            text.scale.set(scale, scale, scale)
-            // console.log(text)
-            scene.add(text);
 
             // 创建灯光 颜色，光照强度
             var light = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -118,7 +97,6 @@ const smoke = {
         // cubeSineDriver += .01;
         // mesh.position.z = 100 + (Math.sin(cubeSineDriver) * 500);
         camera.position.z = (1 - smoke.progress) * 1100 - 100
-        text.position.z = (1 - smoke.progress) * 800;
         renderer.render(scene, camera);
 
     }

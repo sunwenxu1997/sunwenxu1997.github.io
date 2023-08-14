@@ -64,8 +64,8 @@ const handleCreated = (editor) => {
      *  DomEditor.getToolbar(editor) 返回了 null #5394
      * https://github.com/wangeditor-team/wangEditor/issues/5394
      */
-    // const toolbar = DomEditor.getToolbar(editor)
-    // console.log(toolbar.getConfig().toolbarKeys)
+    const toolbar = DomEditor.getToolbar(editor)
+    console.log(toolbar.getConfig().toolbarKeys)
   })
 }
 // 禁用编辑器的方法

@@ -2,7 +2,7 @@
 /**
  * 知识点：
  * mix-blend-mode
- * https://blog.csdn.net/dwb123456123456/article/details/84560763
+ * https://blog.csdn.net/qq_51248309/article/details/129857020
  * 降暗混合模式  darken,multiply,color-burn  减色模式，滤掉图像中高亮色，从而达到图像变暗
  */
 </script>

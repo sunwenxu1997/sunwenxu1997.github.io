@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="main-tool-bar">headerNav</div>
+        <div class="main-tool-bar">头部导航栏</div>
         <div class="scrollable-area"></div>
     </div>
 </template>
