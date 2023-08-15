@@ -7,8 +7,6 @@ import {
   onMounted,
   nextTick,
   defineComponent,
-  defineProps,
-  defineEmits,
   computed
 } from 'vue'
 import { DomEditor, Boot } from '@wangeditor/editor'
