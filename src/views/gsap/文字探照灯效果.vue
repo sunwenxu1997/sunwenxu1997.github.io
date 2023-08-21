@@ -34,10 +34,11 @@ export default {
                 //圆灯相对于 容器的坐标位置
                 let x = e.pageX - box.left - dt[i].getBoundingClientRect().width / 2;
                 let y = e.pageY - box.top - dt[i].getBoundingClientRect().height / 2;
-                gsap.to(dt[i], i + 0.2, {
+                gsap.to(dt[i],{
                     x: x,
                     y: y,
-                    ease: 'back(0.1)'
+                    ease: 'back(0.1)',
+                    duration:i + 0.2
                 });
             }
         }
