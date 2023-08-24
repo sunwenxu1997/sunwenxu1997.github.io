@@ -1,6 +1,5 @@
 <script>
 export default {
-  name: '水滴按钮效果',
   articleLink: 'https://juejin.cn/post/7159379138648735780'
 }
 </script>
