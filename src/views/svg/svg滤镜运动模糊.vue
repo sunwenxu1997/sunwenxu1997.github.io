@@ -1,7 +1,6 @@
 <script setup>
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
-// import { Draggable } from 'gsap/Draggable.js'
 import { onMounted, onUnmounted } from 'vue'
 const list = 20
 //定义一个初始化的对象数据，每次滚动时都会由此对象执行动画操作
@@ -9,7 +8,6 @@ let proxy = { blur: 0 }
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
-  //   gsap.registerPlugin(Draggable)
 
   let sections = gsap.utils.toArray('.blur-img')
   // 不要让模糊超过50
@@ -32,14 +30,7 @@ onMounted(() => {
       }
     }
   })
-  //   Draggable.create('.container', {
-  //     type: 'x',
-  //     bounds: '.app-content',
-  //     inertia: true, //绿🧦会员福利才会有效果，相当于一个惯性效果
-  //     onDrag: function () {
-  //       setBlurGsap()
-  //     }
-  //   })
+
 })
 onUnmounted(() => {
   ScrollTrigger.killAll()
