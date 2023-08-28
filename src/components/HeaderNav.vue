@@ -2,16 +2,19 @@
 import IconRefresh from './icons/IconRefresh.vue'
 import IconGithub from './icons/IconGithub.vue'
 import IconLink from './icons/IconLink.vue'
+import IconSearch from './icons/IconSearch.vue'
 import 'element-plus/es/components/message/style/css'
 import { ElMessage } from 'element-plus'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import routes from '../router/routes'
 import { useAppStore } from '../stores/index'
+import SearchBar from './SearchBar.vue'
 onMounted(() => {})
 const $router = useRouter()
 const $route = useRoute()
 const store = useAppStore()
+const showSearchBar = ref(false)
 // 随即切换一个不一样的页面
 const changeOther = () => {
   $router.push(store.createRandomRoute(routes).path)
@@ -32,6 +35,9 @@ const toArticleLink = () => {
   }
   window.open(link, '_blank')
 }
+const toSearch = () => {
+  showSearchBar.value = true
+}
 </script>
 <template>
   <div class="header-nav">
@@ -45,8 +51,12 @@ const toArticleLink = () => {
       <div class="item" @click="toArticleLink" title="文章链接">
         <IconLink />
       </div>
+      <div class="item" @click="toSearch" title="搜一搜">
+        <IconSearch />
+      </div>
     </div>
   </div>
+  <SearchBar v-model:show="showSearchBar" />
 </template>
 <style lang="scss" scoped>
 .header-nav {

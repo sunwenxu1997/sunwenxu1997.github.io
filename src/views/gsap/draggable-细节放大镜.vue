@@ -70,14 +70,16 @@ function alignBig() {
   bigY(-markerDraggable.y / imageScale)
 }
 
+// 同步小窗口位置的方法
 function alignSmall() {
   markerX(-bigDraggable.x * imageScale)
   markerY(-bigDraggable.y * imageScale)
 }
 
 function setupSizing() {
-  // 图片转换比例
+  // 图片转换比例,方便同步大图拖拽和小图拖拽的位置
   imageScale = smallImage.offsetWidth / bigImage.offsetWidth
+  // 设置拖拽小窗口的大小，保证和背景大图的比例一致
   let screenToBigRatio = bigImageContainer.offsetWidth / bigImage.offsetWidth
   console.log(screenToBigRatio * smallImage.offsetWidth)
   gsap.set(marker, {
@@ -122,9 +124,6 @@ $h: 500px;
   .big-image {
     display: block;
     position: relative;
-    // 可以选择默认给一个宽，否则图片未加载完成无法获取到宽度，会造成 imageScale 获取不到值
-    // 这个宽尽量是需要放大图片的原始宽度
-    // width: 4000px;
   }
 }
 .mini-map {
