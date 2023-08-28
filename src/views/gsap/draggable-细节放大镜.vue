@@ -102,8 +102,8 @@ function setupSizing() {
   </div>
 </template>
 <style lang="scss" scoped>
-$w: 600px;
-$h: 600px;
+$w: 500px;
+$h: 500px;
 .container {
   display: grid;
   grid-gap: 40px;
