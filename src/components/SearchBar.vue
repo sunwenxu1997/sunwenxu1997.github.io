@@ -100,12 +100,11 @@ const close = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: white;
   display: grid;
   grid-template-rows: auto 50vh;
   place-content: center;
   transition: all 0.3s;
-  backdrop-filter: blur(10px);
   .input {
     position: relative;
     &::after {
