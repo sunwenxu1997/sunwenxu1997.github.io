@@ -3,7 +3,6 @@ import { gsap } from 'gsap'
 export default {
   data() {
     return {
-      name: '多模块视觉差效果',
       articleLink: '',
       layers: []
     }
