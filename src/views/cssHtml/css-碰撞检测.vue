@@ -19,25 +19,25 @@ const num = 10
     class="dot"
     v-for="item in num"
     :key="item"
-    :style="`animation-delay: ${0.02 * item}s; opacity: ${(num - item) * 0.05};`"
+    :style="`animation-delay: ${0.01 * item}s; opacity: ${(num - item) * 0.03};`"
   ></div>
   <div
     class="dot two"
     v-for="item in num"
     :key="item"
-    :style="`animation-delay: ${0.02 * item}s; opacity: ${(num - item) * 0.05};`"
+    :style="`animation-delay: ${0.01 * item}s; opacity: ${(num - item) * 0.03};`"
   ></div>
   <div
     class="dot three"
     v-for="item in num"
     :key="item"
-    :style="`animation-delay: ${0.02 * item}s; opacity: ${(num - item) * 0.05};`"
+    :style="`animation-delay: ${0.01 * item}s; opacity: ${(num - item) * 0.03};`"
   ></div>
   <div
     class="dot four"
     v-for="item in num"
     :key="item"
-    :style="`animation-delay: ${0.02 * item}s; opacity: ${(num - item) * 0.05};`"
+    :style="`animation-delay: ${0.01 * item}s; opacity: ${(num - item) * 0.03};`"
   ></div>
 </template>
 <style scoped lang="scss">
@@ -62,29 +62,23 @@ $dotSize: 80px;
 .dot.two {
   animation:
     horizontal 2s linear infinite alternate-reverse,
-    vertical 5s linear infinite alternate-reverse,
-    // 24 = 8 * 2
+    vertical 1s linear infinite alternate-reverse,
     colorX 16s infinite steps(8) alternate-reverse,
-    // 35 = 7 * 5
-    colorY 35s infinite steps(7) alternate-reverse;
+    colorY 7s infinite steps(7) alternate-reverse;
 }
 .dot.three {
   animation:
-    horizontal 2s linear infinite alternate-reverse,
-    vertical 5s linear infinite alternate,
-    // 24 = 8 * 2
-    colorX 16s infinite steps(8) alternate-reverse,
-    // 35 = 7 * 5
-    colorY 35s infinite steps(7) alternate;
+    horizontal 0.5s linear infinite alternate-reverse,
+    vertical 0.3s linear infinite alternate,
+    colorX 4s infinite steps(8) alternate-reverse,
+    colorY 3s infinite steps(10) alternate;
 }
 .dot.four {
   animation:
-    horizontal 2s linear infinite alternate,
-    vertical 5s linear infinite alternate-reverse,
-    // 24 = 8 * 2
-    colorX 16s infinite steps(8) alternate,
-    // 35 = 7 * 5
-    colorY 35s infinite steps(7) alternate-reverse;
+    horizontal 0.8s linear infinite alternate,
+    vertical 1s linear infinite alternate-reverse,
+    colorX 8s infinite steps(10) alternate,
+    colorY 7s infinite steps(7) alternate-reverse;
 }
 /* 水平移动 */
 @keyframes horizontal {
@@ -101,12 +95,12 @@ $dotSize: 80px;
 // 变换颜色
 @keyframes colorX {
   to {
-    filter: hue-rotate(360deg);
+    filter: hue-rotate(1800deg);
   }
 }
 @keyframes colorY {
   to {
-    filter: hue-rotate(360deg);
+    filter: hue-rotate(1800deg);
   }
 }
 </style>
