@@ -107,6 +107,7 @@ const close = () => {
   transition: all 0.3s;
   .input {
     position: relative;
+    width: 50vw;
     &::after {
       content: '';
       width: 100%;
@@ -116,6 +117,7 @@ const close = () => {
       left: 0;
       bottom: 0;
       transition: 0.3s;
+      border-radius: 5px;
     }
     input {
       width: 100%;
@@ -167,6 +169,7 @@ const close = () => {
       position: absolute;
       width: 100%;
       height: 4px;
+      border-radius: 5px;
       background: #333333;
       opacity: 0;
       transition: opacity 0s;

@@ -49,7 +49,6 @@ $--ls: clamp(-1.75px, -0.25vw, -3.5px);
     width: 100%;
     height: 100%;
     z-index: 2;
-    // https://blog.csdn.net/dwb123456123456/article/details/84560763
     // 降暗混合模式  darken,multiply,color-burn  减色模式，滤掉图像中高亮色，从而达到图像变暗
     // 加亮混合模式  screen,lighten,color-dodge  加色模式，滤掉图像中暗色，从而达到图像变亮
     mix-blend-mode: darken; // 混合模式 变暗
