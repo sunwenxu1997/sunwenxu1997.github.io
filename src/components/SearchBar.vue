@@ -30,6 +30,11 @@ const toPath = (row) => {
   $router.push(row.path)
   close()
 }
+// 点击回车按钮，如果有搜索结果，默认进入第一个搜索结果的路由
+const clickEnter = ()=>{
+if (!resultList.value.length) return
+ toPath(resultList.value[0])
+}
 const close = () => {
   keywords.value = ''
   $emit('update:show', false)
@@ -38,7 +43,7 @@ const close = () => {
 <template>
   <div class="search-bar" :class="show ? 'show' : 'hide'">
     <div class="input">
-      <input v-model="keywords" type="text" placeholder="搜索关键词" />
+      <input v-model="keywords" @keyup.enter="clickEnter" type="text" placeholder="搜索关键词" />
     </div>
     <div class="result">
       <div class="item" v-for="item in resultList" :key="item.index" @click="toPath(item)">

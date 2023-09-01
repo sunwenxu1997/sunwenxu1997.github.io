@@ -1,3 +1,8 @@
+<script>
+export default {
+  articleLink: 'https://juejin.cn/post/7273435543677714495'
+}
+</script>
 <script setup>
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
@@ -19,7 +24,7 @@ onMounted(() => {
       trigger: '.container', //容器
       pin: true, //钉住目标至窗口运动轨迹位置
       scrub: true, //将动画的进度直接链接到滚动条，这样它就像一个洗涤器
-    //   markers: true, //显示触发器的位置
+      //   markers: true, //显示触发器的位置
       // 垂直滚动是基于容器的宽度，这样感觉更自然.
       end: () => '+=5000',
       //   滚动条每次滚动时都会执行的操作
@@ -30,7 +35,6 @@ onMounted(() => {
       }
     }
   })
-
 })
 onUnmounted(() => {
   ScrollTrigger.killAll()
@@ -52,7 +56,7 @@ const setBlurGsap = () => {
   <div class="app-content">
     <div class="container" :style="`width: ${list * 100}vw`">
       <div class="blur-img" v-for="item in list" :key="item">
-        <div class="index">{{ item }}</div>
+        <!-- <div class="index">{{ item }}</div> -->
         <img
           width="600"
           height="400"
