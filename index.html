@@ -75,6 +75,7 @@
     window.NProgress = NProgress
     window.NProgress.configure({ showSpinner: false }) // NProgress Configuration
     window.NProgress.start()
+    window.NProgress.inc(0.8)
     const elValue = document.querySelector('#loading-progress .value')
     const elProgress = document.querySelector('#loading-progress .progress')
     window.NProgressTimer = setInterval(() => {
@@ -85,12 +86,14 @@
     }, 100);
     window.NProgress.close = () => {
         return new Promise(resolve => {
-            elValue.innerHTML = 100
-            elProgress.style.width = 100 + '%'
-            window.NProgress.done()
-            clearInterval(window.NProgressTimer)
             setTimeout(() => {
-                resolve()
+                elValue.innerHTML = 100
+                elProgress.style.width = 100 + '%'
+                window.NProgress.done()
+                clearInterval(window.NProgressTimer)
+                // 防止app挂载过快导致没有加载到100%的进度
+                setTimeout(() => { resolve() }, 300);
+                // 默认给一个0.5s的延迟，主要是为了实现效果
             }, 500);
         })
     }
