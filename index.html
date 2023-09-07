@@ -1,13 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>誰在花里胡哨</title>
-  </head>
-  <body>
-    <div id="app"></div>
+    <style>
+        #loading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f8f8f8;
+            z-index: 9999;
+            display: grid;
+            place-content: center;
+            color: #333333;
+        }
+
+        #loading-progress .loading {
+            width: 5rem;
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        #loading-progress .value {
+            margin-right: 0.2rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        #loading-progress .progress {
+            width: 0%;
+            height: 2px;
+            background-color: #333333;
+            margin-top: 0.33rem;
+            transition: 0.3s;
+        }
+
+        #loading-progress .progress::after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            position: absolute;
+            left: 0;
+            z-index: -1;
+            background-color: #dfdfdf;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="loading-progress">
+            <div class="loading">
+                <div><span class="value">0</span>%</div>
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
-  </body>
+</body>
+
+<script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+<script>
+    console.log(NProgress);
+    window.NProgress = NProgress
+    window.NProgress.configure({ showSpinner: false }) // NProgress Configuration
+    window.NProgress.start()
+    const elValue = document.querySelector('#loading-progress .value')
+    const elProgress = document.querySelector('#loading-progress .progress')
+    window.NProgressTimer = setInterval(() => {
+        let value = Math.floor(window.NProgress.status * 100)
+        elValue.innerHTML = value
+        elProgress.style.width = value + '%'
+        console.log(window.NProgress.status);
+    }, 100);
+    window.NProgress.close = () => {
+        return new Promise(resolve => {
+            elValue.innerHTML = 100
+            elProgress.style.width = 100 + '%'
+            window.NProgress.done()
+            clearInterval(window.NProgressTimer)
+            setTimeout(() => {
+                resolve()
+            }, 500);
+        })
+    }
+</script>
+
 </html>
