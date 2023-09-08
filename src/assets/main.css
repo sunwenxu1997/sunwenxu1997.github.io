@@ -12,7 +12,7 @@ body::-webkit-scrollbar {
 
 /*滚动条里面小方块*/
 body::-webkit-scrollbar-thumb {
-    background: #bb96f2;
+    background: #333333;
 }
 .app-content-center,
 .overall {

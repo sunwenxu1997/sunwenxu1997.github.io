@@ -71,7 +71,6 @@
 
 <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 <script>
-    console.log(NProgress);
     window.NProgress = NProgress
     window.NProgress.configure({ showSpinner: false }) // NProgress Configuration
     window.NProgress.start()
@@ -82,7 +81,6 @@
         let value = Math.floor(window.NProgress.status * 100)
         elValue.innerHTML = value
         elProgress.style.width = value + '%'
-        console.log(window.NProgress.status);
     }, 100);
     window.NProgress.close = () => {
         return new Promise(resolve => {
