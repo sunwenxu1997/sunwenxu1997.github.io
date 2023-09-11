@@ -112,11 +112,12 @@ const close = () => {
   transition: all 0.3s;
   .input {
     position: relative;
-    width: 50vw;
+    min-width: 300px;
+    width: 40vw;
     &::after {
       content: '';
       width: 100%;
-      height: 4px;
+      height: 2px;
       background: #333333;
       position: absolute;
       left: 0;
@@ -130,8 +131,9 @@ const close = () => {
       color: #333333;
       border: none;
       outline: none;
-      font-size: 3rem;
+      font-size: 2rem;
       padding: 1rem;
+      font-weight: 200;
       text-align: center;
       &::placeholder {
         color: #bdbdbd;
@@ -153,7 +155,7 @@ const close = () => {
       background: #bfbfbf;
     }
     .item {
-      font-size: 2rem;
+      font-size: 1.5rem;
       margin-bottom: 0.5rem;
       cursor: pointer;
       &:hover {
@@ -173,8 +175,8 @@ const close = () => {
       content: '';
       position: absolute;
       width: 100%;
-      height: 4px;
-      border-radius: 5px;
+      height: 2px;
+      border-radius: 2px;
       background: #333333;
       opacity: 0;
       transition: opacity 0s;
