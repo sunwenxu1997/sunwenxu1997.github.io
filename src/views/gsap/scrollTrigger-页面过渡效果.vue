@@ -15,15 +15,6 @@
             alt=""
           />
         </div>
-        <div class="title">
-          <h2>GSAP scrollTrigger</h2>
-          <p>
-            我是一段文字，我会根据页面滚动的具体位置进行显示，过渡动画是由 GSAP scrollTrigger 实现
-          </p>
-          <p>
-            我是一段文字，我会根据页面滚动的具体位置进行显示，过渡动画是由 GSAP scrollTrigger 实现
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -116,7 +107,7 @@ export default {
 <style lang="scss" scoped>
 .app-content {
   margin: 0 auto;
-  width: 50vw;
+  width: 45vmax;
   overflow: hidden;
   background-color: white;
 }
@@ -126,6 +117,7 @@ export default {
     margin: 0 40px;
     border-bottom: 1px solid #f8f8f8;
     display: flex;
+    justify-content: center;
   }
   .img {
     min-width: 200px;
@@ -143,14 +135,6 @@ export default {
     }
   }
 
-  .title {
-    padding: 40px;
-    font-size: 13px;
-    h2 {
-      font-size: 30px;
-      margin-bottom: 20px;
-    }
-  }
 }
 
 .box:nth-child(2n + 1) .item{

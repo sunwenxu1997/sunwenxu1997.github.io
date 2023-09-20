@@ -28,12 +28,12 @@ export default {
 }
 
 .glass {
-    width: 40vw;
-    height: 30vh;
-    font-size: 4em;
+    width: 40vmax;
+    height: 30vmin;
+    font-size: 4vmax;
     color: white;
     text-align: center;
-    line-height: 30vh;
+    line-height: 30vmin;
     letter-spacing: 0.75em;
     padding-left: 0.75em;
 

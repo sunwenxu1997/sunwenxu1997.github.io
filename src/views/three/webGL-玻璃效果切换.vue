@@ -60,8 +60,8 @@ onMounted(() => {
   justify-items: center;
 }
 .img-item {
-  width: 600px;
-  height: 400px;
+  width: 40vmax;
+  height: calc(40vmax * (4 / 6));
   overflow: hidden;
   position: relative;
 }

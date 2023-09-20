@@ -61,9 +61,10 @@ export default {
 h1 {
   position: relative;
   z-index: 2;
-  font-size: 5vw;
+  font-size: 8vmax;
   letter-spacing: 1rem;
   color: white;
+  text-transform: uppercase;
 }
 .img {
   display: block;

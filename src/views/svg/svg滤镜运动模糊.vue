@@ -89,10 +89,8 @@ const setBlurGsap = () => {
 }
 .container {
   height: 100vh;
-  display: grid;
+  display: flex;
   align-items: center;
-  grid-template-columns: repeat(auto-fill, 600px);
-  grid-gap: 100px;
   position: relative;
   box-sizing: border-box;
   overscroll-behavior: none;
@@ -104,6 +102,10 @@ const setBlurGsap = () => {
   position: relative;
   text-align: center;
   line-height: 400px;
+  margin-right: 4rem;
+}
+.blur-img:last-child{
+    margin-right: 0;
 }
 .index {
   width: 100%;

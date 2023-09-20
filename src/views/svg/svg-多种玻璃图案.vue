@@ -60,9 +60,9 @@
         </defs>
         <defs>
             <filter id="image14">
-                <feImage result="pict7" xlink:href="/images/displacement/14.jpg" x="0" y="0" width="500" height="500">
+                <feImage result="pict7" xlink:href="/images/displacement/14.jpg" x="0" y="0" width="150" height="150">
                 </feImage>
-                <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
+                <feDisplacementMap scale="20" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
                 </feDisplacementMap>
             </filter>
         </defs>
@@ -90,7 +90,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, 50vmax);
     justify-content: center;
-    margin: 0 auto;
     background-color: white;
 }
 
@@ -121,6 +120,7 @@
 }
 .item:nth-child(1) .glass {
     //   玻璃模糊度和蒙层效果
+    -webkit-backdrop-filter:blur(2px) url(#image1);
     backdrop-filter: blur(2px) url(#image1);
 }
 .item:nth-child(2) .glass {

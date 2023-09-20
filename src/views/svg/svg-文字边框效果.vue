@@ -1,6 +1,6 @@
 <script>
 export default {
-    articleLink:'https://juejin.cn/spost/7267092779280695337'
+  articleLink: 'https://juejin.cn/spost/7267092779280695337'
 }
 </script>
 <template>
@@ -30,8 +30,8 @@ export default {
   </div>
 </template>
 <style lang="scss" scoped>
-.svg-box{
-    width: 50vw;
+.svg-box {
+  width: 50vmax;
 }
 svg {
   cursor: pointer;
@@ -42,7 +42,7 @@ svg:hover .text {
 }
 
 .text {
-  font-size: 60px;
+  font-size: 6vmax;
   font-weight: bold;
   stroke-width: 2;
   fill: transparent;
@@ -82,7 +82,7 @@ svg:hover .text {
 }
 
 .text_use {
-  font-size: 60px;
+  font-size: 6vmax;
   font-weight: bold;
   stroke-width: 2;
   fill: transparent;

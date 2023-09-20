@@ -29,7 +29,7 @@ h1 {
     position: relative;
     font-family: "Montserrat", Arial, sans-serif;
     font-weight: 700;
-    font-size: 50px;
+    font-size: 10vmin;
     color: #fff;
     letter-spacing: 0.02em; //文字间距
     text-transform: uppercase; //转大写

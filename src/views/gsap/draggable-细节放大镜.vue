@@ -104,12 +104,11 @@ function setupSizing() {
   </div>
 </template>
 <style lang="scss" scoped>
-$w: 500px;
-$h: 500px;
+$w: 40vmax;
+$h: 40vmax;
 .container {
-  display: grid;
-  grid-gap: 40px;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   background-color: white;
   padding: 40px;
   img {

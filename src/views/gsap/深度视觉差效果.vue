@@ -85,8 +85,8 @@ export default {
 #scene {
   position: relative;
   overflow: hidden;
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
 }
 .layer {
   width: 100%;
@@ -104,5 +104,10 @@ export default {
   top: 0;
   transform: scale(1.1);
   filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
+}
+@media (max-width: 500px) {
+    .layer svg{
+        transform: scale(1.6);
+    }
 }
 </style>

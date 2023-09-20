@@ -106,7 +106,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     letter-spacing: 1rem;
-    font-size: 10rem;
+    font-size: 13vmax;
 
     .text {
         color: transparent;
@@ -125,6 +125,7 @@ export default {
         .text_light {
             position: absolute;
             top: 0;
+            pointer-events: none;
 
             .light {
                 white-space: nowrap;

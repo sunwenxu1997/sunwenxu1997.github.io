@@ -40,6 +40,7 @@ $--ls: clamp(-1.75px, -0.25vw, -3.5px);
     padding: 30px;
     color: white;
     background-color: $--bg;
+    text-align: center;
 }
 
 .aurora {

@@ -9,8 +9,8 @@
             <defs>
                 <clipPath id="svgTextPath">
                     <!-- textLength 文字的长度 此处对应容器的宽度  x y 为横纵坐标位置 -->
-                    <text x="0" y="180" textLength="850px">searchlight</text>
-                    <text x="200" y="300" textLength="300px">text</text>
+                    <text x="0" y="180" textLength="50vmax">searchlight</text>
+                    <text x="0" y="300" textLength="18vmax">text</text>
                 </clipPath>
             </defs>
         </svg>
@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .text-box {
-    width: 850px;
+    width: 50vmax;
     height: 400px;
     font-weight: bold;
     text-transform: uppercase;
@@ -61,6 +61,7 @@ export default {
 
     //移动圆灯的样式
     .dot {
+        pointer-events: none;
         display: inline-block;
         border-radius: 50%;
         position: absolute;
@@ -96,7 +97,7 @@ text {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     font-weight: 500;
-    font-size: 8rem;
+    font-size: 7vmax;
     text-transform: uppercase;
 }
 </style>

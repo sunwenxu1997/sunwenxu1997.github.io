@@ -64,7 +64,13 @@ export default {
         // filter: blur(10px); //模糊度
         position: relative;
         cursor: pointer;
-
+        text-align: center;
+     &::before{
+        content: 'click';
+        color: white;
+        line-height: 95px;
+        font-size: 20px;
+     }
         .dot {
             width: 70px;
             height: 70px;

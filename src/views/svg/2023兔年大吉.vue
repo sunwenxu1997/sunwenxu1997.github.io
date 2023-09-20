@@ -4,8 +4,8 @@
       <svg
         xmlns="http://www.w3.org/2000/svg"
         id="SVGRoot"
-        width="500px"
-        height="500px"
+        width="40vmax"
+        height="40vmax"
         version="1.1"
         viewBox="0 0 500 500"
       >
@@ -32,8 +32,8 @@
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="500"
-        height="500"
+        width="40vmax"
+        height="40vmax"
         viewBox="0 0 500 500"
         class="text-svg"
       >
@@ -66,7 +66,6 @@
         </text>
       </svg>
     </div>
-    <div class="title">2023 兔年大吉</div>
     <div class="grid-xu"></div>
   </div>
 </template>
@@ -118,13 +117,6 @@ path {
   100% {
     opacity: 0;
   }
-}
-.title {
-  font-size: 45px;
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 15px;
-  mix-blend-mode: difference;
 }
 
 $gridSizeXu: 20px;

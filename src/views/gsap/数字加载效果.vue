@@ -102,7 +102,7 @@ const floatThree = (value) => {
 <style scoped>
 .app-content-center {
   overflow: hidden;
-  font-size: 20vh;
+  font-size: 20vmin;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 800;
 }

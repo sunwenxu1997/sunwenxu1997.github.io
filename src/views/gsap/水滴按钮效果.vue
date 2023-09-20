@@ -81,6 +81,7 @@ const mouseListener = (e) => {
   left: 0;
   top: 0;
   opacity: 1;
+  pointer-events: none;
 }
 
 .text {
@@ -88,5 +89,6 @@ const mouseListener = (e) => {
   z-index: 5;
   color: white;
   font-weight: 100;
+  user-select: none;
 }
 </style>
