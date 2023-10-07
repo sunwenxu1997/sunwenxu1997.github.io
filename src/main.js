@@ -1,4 +1,5 @@
 import './assets/main.css'
+import "tailwindcss/tailwind.css" // 引入 tailwindcss 样式
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
