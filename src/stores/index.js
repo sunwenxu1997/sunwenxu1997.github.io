@@ -10,6 +10,8 @@ const useAppStore = defineStore('app', () => {
      * @returns 
      */
     function createRandomRoute(routes) {
+        // 过滤掉hidden为true的路由,因为这些路由不需要随机展示出来
+        routes.filter(item => !item.meta.hidden)
         // 如果都随机过了，那么就清空重新随机
         if (rdmRouteIndexArr.length == routes.length) {
             rdmRouteIndexArr.length = 0
