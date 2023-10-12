@@ -3,7 +3,7 @@ import defaultSettings from '../settings'
 const files = import.meta.globEager('../views/**/*.vue')
 const routes = []
 for (const key in files) {
-  const { articleLink, hidden } = files[key].default
+  const { articleLink, hidden, githubCode } = files[key].default
   const path = key.replace(/.vue*$/g, '').split('../views')[1]
   const name = key
     .replace(/.vue*$/g, '')
@@ -15,7 +15,7 @@ for (const key in files) {
     name: name, //对应vue文件内的name属性
     component: files[key].default, //采用静态路由，根据文件目录获取所有vue文件
     meta: {
-      githubCode: `${defaultSettings.githubLink}/tree/main/src/views${path}.vue`,
+      githubCode:githubCode || `${defaultSettings.githubLink}/tree/main/src/views${path}.vue`,
       articleLink: articleLink,
       hidden: hidden || false
     }
