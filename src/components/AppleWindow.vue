@@ -2,7 +2,7 @@
 // 仿苹果浏览器窗口
 import { ref, reactive, onMounted } from 'vue'
 let appleWindow, appleWindowContent
-const w = ref(600) //默认宽度
+const w = ref(1000) //默认宽度
 const h = ref(0)
 onMounted(() => {
   appleWindow = document.querySelector('#apple-window')
@@ -77,7 +77,7 @@ const draggable = (el) => {
         </div>
         <div
           id="apple-window-content"
-          style="height: 351px"
+          style="height: 551px"
           class="relative bg-white border-t border-slate-200 rounded-b-xl dark:bg-slate-800 dark:border-slate-900/50 h-full max-h-[80vh] overflow-y-auto"
         >
           <slot></slot>
