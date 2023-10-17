@@ -14,6 +14,11 @@ for (const key in files) {
     path: encodeURI(path), //处理中文路径乱码问题
     name: name, //对应vue文件内的name属性
     component: files[key].default, //采用静态路由，根据文件目录获取所有vue文件
+    /**
+     * githubCode github代码地址
+     * articleLink 掘金文章地址
+     * hidden 是否在随机时隐藏
+     */
     meta: {
       githubCode:githubCode || `${defaultSettings.githubLink}/tree/main/src/views${path}.vue`,
       articleLink: articleLink,

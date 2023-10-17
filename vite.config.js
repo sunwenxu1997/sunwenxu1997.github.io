@@ -23,7 +23,7 @@ export default defineConfig({
   },
   css: {
     postcss: {
-      plugins: [require('tailwindcss')]
+      plugins: [require('tailwindcss'),require('autoprefixer')]
     }
   }
 })
