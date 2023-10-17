@@ -1,3 +1,9 @@
+<script>
+export default {
+  articleLink:'https://juejin.cn/post/7290740395914362921'
+}
+</script>
+
 <script setup>
 /**
  * https://tailwindcss.com/docs/installation
