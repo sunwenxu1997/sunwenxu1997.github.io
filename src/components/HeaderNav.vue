@@ -86,7 +86,6 @@ const toSearch = () => {
       padding: 0.5rem 0.8rem;
       display: flex;
       align-items: center;
-      mix-blend-mode: difference;
       transition: 0.3s;
       &:hover {
         filter: invert(1);
