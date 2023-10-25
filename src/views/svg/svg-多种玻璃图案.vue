@@ -12,7 +12,7 @@
 <template>
     <div class="app-content">
         <div class="item" v-for="item in 8" :key="item">
-            <img :src="`https://picsum.photos/1920/1080?random=${item}`" alt="" />
+            <img :src="`https://picsum.photos/1920/1080`" alt="" />
             <div class="glass"></div>
         </div>
     </div>
@@ -35,15 +35,7 @@
             </filter>
         </defs>
         <defs>
-            <filter id="image4">
-                <feImage result="pict4" xlink:href="/images/displacement/4.jpg" x="0" y="0" width="257" height="257">
-                </feImage>
-                <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict4" in="SourceGraphic">
-                </feDisplacementMap>
-            </filter>
-        </defs>
-        <defs>
-            <filter id="image7">
+            <filter id="image3">
                 <feImage result="pict7" xlink:href="/images/displacement/7.jpg" x="0" y="0" width="523" height="330">
                 </feImage>
                 <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
@@ -51,23 +43,30 @@
             </filter>
         </defs>
         <defs>
-            <filter id="image10">
-                <feImage result="pict7" xlink:href="/images/displacement/10.jpg" x="0" y="0" width="517" height="517">
+            <filter id="image4">
+                <feImage result="pict4" xlink:href="/images/displacement/4.jpg" x="0" y="0" width="1000" height="1000"/>
+                <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict4" in="SourceGraphic">
+                </feDisplacementMap>
+            </filter>
+        </defs>
+        <defs>
+            <filter id="image5">
+                <feImage result="pict7" xlink:href="/images/displacement/10.jpg"  x="0" y="0" width="517" height="517">
                 </feImage>
                 <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
                 </feDisplacementMap>
             </filter>
         </defs>
         <defs>
-            <filter id="image14">
-                <feImage result="pict7" xlink:href="/images/displacement/14.jpg" x="0" y="0" width="150" height="150">
+            <filter id="image6">
+                <feImage result="pict7" xlink:href="/images/displacement/14.jpg" x="0" y="0" width="500" height="500">
                 </feImage>
                 <feDisplacementMap scale="20" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
                 </feDisplacementMap>
             </filter>
         </defs>
         <defs>
-            <filter id="image13">
+            <filter id="image7">
                 <feImage result="pict13" xlink:href="/images/displacement/13.jpg" x="0" y="0" width="603" height="582">
                 </feImage>
                 <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict13" in="SourceGraphic">
@@ -75,8 +74,8 @@
             </filter>
         </defs>
         <defs>
-            <filter id="image16">
-                <feImage result="pict7" xlink:href="/images/displacement/16.jpg" x="0" y="0" width="410" height="402">
+            <filter id="image8">
+                <feImage result="pict7" xlink:href="/images/displacement/16.jpg" x="0" y="0" width="510" height="502">
                 </feImage>
                 <feDisplacementMap scale="30" xChannelSelector="R" yChannelSelector="R" in2="pict7" in="SourceGraphic">
                 </feDisplacementMap>
@@ -95,6 +94,7 @@
 
 .item {
     position: relative;
+    clip-path: inset(3rem);
 }
 
 .item img {
@@ -129,7 +129,7 @@
 }
 .item:nth-child(3) .glass {
     //   玻璃模糊度和蒙层效果
-    backdrop-filter: blur(2px) url(#image13);
+    backdrop-filter: blur(2px) url(#image3);
 }
 .item:nth-child(4) .glass {
     //   玻璃模糊度和蒙层效果
@@ -137,15 +137,15 @@
 
 }
 .item:nth-child(5) .glass {
-    backdrop-filter: blur(2px) url(#image7);
+    backdrop-filter: blur(2px) url(#image5);
 }
 .item:nth-child(6) .glass {
-    backdrop-filter: blur(2px) url(#image10);
+    backdrop-filter: blur(2px) url(#image6);
 }
 .item:nth-child(7) .glass {
-    backdrop-filter: blur(2px) url(#image14);
+    backdrop-filter: blur(2px) url(#image7);
 }
 .item:nth-child(8) .glass {
-    backdrop-filter: blur(2px) url(#image16);
+    backdrop-filter: blur(2px) url(#image8);
 }
 </style>

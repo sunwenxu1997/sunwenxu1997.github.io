@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // 禁用预加载，修复tailwind样式 与 naive-ui button等样式等冲突问题
-  //   corePlugins: {
-  //     preflight: false
-  //   },
+//   禁用预加载，修复tailwind样式 与 naive-ui button等样式等冲突问题
+    corePlugins: {
+      preflight: false
+    },
   //   content: ['./index.html', './src/**/*.{html,js,vue}'],
 
   // 暂时只针对部分用到的组件进行预加载，预防影响其它已经确定的组件样式

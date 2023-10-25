@@ -14,19 +14,43 @@ export default {
     <h1>Hello World</h1>
     <h1>Hello World</h1>
     <h1>Hello World</h1>
+    <svg width="100%" height="100%">
+      <mask id="mask">
+        <filter
+          id="filter"
+          filterUnits="objectBoundingBox"
+          x="0%"
+          y="0%"
+          width="100%"
+          height="100%"
+        >
+          <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="5"></feTurbulence>
+          <feDisplacementMap
+            id="feDisplacementMap"
+            in="SourceGraphic"
+            scale="100"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          >
+            <animate attributeName="scale" dur="5s" values="100;10000;100;" repeatCount="indefinite" />
+          </feDisplacementMap>
+        </filter>
+        <rect width="1000" height="1000" fill="white" filter="url(#filter)"></rect>
+      </mask>
+      <text class="mask-text" mask="url(#mask)" x="50" y="125">Hello World</text>
+    </svg>
   </div>
 </template>
 <style scoped>
-.app-content-center {
-}
 .text-box {
   display: grid;
   grid-template-columns: repeat(auto-fill, 25rem);
   justify-content: center;
 }
 
-h1 {
+h1,.mask-text {
   font-size: 3rem;
+  font-weight: bold;
   white-space: nowrap;
   text-align: center;
   padding: 5rem 0;
@@ -90,16 +114,30 @@ h1:nth-child(8) {
   mask-size: 2px 2px;
 }
 h1:nth-child(9) {
-    background: repeating-radial-gradient(circle, red 0, red 10px, yellow 10px, yellow 20px, blue 20px, blue 30px) ;
-    color: transparent;
-    background-position: center;
-    background-size: 10%;
-    background-clip: text;
-    animation: num9 5s infinite linear alternate;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  color: transparent;
+  background-position: center;
+  background-size: 400% 400%;
+  background-clip: text;
+  animation: gradientBG 15s ease infinite;
 }
-@keyframes num9{
-    to{
-        background-position: 300%;
-    }
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+h1:nth-child(10) {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  color: transparent;
+  background-position: center;
+  background-size: 400% 400%;
+  background-clip: text;
+  animation: gradientBG 15s ease infinite;
 }
 </style>
