@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from 'vue'
-import routes from '../router/routes'
+import routes from '../router/works'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../stores/index'
 const store = useAppStore()

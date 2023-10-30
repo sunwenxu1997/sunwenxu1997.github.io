@@ -7,95 +7,55 @@ import 'element-plus/es/components/message/style/css'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import routes from '../router/routes'
+import routes from '../router/works'
 import { useAppStore } from '../stores/index'
-import SearchBar from './SearchBar.vue'
+const navs = [
+  {
+    name: '作品',
+    path: '/works'
+  },
+  {
+    name: '关于',
+    path: '/about'
+  }
+]
 onMounted(() => {})
 const $router = useRouter()
 const $route = useRoute()
 const store = useAppStore()
-const showSearchBar = ref(false)
-// 随即切换一个不一样的页面
-const changeOther = () => {
-  $router.push(store.createRandomRoute(routes).path)
-}
-const toGithubLink = () => {
-  window.open($route.meta.githubCode, '_blank')
-}
-const toArticleLink = () => {
-  let link = $route.meta.articleLink
-  if (!link) {
-    ElMessage({
-      message: '🐔作者还没写~',
-      center: true,
-      grouping: true,
-      type: 'warning'
-    })
-    return
-  }
-  window.open(link, '_blank')
-}
-const toSearch = () => {
-  showSearchBar.value = true
+const toPath = (path)=>{
+    $router.push(path)
 }
 </script>
 <template>
-  <div class="header-nav">
-    <div class="nav">
-      <div class="item" @click="changeOther" title="换一个">
-        <IconRefresh />
-      </div>
-      <div class="item" @click="toGithubLink" title="Github地址">
-        <IconGithub />
-      </div>
-      <div class="item" @click="toArticleLink" title="文章链接">
-        <IconLink />
-      </div>
-      <div class="item" @click="toSearch" title="搜一搜">
-        <IconSearch />
+  <div
+    class="fixed z-20 w-screen p-5 box-border text-base flex justify-between items-center px-12 sm:px-24 py-10"
+  >
+    <div
+      class="text-lg font-bold cursor-pointer sm:text-black"
+      :class="$route.path == '/' ? 'text-white' : 'text-black'"
+      style="font-family: 'Rajdhani', sans-serif"
+      @click="toPath('/')"
+    >
+      WHO.
+    </div>
+    <div
+      class="relative cursor-pointer w-7 h-3 before:content-[''] before:absolute before:top-0 before:w-full before:h-[2px]  after:content-[''] after:absolute after:bottom-0 after:w-full after:h-[2px]  sm:after:bg-black sm:before:bg-black sm:hidden"
+      :class="$route.path == '/' ? 'before:bg-white after:bg-white' : 'before:bg-black after:bg-black'"
+    ></div>
+    <div class="w-full px-10  justify-center hidden sm:flex">
+      <div
+        class=" uppercase p-5 text-xs font-bold text-stone-800 cursor-pointer hover:underline "
+        :class="{'underline': $route.path === item.path}"
+        v-for="(item, index) in navs"
+        :key="index"
+        @click="toPath(item.path)"
+      >
+        {{ item.name }}
       </div>
     </div>
   </div>
-  <SearchBar v-model:show="showSearchBar" />
 </template>
 <style lang="scss" scoped>
-.header-nav {
-  display: flex;
-  justify-content: flex-end;
-  position: fixed;
-  top: 2vh;
-  right: 1vw;
-  z-index: 99;
-  user-select: none;
-  .nav {
-    display: flex;
-    align-items: center;
-    background: transparent;
-    transition: 0.3s;
-    box-sizing: border-box;
-    border-radius: 0.2rem;
-    overflow: hidden;
-    .item {
-      flex-grow: 1;
-      // font-size: 0.8rem;
-      padding: 0.2rem;
-      box-sizing: border-box;
-      cursor: pointer;
-      color: black;
-      font-weight: 500;
-      padding: 0.5rem 0.8rem;
-      display: flex;
-      align-items: center;
-      transition: 0.3s;
-      &:hover {
-        filter: invert(1);
-      }
-
-      &:active {
-        opacity: 1;
-        transform: scale(0.9);
-      }
-    }
-  }
-}
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 </style>

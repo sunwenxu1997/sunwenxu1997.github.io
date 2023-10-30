@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-import imgSrc from '../../assets/icons/github.svg'
+import imgSrc from '@/assets/icons/github.svg'
 onMounted(() => {
   init()
 })
