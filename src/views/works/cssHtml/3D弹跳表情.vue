@@ -1,3 +1,9 @@
+<script>
+export default {
+  cover: 'https://i.imgur.com/YT9QOIY.gif',
+  articleLink: 'https://juejin.cn/post/7262007830721413180'
+}
+</script>
 <script setup>
 /**
  * 知识点：
@@ -6,8 +12,7 @@
  */
 import { defineComponent, onMounted, onUnmounted } from 'vue'
 defineComponent({
-  name: '3D弹跳表情',
-  articleLink: 'https://juejin.cn/post/7262007830721413180'
+  name: '3D弹跳表情'
 })
 let aniFun
 onMounted(() => {

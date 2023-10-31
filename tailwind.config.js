@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  // important 选项可让你控制 Tailwind 的工具是否应标记为 !important。
+  //这在将 Tailwind 与具有高特异性选择器的现有 CSS 结合使用时非常有用。
+  important: '#app',
   //   禁用预加载，修复tailwind样式 与 naive-ui button等样式等冲突问题
   corePlugins: {
     preflight: false
