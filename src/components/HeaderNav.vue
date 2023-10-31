@@ -41,7 +41,7 @@ const toTop = ()=>{
     class="absolute z-20 w-full left-0 top-0 p-5 box-border text-base flex justify-between items-center px-12 sm:px-24 py-10"
   >
     <div
-      class="fixed text-lg flex items-center font-bold"
+      class="sm:fixed text-lg flex items-center font-bold"
       style="font-family: 'Rajdhani', sans-serif"
     >
       <span
@@ -58,6 +58,7 @@ const toTop = ()=>{
       >
     </div>
     <div
+      @click="toPath('/works')"
       class="relative cursor-pointer w-7 h-3 before:content-[''] before:absolute before:top-0 before:w-full before:h-[2px] after:content-[''] after:absolute after:bottom-0 after:w-full after:h-[2px] sm:after:bg-black sm:before:bg-black sm:hidden"
       :class="isHome ? 'before:bg-white after:bg-white' : 'before:bg-black after:bg-black'"
     ></div>
