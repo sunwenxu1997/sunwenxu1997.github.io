@@ -26,7 +26,7 @@ const mouseListener = function (event) {
     >
       <div
         ref="layer"
-        class="absolute left-0 w-full h-full bg-[url('https://picsum.photos/id/18/2500/1667')] bg-cover bg-center scale-125"
+        class="absolute left-0 w-full h-full bg-[url('@/assets/images/home.jpg')] bg-cover bg-center scale-125"
       ></div>
 
       <div

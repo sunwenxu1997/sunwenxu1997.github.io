@@ -11,7 +11,7 @@ for (const path in routeFiles) {
     const element = {
       path: encodeURI(routerPath), //处理中文路径乱码问题
       name: routerName,
-      component: routeFiles[path],
+      component: routeConfig,
       /**
        * githubCode github代码地址
        * articleLink 掘金文章地址
