@@ -1,11 +1,10 @@
 import defaultSet from '../settings'
 // 异步获取检索文件目录 import.meta.glob ，构建时同步获取用 import.meta.globEager
-const routeFiles = import.meta.glob('../views/works/**/*.vue')
+const routeFiles = import.meta.globEager('../views/works/**/*.vue')
 const routes = []
 for (const path in routeFiles) {
   if (Object.hasOwnProperty.call(routeFiles, path)) {
-    const routeModule = await routeFiles[path]()
-    const routeConfig = routeModule.default
+    const routeConfig = routeFiles[path].default
     const routerPath = path.replace(/.vue*$/g, '').split('../views/works')[1]
     const routerName = routerPath.split('/').reverse()[0]
     const { articleLink, hidden, githubCode, cover } = routeConfig
