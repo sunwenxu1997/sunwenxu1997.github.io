@@ -10,7 +10,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+    cover:'https://i.imgur.com/0cuBj4n.png'
+}
 </script>
 
 <style lang="scss" scoped>

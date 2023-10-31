@@ -9,7 +9,8 @@
     filter: blur(20px);
  */
 export default {
-    articleLink: 'https://juejin.cn/post/6979391400844460068?searchId=20230807153325C066903F9072D51F4CEE'
+    articleLink: 'https://juejin.cn/post/6979391400844460068?searchId=20230807153325C066903F9072D51F4CEE',
+    cover:'https://i.imgur.com/TA9ABuL.png'
 }
 </script>
 <template>

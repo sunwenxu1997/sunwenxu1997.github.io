@@ -12,6 +12,9 @@
  * clip-path 路径剪切
  * content: attr(data-text); 文本属性引用
  */
+export default {
+    cover:'https://i.imgur.com/pdhxnTf.png'
+}
 </script>
 
 <style lang="scss" scoped>

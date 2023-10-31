@@ -1,3 +1,8 @@
+<script>
+export default {
+   cover:'https://i.imgur.com/xFdqroU.png'
+}
+</script>
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 onMounted(() => {})

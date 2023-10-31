@@ -1,5 +1,6 @@
 <script>
 export default {
+  cover:'https://i.imgur.com/khNbBA1.png',
   articleLink: 'https://www.wangeditor.com/v5/for-frame.html#vue3'
 }
 </script>

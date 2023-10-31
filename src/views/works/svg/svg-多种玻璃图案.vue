@@ -1,3 +1,8 @@
+<script>
+export default {
+    cover:'https://i.imgur.com/TqArckD.png'
+}
+</script>
 <script setup>
 /**
  * https://www.zhangxinxu.com/wordpress/2020/10/svg-feturbulence/

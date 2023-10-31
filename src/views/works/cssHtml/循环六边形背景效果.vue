@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: '循环六边形背景效果',
+    cover:'https://i.imgur.com/EYaNk85.png',
     articleLink: 'https://juejin.cn/post/7186572424807186490'
 };
 </script>

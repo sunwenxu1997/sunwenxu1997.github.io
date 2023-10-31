@@ -10,6 +10,9 @@
  * filter: blur(var(--roundiness)) contrast(40);
  * 不方便之处在于,需要建立2个一摸一样的标签,其中一个用于实现阴影效果,一个用于展示实际的文字
  */
+export default {
+    cover:'https://i.imgur.com/m72fcoT.png'
+}
 </script>
 <template>
   <div class="app-content-center">

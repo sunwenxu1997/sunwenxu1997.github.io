@@ -8,7 +8,7 @@ import IconImage from '@/components/icons/IconImage.vue'
 import 'element-plus/es/components/image/style/css'
 import { ElImage } from 'element-plus'
 const workRoutes = computed(() => {
-    return works.filter((item) => !item.hidden)
+    return works.filter((item) => !item.meta.hidden)
 })
 onMounted(() => { })
 </script>
@@ -41,7 +41,7 @@ onMounted(() => { })
                 <div class="w-full h-full flex justify-center items-center absolute top-0 left-0">
                     <IconImage />
                 </div>
-                <el-image class=" object-cover" :src="item.meta.cover || `https://picsum.photos/2500/1667?random=${index}`" lazy>
+                <el-image :src="item.meta.cover || `https://picsum.photos/1920/1080?random=${index}`" lazy>
                 </el-image>
             </div>
             <div class="px-8 sm:px-0">
