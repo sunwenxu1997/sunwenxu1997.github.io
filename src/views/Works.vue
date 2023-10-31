@@ -4,6 +4,9 @@ import works from '@/router/works.js'
 import IconGithub from '@/components/icons/IconGithub.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
+import IconImage from '@/components/icons/IconImage.vue'
+import 'element-plus/es/components/image/style/css'
+import { ElImage } from 'element-plus'
 const workRoutes = computed(() => {
   return works.filter((item) => !item.hidden)
 })
@@ -36,12 +39,12 @@ onMounted(() => {})
       </p>
     </div>
     <div class="px-4 py-12 sm:px-60" v-for="(item, index) in workRoutes" :key="index">
-      <div class="w-full aspect-video">
-        <img
-          class="w-full h-full object-cover"
-          :src="item.meta.cover || `https://picsum.photos/2500/1667?random=${index}`"
-          alt=""
-        />
+      <div class="w-full h-full aspect-video relative">
+        <div class="w-full h-full flex justify-center items-center absolute top-0 left-0">
+          <IconImage />
+        </div>
+        <el-image :src="item.meta.cover || `https://picsum.photos/2500/1667?random=${index}`" lazy>
+        </el-image>
       </div>
       <div class="px-8 sm:px-0">
         <div class="py-6 flex justify-between">

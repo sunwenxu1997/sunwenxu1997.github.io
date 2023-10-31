@@ -4,3 +4,6 @@ body {
     margin: 0;
     padding: 0;
 }
+.el-image{
+    display: block !important;
+}
