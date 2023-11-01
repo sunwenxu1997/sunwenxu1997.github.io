@@ -15,6 +15,7 @@ export default {
     './src/views/Works.vue',
     './src/views/About.vue',
     './src/components/AppleWindow.vue',
+    './src/components/SearchButton.vue',
     './src/components/HeaderNav.vue',
     './src/views/works/cssHtml/tailwindcss使用.vue',
     './src/views/works/cssHtml/tailwindcss使用1.vue'
