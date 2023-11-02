@@ -5,8 +5,6 @@ import IconGithub from '@/components/icons/IconGithub.vue'
 import IconLink from '@/components/icons/IconLink.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
 import IconImage from '@/components/icons/IconImage.vue'
-import 'element-plus/es/components/image/style/css'
-import { ElImage } from 'element-plus'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
@@ -83,8 +81,8 @@ const onMouseleaveElement = () => {
                 <div class="w-full h-full flex justify-center items-center absolute top-0 left-0 animate-pulse">
                     <IconImage />
                 </div>
-                <el-image class="h-full" :src="item.meta.cover || `https://picsum.photos/1920/1080?random=${index}`" lazy>
-                </el-image>
+                <img class="w-full h-full block object-cover relative z-10"
+                    :src="item.meta.cover || `https://picsum.photos/1920/1080?random=${index}`" loading="lazy" alt="">
             </div>
             <div class="px-8 sm:px-0">
                 <div ref="titleRef" class="py-6 flex justify-between">
