@@ -100,7 +100,7 @@ const toTop = () => {
       <div class="flex items-center sm:hidden">
         <div
           class="flex items-center mr-2 p-2 box-border rounded-full"
-          :class="{ 'bg-slate-50': searchInputShow,'opacity-0 pointer-events-none': navMobileShow || !$route.path === '/works'}"
+          :class="{ 'bg-slate-50': searchInputShow,'opacity-0 pointer-events-none': navMobileShow || $route.path !== '/works'}"
         >
           <svg
             @click="clickSearchIcon()"
