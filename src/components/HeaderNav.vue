@@ -97,7 +97,7 @@ const toTop = () => {
           >{{ $route.meta.title }}</span
         >
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center sm:hidden">
         <div
           v-if="!navMobileShow && $route.path === '/works'"
           class="flex items-center mr-2 p-2 rounded-full"
@@ -125,7 +125,7 @@ const toTop = () => {
         </div>
         <div
           @click="clickNavMobile()"
-          class="relative cursor-pointer w-6 h-3 before:content-[''] before:absolute before:top-0 before:w-full before:h-[2px] before:transition after:transition after:content-[''] after:absolute after:bottom-0 after:w-full after:h-[2px] sm:after:bg-stone-700 sm:before:bg-stone-700 sm:hidden"
+          class="relative cursor-pointer w-6 h-3 before:content-[''] before:absolute before:top-0 before:w-full before:h-[2px] before:transition after:transition after:content-[''] after:absolute after:bottom-0 after:w-full after:h-[2px] sm:after:bg-stone-700 sm:before:bg-stone-700"
           :class="[
             isHome && !navMobileShow
               ? 'before:bg-white after:bg-white'
