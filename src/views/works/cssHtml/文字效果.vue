@@ -1,6 +1,6 @@
 <script>
 export default {
-  cover:'https://i.imgur.com/XTwUf5G.png',
+  cover:'https://iili.io/JqJOqRS.png',
   articleLink: 'https://juejin.cn/post/7165675529763454983'
 }
 </script>

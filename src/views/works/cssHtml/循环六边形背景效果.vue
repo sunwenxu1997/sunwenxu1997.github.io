@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    cover:'https://i.imgur.com/EYaNk85.png',
+    cover:'https://iili.io/JqJOCb9.png',
     articleLink: 'https://juejin.cn/post/7186572424807186490'
 };
 </script>

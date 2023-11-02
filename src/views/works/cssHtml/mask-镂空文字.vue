@@ -1,7 +1,7 @@
 <script>
 export default {
   articleLink: 'https://github.com/chokcoco/iCSS/issues/80',
-  cover:'https://i.imgur.com/YdPhAIF.png'
+  cover:'https://iili.io/JqJOTfj.png'
 }
 </script>
 <script setup>

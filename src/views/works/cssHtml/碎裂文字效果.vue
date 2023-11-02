@@ -13,7 +13,7 @@
  * content: attr(data-text); 文本属性引用
  */
 export default {
-    cover:'https://i.imgur.com/pdhxnTf.png'
+    cover:'https://iili.io/JqJOfJ2.png'
 }
 </script>
 

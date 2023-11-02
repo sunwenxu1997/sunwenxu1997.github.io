@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    cover:'https://i.imgur.com/0cuBj4n.png'
+    cover:'https://iili.io/JqJOoxe.png'
 }
 </script>
 

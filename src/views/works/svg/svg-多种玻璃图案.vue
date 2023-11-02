@@ -1,6 +1,6 @@
 <script>
 export default {
-    cover:'https://i.imgur.com/TqArckD.png'
+    cover:'https://iili.io/JqJO5JV.png'
 }
 </script>
 <script setup>
