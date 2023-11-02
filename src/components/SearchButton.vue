@@ -2,6 +2,7 @@
 // 悬浮跟随鼠标的搜索按钮
 import { ref, reactive, onMounted, onUnmounted, defineProps } from 'vue'
 import { gsap } from 'gsap'
+import { isMobileDevice } from '@/utils/index.js'
 const props = defineProps({
   searchIconShow: { Boolean, default: true }
 })
@@ -13,12 +14,15 @@ const searchBtnRef = ref(null),
 let mouseDownTimeout = null
 onMounted(() => {
   document.body.style.cursor = 'none'
-  window.addEventListener('mousemove', mousemoveSearchBtnListener)
-  window.addEventListener('mousedown', mousedownSearchBtnListener)
-  window.addEventListener('mouseup', function () {
-    clearTimeout(mouseDownTimeout)
-  })
-  window.addEventListener('keydown', keydownSearchBtnListener)
+  //   非移动端才执行自定义的鼠标样式
+  if (!isMobileDevice()) {
+    window.addEventListener('mousemove', mousemoveSearchBtnListener)
+    window.addEventListener('mousedown', mousedownSearchBtnListener)
+    window.addEventListener('mouseup', function () {
+      clearTimeout(mouseDownTimeout)
+    })
+    window.addEventListener('keydown', keydownSearchBtnListener)
+  }
 })
 onUnmounted(() => {
   document.body.style.cursor = 'auto'
@@ -66,12 +70,14 @@ const mousemoveSearchBtnListener = (e) => {
 }
 </script>
 <template>
+  <!-- 非移动端设备时，都采用自定义的悬浮搜索按钮 -->
   <div
     ref="searchBtnRef"
-    class="fixed opacity-0 transition top-0 left-0 z-50 pointer-events-none min-w-[2.5rem] min-h-[2.5rem] rounded-full flex justify-center items-center"
+    v-if="!isMobileDevice()"
+    class="flex fixed opacity-0 transition top-0 left-0 z-50 pointer-events-none min-w-[2.5rem] min-h-[2.5rem] rounded-full justify-center items-center"
     :class="[
       searchInputShow && props.searchIconShow ? 'px-2' : 'px-0',
-      props.searchIconShow ? ' bg-white' : ' bg-red-600'
+      props.searchIconShow ? ' bg-slate-100' : ' bg-red-600 scale-75 mix-blend-difference'
     ]"
   >
     <svg

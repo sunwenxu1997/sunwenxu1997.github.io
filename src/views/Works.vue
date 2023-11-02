@@ -10,6 +10,7 @@ import { ElImage } from 'element-plus'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
+import { onBus } from '@/utils/bus.js'
 const bodyScrollProgress = ref(0)
 const textContentRef = ref(),
   titleRef = ref(),
@@ -20,11 +21,11 @@ const workRoutes = computed(() => {
   return works.filter((item) => !item.meta.hidden && item.name.indexOf(searchValue.value) !== -1)
 })
 onMounted(() => {
+  onBus('searchInput', searchInput)
   gsap.registerPlugin(ScrollTrigger)
   bodyScrollTrigger()
   elementScrollAnimation(titleRef.value)
   elementScrollAnimation(textContentRef.value, 0.2)
-  console.log(searchButtonRef.value.style)
 })
 const toTop = () => {
   window.scrollTo({
@@ -72,15 +73,15 @@ const onMouseenterElement = () => {
 }
 const onMouseleaveElement = () => {
   searchIconShow.value = true
-  // searchButtonRef.value.$el.classList.toggle('sm:flex')
 }
 </script>
 <template>
   <div
-    class="px-4 sm:px-60 sm:max-w-screen-sm sm:m-auto selection:bg-stone-700 selection:text-white"
+    id="works-page"
+    class="px-4 sm:px-60 sm:max-w-screen-sm sm:m-auto bg-white selection:bg-stone-700 selection:text-white"
   >
     <div
-      class="pt-28 px-8 text-stone-800 text-xs tracking-widest"
+      class="pt-28 px-8 text-stone-800 text-xs tracking-widest sm:px-0"
       @mouseenter="onMouseenterElement"
       @mouseleave="onMouseleaveElement"
     >
@@ -99,7 +100,7 @@ const onMouseleaveElement = () => {
         自己也有写相关的文章，主要在平台
         <a
           class="text-sm text-stone-800 font-bold"
-          href="https://juejin.cn/user/1011206430666551"
+          href="https://juejin.cn/user/1011206430666551/posts?sort=popular"
           target="_blank"
           >掘金</a
         >、
@@ -118,7 +119,7 @@ const onMouseleaveElement = () => {
       </p>
     </div>
     <div cursor="search" class="py-12 w-full" v-for="(item, index) in workRoutes" :key="index">
-      <div class="w-full aspect-video relative">
+      <div class="w-full aspect-video relative bg-stone-100">
         <div
           class="w-full h-full flex justify-center items-center absolute top-0 left-0 animate-pulse"
         >
@@ -158,7 +159,7 @@ const onMouseleaveElement = () => {
     </div>
     <SearchButton
       ref="searchButtonRef"
-      class="cursor hidden sm:flex"
+      class="cursor"
       :searchIconShow="searchIconShow"
       @input="searchInput"
     />
@@ -167,7 +168,7 @@ const onMouseleaveElement = () => {
     @mouseenter="onMouseenterElement"
     @mouseleave="onMouseleaveElement"
     @click="toTop()"
-    class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-sm fixed bottom-8 right-8 sm:right-20 cursor-pointer hover:shadow"
+    class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md fixed bottom-10 right-8 sm:right-20 cursor-pointer hover:shadow"
     :class="bodyScrollProgress < 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
   >
     <svg
@@ -187,7 +188,7 @@ const onMouseleaveElement = () => {
 }
 
 /* 鼠标点击按钮  仿鼠标标签的样式变化 */
-[cursor='search']:active ~ .cursor {
+#works-page:active .cursor {
   transform: scale(1.25);
 }
 </style>
