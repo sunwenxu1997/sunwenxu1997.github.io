@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import works from '@/router/works.js'
 import IconGithub from '@/components/icons/IconGithub.vue'
 import IconLink from '@/components/icons/IconLink.vue'
@@ -9,7 +9,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
 import { onBus } from '@/utils/bus.js'
-const bodyScrollProgress = ref(0)
+const bodyScrollTop = ref(0)
 const textContentRef = ref(),
   titleRef = ref(),
   searchValue = ref(''),
@@ -29,6 +29,9 @@ onMounted(() => {
   elementScrollAnimation(titleRef.value)
   elementScrollAnimation(textContentRef.value, 0.2)
 })
+onUnmounted(() => {
+  ScrollTrigger.killAll()
+})
 const toTop = () => {
   window.scrollTo({
     top: 0,
@@ -39,8 +42,8 @@ const toTop = () => {
 const bodyScrollTrigger = () => {
   ScrollTrigger.create({
     trigger: document.body,
-    onUpdate: (self) => {
-      bodyScrollProgress.value = Math.ceil(self.progress * 10000) / 100
+    onUpdate: () => {
+      bodyScrollTop.value = window.pageYOffset
     }
   })
 }
@@ -57,6 +60,7 @@ const elementScrollAnimation = (elements, delay = 0) => {
         y: 0,
         ease: 'power4.out',
         scrollTrigger: {
+          //   markers: true,
           trigger: el, // 触发滚动的元素
           start: 'top 100%' // 触发动画的滚动位置
         }
@@ -66,6 +70,10 @@ const elementScrollAnimation = (elements, delay = 0) => {
 }
 const searchInput = (val) => {
   searchValue.value = val
+  ScrollTrigger.killAll()
+  bodyScrollTrigger()
+  elementScrollAnimation(titleRef.value)
+  elementScrollAnimation(textContentRef.value, 0.2)
 }
 // 部分选项操作不需要展示悬浮的搜索，需要展示默认鼠标样式
 const onMouseenterElement = () => {
@@ -134,14 +142,14 @@ const onMouseleaveElement = () => {
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
-            v-if="item.meta.info"
-            v-html="item.meta.info"
+            v-html="
+              item.meta.info
+                ? item.meta.info
+                : `<p>作者🐔很懒啥也没写，建议直接点击右上↗链接...</p>`
+            "
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           ></div>
-          <div v-else>
-            <p>作者🐔很懒啥也没写，建议直接点击右上↗链接...</p>
-          </div>
         </div>
       </div>
     </div>
@@ -157,7 +165,7 @@ const onMouseleaveElement = () => {
     @mouseleave="onMouseleaveElement"
     @click="toTop()"
     class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md fixed bottom-10 right-8 sm:right-20 cursor-pointer hover:shadow"
-    :class="bodyScrollProgress < 3 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
+    :class="bodyScrollTop < 200 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
   >
     <svg
       class="icon -top-[0.5px] relative"
@@ -179,7 +187,7 @@ const onMouseleaveElement = () => {
     color: white;
     padding: 0 0.33rem;
     cursor: text;
-    &::selection{
+    &::selection {
       background-color: #2ae3e6 !important;
     }
   }
