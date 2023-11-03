@@ -1,6 +1,6 @@
 <script>
 export default {
-  articleLink: 'https://github.com/chokcoco/iCSS/issues/80',
+  link: 'https://github.com/chokcoco/iCSS/issues/80',
   cover:'https://iili.io/JqJOTfj.png'
 }
 </script>

@@ -1,7 +1,14 @@
 <script>
 export default {
-  cover:'https://iili.io/JqJOqRS.png',
-  articleLink: 'https://juejin.cn/post/7165675529763454983'
+  cover: 'https://iili.io/JqJOqRS.png',
+  link: 'https://juejin.cn/post/7165675529763454983',
+  info: ` 
+    <p>🌈属于文字效果，里面有各种样式类型的文本，当然不仅仅可以应用于文字上，你也可以应用在其他地方。首先你要先学会他，不是吗？</p>
+    <p>知识点：</p>
+    <p>1. <code>background-clip: text;</code> 背景文本裁切</p>
+    <p>2. <code>mask</code> 遮罩层 </p>
+    <p>3. <code>svg，fliter</code>等效果应用 </p>
+    `
 }
 </script>
 <template>
@@ -33,7 +40,12 @@ export default {
             xChannelSelector="R"
             yChannelSelector="G"
           >
-            <animate attributeName="scale" dur="5s" values="100;10000;100;" repeatCount="indefinite" />
+            <animate
+              attributeName="scale"
+              dur="5s"
+              values="100;10000;100;"
+              repeatCount="indefinite"
+            />
           </feDisplacementMap>
         </filter>
         <rect width="1000" height="1000" fill="white" filter="url(#filter)"></rect>
@@ -49,7 +61,8 @@ export default {
   justify-content: center;
 }
 
-h1,.mask-text {
+h1,
+.mask-text {
   font-size: 3rem;
   font-weight: bold;
   white-space: nowrap;

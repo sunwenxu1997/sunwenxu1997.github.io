@@ -13,7 +13,7 @@
  * numOctaves 属性numOctaves就表示倍频的数量，默认值是1，不能是小数，只能是整数，如果是小数会当作默认值1处理。
  */
 export default {
-  articleLink: 'https://www.zhangxinxu.com/wordpress/2020/10/svg-feturbulence'
+  link: 'https://www.zhangxinxu.com/wordpress/2020/10/svg-feturbulence'
 }
 </script>
 <template>

@@ -1,6 +1,12 @@
 <script>
 export default {
-  articleLink: 'https://juejin.cn/post/7269797025863499837'
+  link: 'https://juejin.cn/post/7269797025863499837',
+  info: ` 
+    <p>动画新属性 <b>animation-composition</b> 的学习，可能实际项目上用不到。</p>
+    <p>知识点：</p>
+    <p>1. <code>animation-composition</code> 动画合成</p>
+    <p>2. <code>steps</code> 按步执行动画</p>
+    `
 }
 </script>
 <script setup>

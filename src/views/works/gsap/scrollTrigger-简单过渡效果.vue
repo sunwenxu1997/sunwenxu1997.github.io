@@ -23,7 +23,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 export default {
-  articleLink: 'https://juejin.cn/post/7165808796462219295',
+  link: 'https://juejin.cn/post/7165808796462219295',
   data() {
     return {
       list: 30

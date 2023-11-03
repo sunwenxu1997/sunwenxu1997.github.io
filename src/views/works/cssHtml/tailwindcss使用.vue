@@ -1,6 +1,6 @@
 <script>
 export default {
-  articleLink:'https://juejin.cn/post/7290740395914362921'
+  link:'https://juejin.cn/post/7290740395914362921'
 }
 </script>
 

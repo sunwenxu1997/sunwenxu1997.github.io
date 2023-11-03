@@ -24,7 +24,7 @@
 <script>
 export default {
     name: '抽奖-大转盘',
-    articleLink: 'https://juejin.cn/post/7165676884460568590',
+    link: 'https://juejin.cn/post/7165676884460568590',
     computed: {
         // eslint-disable-next-line vue/return-in-computed-property
         animationClass() {

@@ -1,7 +1,7 @@
 <script>
 export default {
   cover:'https://iili.io/JqJOzib.png',
-  articleLink: 'https://www.wangeditor.com/v5/for-frame.html#vue3'
+  link: 'https://www.wangeditor.com/v5/for-frame.html#vue3'
 }
 </script>
 <script setup>

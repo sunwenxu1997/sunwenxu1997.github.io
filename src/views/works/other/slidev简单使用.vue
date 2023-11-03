@@ -1,7 +1,7 @@
 <script>
 export default {
-    githubCode: 'https://github.com/sunwenxu1997/slidev',
-    articleLink: 'https://juejin.cn/post/7288963700538556470'
+    code: 'https://github.com/sunwenxu1997/slidev',
+    link: 'https://juejin.cn/post/7288963700538556470'
 }
 </script>
 

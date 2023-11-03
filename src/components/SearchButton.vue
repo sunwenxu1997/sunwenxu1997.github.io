@@ -1,6 +1,6 @@
 <script setup>
 // 悬浮跟随鼠标的搜索按钮
-import { ref, reactive, onMounted, onUnmounted, defineProps } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { isMobileDevice } from '@/utils/index.js'
 const props = defineProps({

@@ -11,7 +11,15 @@
 
 <script>
 export default {
-    cover:'https://iili.io/JqJOoxe.png'
+  cover: 'https://iili.io/JqJOoxe.png',
+  link: 'https://juejin.cn/post/7160858048636911652',
+  info: `
+  <p>某一天感觉单纯的背景色有点单一，同时看到掘金有些文章背部有类似网格形状的东西，所以就好奇的尝试实现下。其实原理还是挺简单的，当然你也可以直接通过图片来实现（放大会模糊），但是当你真正掌握后，它不仅仅能实现网格，还有其他更多花样背景呢。</p>
+  <p>知识点：</p>
+  <p>1. <code>linear-gradient</code> 背景渐变；</p>
+  <p>2. <code>background-size</code> 背景尺寸；</p>
+  <p>3. <code>background-repeat</code> 背景重复；</p>
+`
 }
 </script>
 
@@ -38,7 +46,7 @@ $gridColor: #5f5f5f;
   height: 100%;
   left: 0;
   top: 0;
-   animation: play 15s linear infinite ;
+  animation: play 15s linear infinite;
 }
 .grid-xu::before {
   /* 从左往右 */
@@ -64,11 +72,11 @@ $gridColor: #5f5f5f;
     linear-gradient(to bottom, $gridColor 0.5px, transparent 0.5px);
   background-size: $gridSizeShi $gridSizeShi;
   background-repeat: repeat;
-  animation: play 10s linear infinite ;
+  animation: play 10s linear infinite;
 }
 @keyframes play {
   100% {
-    background-position:  120px 120px;
+    background-position: 120px 120px;
     //  background-size: 70px 70px;
   }
 }

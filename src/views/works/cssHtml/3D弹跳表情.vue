@@ -1,9 +1,18 @@
 <script>
 export default {
   cover: 'https://iili.io/Jq9GrUg.gif',
-  articleLink: 'https://juejin.cn/post/7262007830721413180'
+  link: 'https://juejin.cn/post/7262007830721413180',
+  date:'2023.09.09',
+  info: `
+  <p>参考大佬 Chokcoco 的作品，用 Vue3.0 实现了一下，代码比较简单，就不多说了。</p>
+  <p>知识点：</p>
+  <p>1.通过伪元素制造多层表情标签，制造3D假象；</p>
+  <p>2.通过记录下落转向上升的那一帧开始，更换表情和背景；</p>
+  <p>3.学会如何通过 <code>conic-gradient</code> <code>linear-gradient</code> <code>radial-gradient </code> 实现多样化的背景效果；</p>
+`
 }
 </script>
+
 <script setup>
 /**
  * 知识点：

@@ -17,7 +17,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 export default {
-  articleLink: 'https://juejin.cn/post/7162001311225888782',
+  link: 'https://juejin.cn/post/7162001311225888782',
   mounted() {
     gsap.registerPlugin(ScrollTrigger)
     function videoGurrentTime(elem, progress, direction) {

@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 export default {
   data() {
     return {
-      articleLink: '',
+      link: '',
       layers: []
     }
   },

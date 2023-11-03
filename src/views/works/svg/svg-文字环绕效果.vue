@@ -49,7 +49,7 @@
 </template>
 <script>
 export default {
-    articleLink: 'https://juejin.cn/post/7187585110403711033'
+    link: 'https://juejin.cn/post/7187585110403711033'
 }
 </script>
 

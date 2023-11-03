@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             ball: false,
-            articleLink:'https://www.jianshu.com/p/aaf14eb2a34a'
+            link:'https://www.jianshu.com/p/aaf14eb2a34a'
         };
     },
 };

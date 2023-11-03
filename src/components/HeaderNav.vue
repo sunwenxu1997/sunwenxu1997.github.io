@@ -1,8 +1,5 @@
 <script setup>
-import IconRefresh from './icons/IconRefresh.vue'
-import IconSearch from './icons/IconSearch.vue'
 import 'element-plus/es/components/message/style/css'
-import { ElMessage } from 'element-plus'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { emitBus } from '@/utils/bus.js'
@@ -25,7 +22,7 @@ const clickSearchIcon = () => {
   if (searchInputShow.value) {
     setTimeout(() => {
       searchInputRef.value.focus()
-    }, 100)
+    }, 300)
   }
 }
 const onSearchInputBlur = () => {
@@ -100,7 +97,10 @@ const toTop = () => {
       <div class="flex items-center sm:hidden">
         <div
           class="flex items-center mr-2 p-2 box-border rounded-full"
-          :class="{ 'bg-slate-50': searchInputShow,'opacity-0 pointer-events-none': navMobileShow || $route.path !== '/works'}"
+          :class="{
+            'bg-slate-50': searchInputShow,
+            'opacity-0 pointer-events-none': navMobileShow || $route.path !== '/works'
+          }"
         >
           <svg
             @click="clickSearchIcon()"
@@ -116,6 +116,7 @@ const toTop = () => {
             ref="searchInputRef"
             class="select-none outline-none border-0 transition-all bg-transparent"
             :class="searchInputShow ? 'w-20 px-2' : 'w-0 p-0'"
+            placeholder="搜索关键字"
             type="text"
             v-model="searchInputValue"
             @input="emitBus('searchInput', searchInputValue)"
