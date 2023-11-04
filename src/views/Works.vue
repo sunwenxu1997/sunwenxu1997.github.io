@@ -70,10 +70,6 @@ const elementScrollAnimation = (elements, delay = 0) => {
 }
 const searchInput = (val) => {
   searchValue.value = val
-  ScrollTrigger.killAll()
-  bodyScrollTrigger()
-  elementScrollAnimation(titleRef.value)
-  elementScrollAnimation(textContentRef.value, 0.2)
 }
 // 部分选项操作不需要展示悬浮的搜索，需要展示默认鼠标样式
 const onMouseenterElement = () => {
