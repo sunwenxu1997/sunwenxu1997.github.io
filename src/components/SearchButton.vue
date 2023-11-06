@@ -1,6 +1,6 @@
 <script setup>
 // 悬浮跟随鼠标的搜索按钮
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, onDeactivated, onActivated } from 'vue'
 import { gsap } from 'gsap'
 import { isMobileDevice } from '@/utils/index.js'
 const props = defineProps({
@@ -12,7 +12,20 @@ const searchBtnRef = ref(null),
   searchInputRef = ref(null),
   searchInputValue = ref('')
 let mouseDownTimeout = null
+onActivated(() => {
+  addEventListener()
+})
 onMounted(() => {
+  addEventListener()
+})
+onUnmounted(() => {
+  removeEventListener()
+})
+onDeactivated(() => {
+  removeEventListener()
+})
+// 添加相关监听事件
+const addEventListener = () => {
   document.body.style.cursor = 'none'
   //   非移动端才执行自定义的鼠标样式
   if (!isMobileDevice()) {
@@ -23,13 +36,14 @@ onMounted(() => {
     })
     window.addEventListener('keydown', keydownSearchBtnListener)
   }
-})
-onUnmounted(() => {
+}
+// 清除相关监听事件
+const removeEventListener = () => {
   document.body.style.cursor = 'auto'
   window.removeEventListener('mousemove', mousemoveSearchBtnListener)
   window.removeEventListener('mousedown', mousedownSearchBtnListener)
   window.removeEventListener('keydown', keydownSearchBtnListener)
-})
+}
 const keydownSearchBtnListener = (e) => {
   if (e.key === 'Enter') {
     // 在这里执行回车键按下后的操作

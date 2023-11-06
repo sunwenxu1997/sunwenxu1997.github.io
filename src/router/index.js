@@ -14,7 +14,7 @@ const router = createRouter({
       path: '/works',
       name: 'Works',
       component: () => import('../views/Works.vue'),
-      meta: { title: '作品' }
+      meta: { title: '作品', keepAlive: true }
     },
     {
       path: '/about',

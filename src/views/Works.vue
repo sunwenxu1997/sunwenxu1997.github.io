@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted, onActivated, watch, onDeactivated } from 'vue'
 import works from '@/router/works.js'
-import IconGithub from '@/components/icons/IconGithub.vue'
-import IconLink from '@/components/icons/IconLink.vue'
+import IconGithub from '@/components/icons/github.vue'
+import IconLink from '@/components/icons/link.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
-import IconImage from '@/components/icons/IconImage.vue'
+import IconImage from '@/components/icons/image.vue'
+import IconDate from '@/components/icons/date.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
@@ -22,14 +23,20 @@ const workRoutes = computed(() => {
     .sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime())
     .sort((a, b) => b.meta.sort - a.meta.sort)
 })
-onMounted(() => {
+// 通过监听works作品变化，重新执行动画 避免快速搜索时，部分元素未执行动画
+watch(workRoutes, () => {
+  elementScrollAnimation(titleRef.value)
+  elementScrollAnimation(textContentRef.value, 0.2)
+})
+onActivated(() => {
   onBus('searchInput', searchInput)
+  searchIconShow.value = true
   gsap.registerPlugin(ScrollTrigger)
   bodyScrollTrigger()
   elementScrollAnimation(titleRef.value)
   elementScrollAnimation(textContentRef.value, 0.2)
 })
-onUnmounted(() => {
+onDeactivated(() => {
   ScrollTrigger.killAll()
 })
 const toTop = () => {
@@ -49,6 +56,8 @@ const bodyScrollTrigger = () => {
 }
 // 元素滚动动画
 const elementScrollAnimation = (elements, delay = 0) => {
+  // 清除指定目标元素的所有动画
+  gsap.killTweensOf(elements)
   elements.forEach((el) => {
     gsap.fromTo(
       el,
@@ -94,8 +103,9 @@ const onMouseleaveElement = () => {
     >
       <div
         v-if="item.meta.date"
-        class="hidden text-xs font-bold -mb-4 leading-4 translate-x-24 text-right sticky top-4 text-black sm:block"
+        class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-4 text-black sm:flex"
       >
+        <IconDate class="mr-1 relative -top-[1px]" />
         {{ item.meta.date }}
       </div>
       <div class="w-full aspect-video relative bg-stone-100">
@@ -130,8 +140,9 @@ const onMouseleaveElement = () => {
             </router-link>
           </div>
         </div>
-        <div v-if="item.meta.date" class="text-xs font-bold text-stone-400 mb-2 sm:hidden">
-          📅 {{ item.meta.date }}
+        <div v-if="item.meta.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
+          <IconDate class="mr-1 relative -top-[1px]" />
+          <span class="text-xs font-bold">{{ item.meta.date }}</span>
         </div>
         <div
           ref="textContentRef"

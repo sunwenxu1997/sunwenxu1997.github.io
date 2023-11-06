@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
+import defaultSet from '../settings'
 const layer = ref(null)
 onMounted(() => {
   window.addEventListener('mousemove', mouseListener)
@@ -41,10 +42,10 @@ const mouseListener = function (event) {
       </div>
     </div>
     <div
-      class="absolute bottom-12 left-12 sm:left-24 font-bold text-white sm:text-black"
+      class="absolute bottom-12 left-12 sm:left-24 font-bold text-white sm:text-black text-xs"
       style="font-family: 'Rajdhani', sans-serif"
     >
-      ©2023 sunwenxu
+      ©2023 {{ defaultSet.userName }}
     </div>
     <svg width="0" height="0">
       <defs>

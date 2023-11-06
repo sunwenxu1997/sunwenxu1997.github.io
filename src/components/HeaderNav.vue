@@ -3,6 +3,9 @@ import 'element-plus/es/components/message/style/css'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { emitBus } from '@/utils/bus.js'
+import defaultSet from '../settings'
+import IconGithub from '@/components/icons/github.vue'
+import IconEmail from '@/components/icons/email.vue'
 const navs = [
   {
     name: '作品',
@@ -40,8 +43,6 @@ const navMobileShow = ref(false)
 watch(
   () => $route.path,
   () => {
-    searchInputValue.value = ''
-    searchInputShow.value = false
     navMobileShow.value = false
     document.body.style.overflow = 'auto'
   }
@@ -179,6 +180,35 @@ const toTop = () => {
               >{{ item.name }}</span
             >
           </div>
+        </div>
+        <div
+          class="absolute w-full bottom-12 left-0 px-12 box-border text-stone-800 text-sm font-bold"
+        >
+          <p class="mb-2 flex items-center">
+            <IconEmail class="mr-2" />
+            <a
+              :href="'mailto:' + defaultSet.email"
+              class="text-stone-800 text-sm font-bold hover:opacity-50 hover:no-underline"
+              rel="email"
+              >{{ defaultSet.email }}</a
+            >
+          </p>
+          <p class="mb-2 flex items-center">
+            <IconGithub class="mr-2" />
+            <a
+              :href="defaultSet.github"
+              class="text-stone-800 text-sm font-bold hover:opacity-50 hover:no-underline"
+              target="_blank"
+              >Github.com</a
+            >
+          </p>
+          <p
+            class="my-0 mt-10 text-xs flex justify-between"
+            style="font-family: 'Rajdhani', sans-serif"
+          >
+            <span>©2023 {{ defaultSet.userName }}</span>
+            <span>github.io</span>
+          </p>
         </div>
       </div>
     </div>

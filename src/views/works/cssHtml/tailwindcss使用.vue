@@ -1,6 +1,6 @@
 <script>
 export default {
-  link:'https://juejin.cn/post/7290740395914362921'
+  link: 'https://juejin.cn/post/7290740395914362921'
 }
 </script>
 
@@ -24,7 +24,7 @@ onMounted(() => {})
 <template>
   <div class="grid h-screen place-content-center">
     <AppleWindow>
-      <iframe class="w-full h-full" src="/#/cssHtml/tailwindcss使用1" frameborder="0"></iframe>
+      <iframe class="w-full h-full" src="/#/" frameborder="0"></iframe>
     </AppleWindow>
   </div>
 </template>
