@@ -1,6 +1,7 @@
 <script>
 export default {
   link: 'https://juejin.cn/post/7269797025863499837',
+  cover:'https://iili.io/Jq644b1.gif',
   info: ` 
     <p>动画新属性 <b>animation-composition</b> 的学习，可能实际项目上用不到。</p>
     <p>知识点：</p>

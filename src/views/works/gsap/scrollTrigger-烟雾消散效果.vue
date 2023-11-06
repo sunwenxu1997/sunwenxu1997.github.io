@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger.js";
 import smoke from "@/assets/js/threejsSmokeCanvas.js";
 export default {
+    cover: "https://iili.io/Jq6Qtgs.gif",
     mounted() {
         smoke.play(".smoke-canvas");
         gsap.registerPlugin(ScrollTrigger);

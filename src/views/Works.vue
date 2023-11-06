@@ -152,7 +152,7 @@ const onMouseleaveElement = () => {
             v-html="
               item.meta.info
                 ? item.meta.info
-                : `<p>作者🐔很懒啥也没写，建议直接点击右上↗链接...</p>`
+                : `<p>作者🐔很懒啥也没写。<br/>建议直接点击右上↗链接...</p>`
             "
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"

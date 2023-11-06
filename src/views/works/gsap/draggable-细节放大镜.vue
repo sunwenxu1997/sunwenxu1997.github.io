@@ -1,3 +1,8 @@
+<script>
+export default {
+   cover:'https://iili.io/Jq64iWg.gif'
+}
+</script>
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'

@@ -11,6 +11,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 export default {
   name: 'scrollTrigger-倾斜滚动特效',
+  cover:'https://iili.io/Jq64ssa.gif',
   mounted() {
     gsap.registerPlugin(ScrollTrigger)
     let proxy = { skew: 0 } //定义一个初始化的对象数据，每次滚动时都会由此对象执行动画操作
