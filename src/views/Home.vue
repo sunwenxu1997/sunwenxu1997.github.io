@@ -30,10 +30,7 @@ const mouseListener = function (event) {
         class="absolute left-0 w-full h-full bg-[url('@/assets/images/home.jpg')] bg-cover bg-center scale-125"
       ></div>
 
-      <div
-        class="w-80 h-full absolute left-0 top-0 hidden sm:block"
-        style="backdrop-filter: blur(3px); filter: url(#image5)"
-      ></div>
+      <div class="w-80 h-full absolute left-0 top-0 hidden sm:block home-glass" style="backdrop-filter: blur(3px); filter: url(#image5)"></div>
       <div class="text-white text-2xl font-black tracking-[.5rem] z-10 px-24 pointer-events-none">
         <p>A LIKE</p>
         <p>花里胡哨，</p>
@@ -72,4 +69,7 @@ const mouseListener = function (event) {
 </template>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+.home-glass {
+  mask: linear-gradient(to left,transparent 0%, #000 15%, #000 100%);
+}
 </style>
