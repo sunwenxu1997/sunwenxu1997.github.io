@@ -182,7 +182,7 @@ export default {
 .app-content {
   width: 100vw;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 25vmax);
+  grid-template-columns: repeat(auto-fit, 40vmax);
   justify-content: center;
   background-color: white;
 }
