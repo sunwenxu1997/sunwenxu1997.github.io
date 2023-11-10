@@ -26,29 +26,21 @@ export default {
 <template>
   <div class="app-content">
     <div class="item" v-for="item in 8" :key="item">
-      <img :src="`https://picsum.photos/1920/1080`" alt="" />
+      <img src="@/assets/images/home.jpg" alt="" />
       <div class="glass"></div>
     </div>
   </div>
   <svg style="display: none">
     <defs>
       <filter id="image1">
-        <feImage
-          result="pict1"
-          xlink:href="/images/displacement/1.jpg"
-          x="0"
-          y="0"
+        <feImage result="pict1" xlink:href="/images/displacement/1.jpg" x="0" y="0"
           width="527"
           height="336"
         ></feImage>
-        <feDisplacementMap
-          scale="30"
-          xChannelSelector="R"
-          yChannelSelector="R"
+        <feDisplacementMap  scale="30" xChannelSelector="R" yChannelSelector="R"
           in2="pict1"
           in="SourceGraphic"
         ></feDisplacementMap>
-        <!-- <feComposite operator="in" in2="pict2"></feComposite> -->
       </filter>
     </defs>
     <defs>
@@ -119,7 +111,7 @@ export default {
           height="517"
         ></feImage>
         <feDisplacementMap
-          scale="30"
+          scale="20"
           xChannelSelector="R"
           yChannelSelector="R"
           in2="pict7"
@@ -190,14 +182,14 @@ export default {
 .app-content {
   width: 100vw;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 50vmax);
+  grid-template-columns: repeat(auto-fit, 25vmax);
   justify-content: center;
   background-color: white;
 }
 
 .item {
   position: relative;
-  clip-path: inset(3rem);
+  clip-path: inset(2rem);
 }
 
 .item img {

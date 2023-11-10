@@ -20,6 +20,7 @@
 <script>
 import { gsap } from "gsap";
 export default {
+    date: "2023-09-10",
     mounted() {
         window.addEventListener("mousemove", this.mouseListener);
     },

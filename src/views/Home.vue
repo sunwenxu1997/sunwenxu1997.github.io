@@ -70,6 +70,6 @@ const mouseListener = function (event) {
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 .home-glass {
-  mask: linear-gradient(to left,transparent 0%, #000 15%, #000 100%);
+  mask: linear-gradient(to left,transparent 0%,  #000 100%);
 }
 </style>
