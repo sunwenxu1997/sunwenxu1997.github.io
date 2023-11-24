@@ -1,6 +1,6 @@
 import defaultSet from '../settings'
-// 异步获取检索文件目录 import.meta.glob ，构建时同步获取用 import.meta.globEager
-const routeFiles = import.meta.globEager('../views/works/**/*.vue')
+// 检索文件目录 import.meta.glob
+const routeFiles = import.meta.glob('../views/works/**/*.vue', { eager: true })
 const routes = []
 for (const path in routeFiles) {
   if (Object.hasOwnProperty.call(routeFiles, path)) {
@@ -23,12 +23,12 @@ for (const path in routeFiles) {
        */
       meta: {
         code: code || `${defaultSet.githubLink}/tree/main/src/views/works/${routerPath}.vue`,
-        link: link,
-        hidden: hidden || false,
-        cover: cover || '',
-        info: info || '',
+        link,
+        hidden,
+        cover,
+        info,
         sort: sort || 0,
-        date: date || 0
+        date
       }
     }
     routes.push(element)
