@@ -1,6 +1,7 @@
 <script>
 export default {
-  link: 'https://juejin.cn/post/7273680035096494099'
+  link: 'https://juejin.cn/post/7273680035096494099',
+  cover: 'https://iili.io/JRahFql.gif'
 }
 </script>
 <script setup>

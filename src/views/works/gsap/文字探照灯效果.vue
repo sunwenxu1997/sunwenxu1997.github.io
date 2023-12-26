@@ -21,6 +21,7 @@
 import { gsap } from "gsap";
 export default {
     date: "2023-09-10",
+    cover:'https://iili.io/JRaVVB2.gif',
     mounted() {
         window.addEventListener("mousemove", this.mouseListener);
     },
@@ -48,6 +49,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.overall{
+    background: #f8f8f8;
+}
 .text-box {
     width: 50vmax;
     height: 400px;

@@ -27,6 +27,8 @@ const router = createRouter({
 })
 // 路由守卫
 router.beforeEach((to, from, next) => {
+  // // 滚动条置顶
+  // window.scrollTo(0, 0)
   next()
 })
 

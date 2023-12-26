@@ -28,7 +28,7 @@ for (const path in routeFiles) {
         cover,
         info,
         sort: sort || 0,
-        date
+        date: date || null
       }
     }
     routes.push(element)

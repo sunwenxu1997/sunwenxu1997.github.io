@@ -129,7 +129,7 @@ const onMouseleaveElement = () => {
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           >
-            <a v-if="item.meta.link" :href="item.meta.link" title="文章链接" target="_blank">
+            <a v-if="item.meta.link" :href="item.meta.link" title="推荐链接" target="_blank">
               <IconLink class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
             <a :href="item.meta.code" title="Github地址" target="_blank">
