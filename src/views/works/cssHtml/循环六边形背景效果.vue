@@ -10,11 +10,10 @@
 export default {
   cover: 'https://iili.io/JqJOCb9.png',
   link: 'https://juejin.cn/post/7186572424807186490',
-  info: ` 
-    <p>可能使用价值不太高，娱乐学习一下~</p>
-    <p>知识点：</p>
-    <p>1. <code>clip-path</code> 路径裁切，实现⑥边形效果</p>
-    <p>2. <code>shape-outside</code> 说白了就是可以让文本围绕着你定义的样式环绕</p>
+  info: `可能使用价值不太高，娱乐学习一下~
+    知识点：
+    1. <code>clip-path</code> 路径裁切，实现⑥边形效果
+    2. <code>shape-outside</code> 说白了就是可以让文本围绕着你定义的样式环绕
     `
 }
 </script>

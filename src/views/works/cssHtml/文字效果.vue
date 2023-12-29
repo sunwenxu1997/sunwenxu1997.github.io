@@ -2,12 +2,11 @@
 export default {
   cover: 'https://iili.io/JqJOqRS.png',
   link: 'https://juejin.cn/post/7165675529763454983',
-  info: ` 
-    <p>🌈属于文字效果，里面有各种样式类型的文本，当然不仅仅可以应用于文字上，你也可以应用在其他地方。首先你要先学会他，不是吗？</p>
-    <p>知识点：</p>
-    <p>1. <code>background-clip: text;</code> 背景文本裁切</p>
-    <p>2. <code>mask</code> 遮罩层 </p>
-    <p>3. <code>svg，fliter</code>等效果应用 </p>
+  info: `🌈属于文字效果，里面有各种样式类型的文本，当然不仅仅可以应用于文字上，你也可以应用在其他地方。首先你要先学会他，不是吗？
+    知识点：
+    1. <code>background-clip: text;</code> 背景文本裁切
+    2. <code>mask</code> 遮罩层 
+    3. <code>svg，fliter</code>等效果应用 
     `
 }
 </script>

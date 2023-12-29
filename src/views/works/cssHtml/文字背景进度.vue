@@ -5,12 +5,11 @@ export default {
   date: '2023.12.26',
   cover:'https://iili.io/JRauCrl.gif',
   link: 'http://manifesto.clapat.com/',
-  info: ` 
-    <p>今天又是忙碌的一天，今天周二还有生产发布，但是发现这个有意思得效果还是要学习下的！😄</p>
-    <p>知识点：</p>
-    <p>1. <code>-webkit-text-fill-color</code>设置文本的填充颜色，这里建议设置透明度低得，否则颜色过渡上会有冲突</p>
-    <p>2. <code>-webkit-background-clip: text</code>用于将背景应用到文本内容内部，创建文本填充效果 </p>
-    <p>3. <code>background-size: 0% 100%;</code>文字进度完成度 x轴控制水平进度，y轴控制垂直进度</p>
+  info: `今天又是忙碌的一天，今天周二还有生产发布，但是发现这个有意思得效果还是要学习下的！😄
+    知识点：
+    1. <code>-webkit-text-fill-color</code>设置文本的填充颜色，这里建议设置透明度低得，否则颜色过渡上会有冲突
+    2. <code>-webkit-background-clip: text</code>用于将背景应用到文本内容内部，创建文本填充效果 
+    3. <code>background-size: 0% 100%;</code>文字进度完成度 x轴控制水平进度，y轴控制垂直进度
     `,
   mounted() {
     gsap.registerPlugin(ScrollTrigger)

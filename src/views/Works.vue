@@ -92,6 +92,12 @@ const onMouseenterElement = () => {
 const onMouseleaveElement = () => {
   searchIconShow.value = true
 }
+// 加工处理html格式
+const handleHtmlContent = (html) => {
+  if (!html) return '作者🐔很懒啥也没写。建议直接点击右上↗链接...'
+  // 换行加<br/>
+  return html.replace(/\n/g, '<br/>')
+}
 </script>
 <template>
   <div
@@ -152,11 +158,7 @@ const onMouseleaveElement = () => {
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
-            v-html="
-              item.meta.info
-                ? item.meta.info
-                : `<p>作者🐔很懒啥也没写。建议直接点击右上↗链接...</p>`
-            "
+            v-html="handleHtmlContent(item.meta.info)"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           ></div>

@@ -14,11 +14,10 @@
  */
 export default {
   cover: 'https://iili.io/JqJOfJ2.png',
-  info: `
-    <p>单纯的通过 css+html 实现的碎裂效果。</p>
-    <p>知识点：</p>
-    <p>1. <code>clip-path</code> 路径剪切；</p>
-    <p>2. <code>content: attr(data-text); </code>文本属性引用；</p>
+  info: `单纯的通过 css+html 实现的碎裂效果。
+    知识点：
+    1. <code>clip-path</code> 路径剪切；
+    2. <code>content: attr(data-text); </code>文本属性引用；
 `
 }
 </script>

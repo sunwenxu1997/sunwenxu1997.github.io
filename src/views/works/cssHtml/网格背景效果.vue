@@ -2,10 +2,6 @@
   <div class="overall">
     <div class="grid-xu"></div>
     <div class="grid-shi"></div>
-    <!-- <div class="content">
-      <h1>网格背景</h1>
-      <p>The grid background</p>
-    </div> -->
   </div>
 </template>
 
@@ -13,12 +9,11 @@
 export default {
   cover: 'https://iili.io/JqJOoxe.png',
   link: 'https://juejin.cn/post/7160858048636911652',
-  info: `
-  <p>某一天感觉单纯的背景色有点单一，同时看到掘金有些文章背部有类似网格形状的东西，所以就好奇的尝试实现下。其实原理还是挺简单的，当然你也可以直接通过图片来实现（放大会模糊），但是当你真正掌握后，它不仅仅能实现网格，还有其他更多花样背景呢。</p>
-  <p>知识点：</p>
-  <p>1. <code>linear-gradient</code> 背景渐变；</p>
-  <p>2. <code>background-size</code> 背景尺寸；</p>
-  <p>3. <code>background-repeat</code> 背景重复；</p>
+  info: `某一天感觉单纯的背景色有点单一，同时看到掘金有些文章背部有类似网格形状的东西，所以就好奇的尝试实现下。其实原理还是挺简单的，当然你也可以直接通过图片来实现（放大会模糊），但是当你真正掌握后，它不仅仅能实现网格，还有其他更多花样背景呢。
+  知识点：
+  1. <code>linear-gradient</code> 背景渐变；
+  2. <code>background-size</code> 背景尺寸；
+  3. <code>background-repeat</code> 背景重复；
 `
 }
 </script>

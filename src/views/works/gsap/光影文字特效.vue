@@ -20,6 +20,7 @@
 <script>
 import { gsap } from "gsap";
 export default {
+    cover:'https://iili.io/JRSZ1Sf.gif',
     data() {
         return {
             //光影文字

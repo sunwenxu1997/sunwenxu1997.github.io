@@ -12,15 +12,14 @@
 <script>
 export default {
   cover: 'https://iili.io/JRSzVKg.gif',
-  info: ` 
-    <p>多用于导航栏文字效果，让人感觉有种吸附的效果，主要用的就是监听鼠标得移入移出。</p>
-    <p>知识点：</p>
-    <p>1. <code>addEventListener</code>监听进入按钮时得 mousemove mouseleave</p>
-    <p>2. <code>rotate3d(x, y, z, angle)</code>
+  info: `多用于导航栏文字效果，让人感觉有种吸附的效果，主要用的就是监听鼠标得移入移出。
+    知识点：
+    1. <code>addEventListener</code>监听进入按钮时得 mousemove mouseleave
+    2. <code>rotate3d(x, y, z, angle)</code>
        x：表示绕着X轴旋转的角度。
        y：表示绕着Y轴旋转的角度。
        z：表示绕着Z轴旋转的角度。
-       angle：表示旋转的角度，单位为度（deg）</p>
+       angle：表示旋转的角度，单位为度（deg）
   
     `,
   mounted() {

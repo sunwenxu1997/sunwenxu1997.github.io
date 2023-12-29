@@ -1,3 +1,8 @@
+<script>
+export default {
+  cover: 'https://iili.io/JRSZMAl.gif'
+}
+</script>
 <script setup>
 import { nextTick, onMounted } from 'vue'
 import hoverEffect from '@/assets/js/threejsHover'

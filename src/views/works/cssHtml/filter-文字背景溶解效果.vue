@@ -12,11 +12,10 @@
  */
 export default {
   cover: 'https://iili.io/JqJOAUQ.png',
-  info: ` 
-    <p>想要实现这种效果可以通过svg滤镜，也可以通过模糊和对比度来实现。因为效果展示原因，最终采用了后者。但是也有弊端，就是需要重复一套相同的文本，其中一个是专门用作背景效果使用。更多内容可以直接在代码里了解。</p>
-    <p>知识点：</p>
-    <p>1. <code>filter:blur() contrast()</code>filter滤镜模糊和对比度</p>
-    <p>2. <code>box-decoration-break</code>属性用来定义当元素跨多行、多列或多页时，元素的片段应如何呈现。 </p>
+  info: `想要实现这种效果可以通过svg滤镜，也可以通过模糊和对比度来实现。因为效果展示原因，最终采用了后者。但是也有弊端，就是需要重复一套相同的文本，其中一个是专门用作背景效果使用。更多内容可以直接在代码里了解。
+    知识点：
+    1. <code>filter:blur() contrast()</code>filter滤镜模糊和对比度
+    2. <code>box-decoration-break</code>属性用来定义当元素跨多行、多列或多页时，元素的片段应如何呈现。 
     `
 }
 </script>
