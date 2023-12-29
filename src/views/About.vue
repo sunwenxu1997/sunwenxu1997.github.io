@@ -28,13 +28,13 @@ onMounted(() => {})
         class="text-sm text-stone-800 font-bold"
         href="https://juejin.cn/user/1011206430666551/posts?sort=popular"
         target="_blank"
-        >掘金</a
+        >掘金👍</a
       >、
       <a
         class="text-sm text-stone-800 font-bold"
         href="https://www.jianshu.com/u/5294c349f0f1"
         target="_blank"
-        >简书(弃用)</a
+        >简书</a
       >都有记录，你也可以通过
       <a
         class="text-sm text-stone-800 font-bold"

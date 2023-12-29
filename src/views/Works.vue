@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onActivated, watch, onDeactivated, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import works from '@/router/works.js'
+import externalRoutes from '@/router/external.js'
 import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
@@ -17,8 +19,10 @@ const textContentRef = ref(),
   searchButtonRef = ref(null),
   searchIconShow = ref(true)
 const workRoutes = computed(() => {
+  // 合入外部需要打开的页面
+  const _works = works.concat(externalRoutes)
   // 过滤掉隐藏的路由,日期降序,sort降序
-  return works
+  return _works
     .filter((item) => !item.meta.hidden && item.name.indexOf(searchValue.value) !== -1)
     .sort((a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime())
     .sort((a, b) => b.meta.sort - a.meta.sort)
@@ -94,9 +98,15 @@ const onMouseleaveElement = () => {
 }
 // 加工处理html格式
 const handleHtmlContent = (html) => {
-  if (!html) return '作者🐔很懒啥也没写。建议直接点击右上↗链接...'
+  if (!html) return '' // 作者🐔很懒啥也没写。建议直接点击右上↗链接...
   // 换行加<br/>
   return html.replace(/\n/g, '<br/>')
+}
+const $router = useRouter()
+const toPath = (path) => {
+  // 判断是否为外部链接
+  if (path.indexOf('http') !== -1) window.open(path, '_blank')
+  else $router.push(path)
 }
 </script>
 <template>
@@ -141,12 +151,12 @@ const handleHtmlContent = (html) => {
             <a v-if="item.meta.link" :href="item.meta.link" title="推荐链接" target="_blank">
               <IconLink class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a :href="item.meta.code" title="Github地址" target="_blank">
+            <a v-if="item.meta.code" :href="item.meta.code" title="Github地址" target="_blank">
               <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <router-link title="打开内容" :to="item.path">
+            <a title="打开内容" @click="toPath(item.path)">
               <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
-            </router-link>
+            </a>
           </div>
         </div>
         <div v-if="item.meta.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
