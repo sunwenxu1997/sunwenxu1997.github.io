@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, onUnmounted, onActivated, watch, onDeactivated } from 'vue'
+import { ref, computed, onActivated, watch, onDeactivated, nextTick } from 'vue'
 import works from '@/router/works.js'
 import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
@@ -25,8 +25,11 @@ const workRoutes = computed(() => {
 })
 // 通过监听works作品变化，重新执行动画 避免快速搜索时，部分元素未执行动画
 watch(workRoutes, () => {
-  elementScrollAnimation(titleRef.value)
-  elementScrollAnimation(textContentRef.value, 0.2)
+  // 搜索结果变化时，等待dom更新后执行动画
+  nextTick(() => {
+    elementScrollAnimation(titleRef.value)
+    elementScrollAnimation(textContentRef.value, 0.2)
+  })
 })
 onActivated(() => {
   onBus('searchInput', searchInput)
@@ -57,7 +60,7 @@ const bodyScrollTrigger = () => {
 // 元素滚动动画
 const elementScrollAnimation = (elements, delay = 0) => {
   // 清除指定目标元素的所有动画
-  gsap.killTweensOf(elements)
+  // gsap.killTweensOf(elements)
   elements.forEach((el) => {
     gsap.fromTo(
       el,
@@ -69,9 +72,9 @@ const elementScrollAnimation = (elements, delay = 0) => {
         y: 0,
         ease: 'power4.out',
         scrollTrigger: {
-          //   markers: true,
+          // markers: true,
           trigger: el, // 触发滚动的元素
-          start: 'top 100%' // 触发动画的滚动位置
+          start: 'top bottom' // 触发动画的滚动位置
         }
       }
     )

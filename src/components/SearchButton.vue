@@ -1,8 +1,9 @@
 <script setup>
 // 悬浮跟随鼠标的搜索按钮
-import { ref, reactive, onMounted, onUnmounted, onDeactivated, onActivated } from 'vue'
+import { ref, onMounted, onUnmounted, onDeactivated, onActivated } from 'vue'
 import { gsap } from 'gsap'
 import { isMobileDevice } from '@/utils/index.js'
+import { debounce } from '@/utils/index.js'
 const props = defineProps({
   searchIconShow: { Boolean, default: true }
 })
@@ -82,6 +83,9 @@ const mousemoveSearchBtnListener = (e) => {
     duration: 0.3
   })
 }
+const onInputSearch = debounce(() => {
+  $emit('input', searchInputValue.value)
+})
 </script>
 <template>
   <!-- 非移动端设备时，都采用自定义的悬浮搜索按钮 -->
@@ -112,7 +116,7 @@ const mousemoveSearchBtnListener = (e) => {
       :class="searchInputShow ? 'w-20 px-2' : 'w-0 p-0'"
       type="text"
       v-model="searchInputValue"
-      @input="$emit('input', searchInputValue)"
+      @input="onInputSearch"
     />
     <div v-show="!props.searchIconShow" class="w-1 h-1 rounded-full bg-black"></div>
   </div>
