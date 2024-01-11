@@ -2,7 +2,6 @@
 export default {
   cover: 'https://iili.io/JRSZG94.gif',
   link: 'https://juejin.cn/post/7273435543677714495',
-  sort: '2',
   info: `知识点：
       <code>feGaussianBlur</code>高斯模糊。
       <code>in</code>: in属性标识给定过滤器原语的输入。
