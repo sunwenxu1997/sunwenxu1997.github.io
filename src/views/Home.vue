@@ -27,7 +27,7 @@ const mouseListener = function (event) {
     >
       <div
         ref="layer"
-        class="absolute left-0 w-full h-full bg-[url('https://picsum.photos/1920/1080')] bg-cover bg-center scale-125"
+        class="absolute left-0 w-full h-full bg-[url('https://picsum.photos/1920/1080')] bg-cover bg-center bg-zinc-800 scale-125"
       ></div>
 
       <div class="w-80 h-full absolute left-0 top-0 hidden sm:block home-glass" style="backdrop-filter: blur(3px); filter: url(#image5)"></div>
