@@ -144,7 +144,7 @@ const toPath = (path) => {
         <div ref="titleRef" class="py-6 flex justify-between">
           <div class="uppercase text-stone-800 text-sm font-bold">{{ item.name }}</div>
           <div
-            class="group grid grid-rows-1 grid-flow-col gap-4"
+            class="group grid grid-rows-1 grid-flow-col gap-4 title-ref"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           >
@@ -200,7 +200,14 @@ const toPath = (path) => {
   </div>
 </template>
 <style lang="scss">
+.title-ref{
+  cursor: auto !important;
+  a {
+    cursor: pointer;
+  }
+}
 .info-ref {
+  cursor: text !important;
   p {
     margin: 0 !important;
   }
@@ -208,7 +215,6 @@ const toPath = (path) => {
     background: #000000;
     color: white;
     padding: 0 0.33rem;
-    cursor: text;
     &::selection {
       background-color: #2ae3e6 !important;
     }
@@ -223,6 +229,7 @@ const toPath = (path) => {
 
 /* 鼠标点击按钮  仿鼠标标签的样式变化 */
 #works-page:active .cursor {
+  transform-origin: center;
   transform: scale(1.25);
 }
 </style>

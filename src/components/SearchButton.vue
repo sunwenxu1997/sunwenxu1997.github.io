@@ -118,7 +118,6 @@ const onInputSearch = debounce(() => {
       v-model="searchInputValue"
       @input="onInputSearch"
     />
-    <div v-show="!props.searchIconShow" class="w-1 h-1 rounded-full bg-black"></div>
   </div>
 </template>
 <style lang="scss" scoped></style>

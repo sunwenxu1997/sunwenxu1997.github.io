@@ -1,6 +1,5 @@
 <script>
 export default {
-  sort: 99,
   cover: 'https://iili.io/JqJO5JV.png',
   date: '2023.11.03',
   link: 'https://juejin.cn/post/7299671709475766324',
