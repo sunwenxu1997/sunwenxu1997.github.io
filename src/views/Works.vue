@@ -23,7 +23,7 @@ const workRoutes = computed(() => {
   const _works = works.concat(externalRoutes)
   // 过滤掉隐藏的路由,日期降序,sort降序
   return _works
-    .filter((item) => !item.meta.hidden && item.name.indexOf(searchValue.value) !== -1)
+    .filter((item) => !item.meta.hidden && item.name.toLowerCase().indexOf(searchValue.value.toLowerCase()) !== -1)
     .sort((a, b) => new Date(b.meta.date || 0).getTime() - new Date(a.meta.date || 0).getTime())
     .sort((a, b) => (b.meta.sort || 0) - (a.meta.sort || 0))
 })
