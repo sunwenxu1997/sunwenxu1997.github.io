@@ -27,8 +27,8 @@ for (const path in routeFiles) {
         hidden,
         cover,
         info,
-        sort: sort || 0,
-        date: date || null
+        sort,
+        date
       }
     }
     routes.push(element)
