@@ -2,7 +2,7 @@
 export default {
   cover: 'https://iili.io/Jq9GrUg.gif',
   link: 'https://juejin.cn/post/7262007830721413180',
-  date:'2023.09.09',
+  date:'2023-09-09',
   info: `参考大佬 Chokcoco 的作品，用 Vue3.0 实现了一下，代码比较简单，就不多说了。
   知识点：
   1.通过伪元素制造多层表情标签，制造3D假象；

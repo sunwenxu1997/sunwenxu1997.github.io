@@ -4,7 +4,7 @@ export default [
     path: 'https://codepen.io/MarkBoots/pen/abMWxKm',
     name: 'svg-filter镂空文字',
     meta: {
-      date: '2024.01.23',
+      date: '2024-01-23',
       cover: 'https://iili.io/Ja4B6HN.png',
       link: 'https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/feColorMatrix',
       info: `<b>remove black pixels from element (filter)</b>/从元素(滤镜)中移除黑色像素

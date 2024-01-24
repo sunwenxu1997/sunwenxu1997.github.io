@@ -2,7 +2,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 export default {
-  date: '2023.12.26',
+  date: '2023-12-26',
   cover:'https://iili.io/JRauCrl.gif',
   link: 'http://manifesto.clapat.com/',
   info: `今天又是忙碌的一天，今天周二还有生产发布，但是发现这个有意思得效果还是要学习下的！😄
