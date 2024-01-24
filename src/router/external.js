@@ -20,5 +20,24 @@ export default [
     path: 'https://codepen.io/codegridweb/pen/VwEzbqa',
     name: 'svg-path路径过渡',
     meta: { cover: 'https://iili.io/Ja4qjQs.gif' }
+  },
+  {
+    path: 'https://codepen.io/sunwenxu1997/pen/eYXGYwr',
+    name: 'gsap-stagger交错动画',
+    meta: {
+      date: '2024-01-24',
+      cover: 'https://iili.io/JampcRR.gif',
+      link: 'https://gsap.com/resources/getting-started/Staggers',
+      info: `当你有100个标签，想要每个交错或者递增执行某一个动画，在CSS中你可能会想到使用 <b>animation-delay</b> 来实现。但是 <b>GSAP-stagger</b> 更加便捷，而且有更多的属性（axis）来支持你从头、从左、从上、从中间等来执行交错动画。
+      <code>stagger: {...}</code>：这是一个变量，它用于创建一个错开的动画。在这个例子中，每个path元素的动画将会错开开始。
+      <code>repeat: -1</code>：指定了动画的重复次数。-1表示动画将无限重复。
+      <code>amount: 1</code>：指定的是所有动画之间的总延迟时间，而不是每个动画的持续时间。
+      例如，如果你有10个path元素，amount属性的值是1秒，那么每个动画之间的延迟时间将会是0.1秒（1秒除以10）。这样，第一个动画将立即开始，第二个动画将在0.1秒后开始，第三个动画将在0.2秒后开始，以此类推，直到最后一个动画在0.9秒后开始。
+      <code>yoyo: true</code>：指定了动画是否应该在每次重复时反向播放。true表示动画将在每次重复时反向播放。
+      <code>from: "end"</code>：指定了动画的开始位置。"end"表示动画将从path元素的末尾开始。
+      <code>each: 0.5</code>：用于指定每个动画之间的延迟时间。这个值是固定的，不会因为目标元素的数量而改变。
+      例如，如果你有10个path元素，each属性的值是0.5秒，那么每个动画之间的延迟时间将会是0.5秒。这样，第一个动画将立即开始，第二个动画将在0.5秒后开始，第三个动画将在1秒后开始，以此类推，直到最后一个动画在4.5秒后开始。
+      `
+    }
   }
 ]

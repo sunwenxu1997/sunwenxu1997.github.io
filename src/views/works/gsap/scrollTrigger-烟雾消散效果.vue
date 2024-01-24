@@ -44,5 +44,6 @@ export default {
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    animation-delay: time;
 }
 </style>

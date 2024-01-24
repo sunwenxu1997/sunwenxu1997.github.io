@@ -141,10 +141,16 @@ const toPath = (path) => {
         />
       </div>
       <div class="px-8 sm:px-0">
-        <div ref="titleRef" class="py-6 flex justify-between">
-          <div class="uppercase text-stone-800 text-sm font-bold">{{ item.name }}</div>
+        <div ref="titleRef" class="py-6 flex justify-between title-ref">
           <div
-            class="group grid grid-rows-1 grid-flow-col gap-4 title-ref"
+            class="uppercase text-stone-800 text-sm font-bold"
+            @mouseenter="onMouseenterElement"
+            @mouseleave="onMouseleaveElement"
+          >
+            {{ item.name }}
+          </div>
+          <div
+            class="group grid grid-rows-1 grid-flow-col gap-4"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           >
@@ -200,7 +206,7 @@ const toPath = (path) => {
   </div>
 </template>
 <style lang="scss">
-.title-ref{
+.title-ref {
   cursor: auto !important;
   a {
     cursor: pointer;
