@@ -39,5 +39,18 @@ export default [
       例如，如果你有10个path元素，each属性的值是0.5秒，那么每个动画之间的延迟时间将会是0.5秒。这样，第一个动画将立即开始，第二个动画将在0.5秒后开始，第三个动画将在1秒后开始，以此类推，直到最后一个动画在4.5秒后开始。
       `
     }
+  },
+  {
+    path: 'https://codepen.io/sunwenxu1997/pen/vYPeeqa',
+    name: 'mix-blend-mode混合模式-重复文字背景',
+    meta: {
+      date: '2024-01-25',
+      cover: 'https://iili.io/Jc3Kant.png',
+      link: 'https://juejin.cn/post/6844903477429141517',
+      info: `想要实现这种效果的形式有很多：
+      方式1：你需要有一张文字背景图片或svg，通过<code>background-image</code>引入，加上<code>background-clip: text;</code>背景文字裁切来实现。可搜索关键字<b>‘文字效果’</b>来查看。
+      👍方式2：你可以通过<code>mix-blend-mode: screen;</code>滤色模式，具体做法是把两个颜色都反相，相乘，然后再反相。简单记忆为"让白更白，而黑不变"。当然弊端😔就是背景都需要是纯白色。
+      `
+    }
   }
 ]
