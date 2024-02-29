@@ -12,6 +12,7 @@
   "dependencies": {
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
+    "css-doodle": "^0.38.3",
     "element-plus": "^2.3.9",
     "gsap": "^3.12.2",
     "mitt": "^3.0.1",
