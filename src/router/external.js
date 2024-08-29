@@ -52,5 +52,20 @@ export default [
       👍方式2：你可以通过<code>mix-blend-mode: screen;</code>滤色模式，具体做法是把两个颜色都反相，相乘，然后再反相。简单记忆为"让白更白，而黑不变"。当然弊端😔就是背景都需要是纯白色。
       `
     }
+  },
+   {
+    path: 'https://codepen.io/sunwenxu1997/pen/bGPjMdK',
+    name: 'radial-gradient圆角裁边入场券',
+    meta: {
+      date: '2024-08-29',
+      cover: 'https://iili.io/djbneHP.png',
+      link: 'https://codepen.io/cbolson/pen/JjVVPPP',
+      info: `优惠券，入场券等，有时UI会设计这种圆角裁边的效果。大部分情况，我们会直接取背景色用⚪覆盖实现效果。
+      而此处则可以达到镂空效果，可以达到真实的裁边效果，以下为重点实现代码。
+      <code>radial-gradient(circle..top left)</code>：背景径向渐变，控制圆的大小以及初始位置。背景径向渐变有2个，一个是上左，一个是下右方；
+      <code>background-size: 100% 51%;</code>：因为有2个径向渐变，为保证镂空处不被另一方给覆盖，所以会让y轴设置为51%，刚好达到交界结合效果；
+      <code>background-repeat: no-repeat;</code>： 设置不允许重叠，避免默认重叠不能实现该效果。
+      `
+    }
   }
 ]
