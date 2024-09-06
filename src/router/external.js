@@ -67,5 +67,19 @@ export default [
       <code>background-repeat: no-repeat;</code>： 设置不允许重叠，避免默认重叠不能实现该效果。
       `
     }
+  },
+  {
+    path: 'https://codepen.io/sunwenxu1997/pen/PorXbzO',
+    name: '卡片3D旋转跟随效果',
+    meta: {
+      date: '2024-09-06',
+      cover: 'https://iili.io/dvlGSqX.gif',
+      link: 'https://juejin.cn/post/7326461075447201843#heading-0',
+      info: `rotateX = -(鼠标 y 坐标 - 元素左上角 y 坐标 - 元素高度的一半)deg / multiple(幅度);
+      rotateY = (鼠标 x 坐标 - 元素左上角 x 坐标 - 元素宽度的一半)deg / multiple(幅度);
+      <code>mousemove,mouseleave</code>：监听鼠标移动和移出,控制卡片的偏移;
+      <code>transform: rotateX rotateY</code> <code>transform-style: preserve-3d</code>：控制css的transform属性来实现标签的3d旋转;
+      `
+    }
   }
 ]
