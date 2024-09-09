@@ -88,9 +88,9 @@ export default [
     name: '3D模型鼠标跟随旋转效果',
     meta: {
       date: '2024-09-09',
-      cover: 'https://iili.io/dSMmszQ.gif',
+      cover: 'https://iili.io/dSWocdJ.gif',
       link: '',
-      info: `也是偶尔在 <a href="https://leetcode.cn/studyplan/top-interview-150/" target="_blank">力扣</a> 这个刷题平台上看到的效果，觉得挺有意思，就花了点时间研究下。主要还是用到Threejs来实现的，当然鼠标移动的旋转也可以参考上条内容，实现方式差不多😊。
+      info: `也是偶尔在 <a href="https://leetcode.cn/studyplan/top-interview-150/" target="_blank">[力扣]</a> 这个刷题平台上看到的效果，觉得挺有意思，就花了点时间研究下。主要还是用到Threejs来实现的，当然鼠标移动的旋转也可以参考上条内容，实现方式差不多😊。
       <code>THREE.OBJLoader</code>：外部.obj格式3D模型加载;
       <code>.rotation</code>：控制模型的旋转;
       `
