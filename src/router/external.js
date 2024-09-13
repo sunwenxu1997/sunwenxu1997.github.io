@@ -8,7 +8,7 @@ export default [
       cover: 'https://iili.io/dgS5isj.gif',
       link: '',
       info: `今天发现一个很有意思的效果，起初认为只有canvas或者webGL才能实现。后来发现原来css也可以达到这种效果，主要用的是css的新特性 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:has" target="_blank">:has()</a> 伪类选择器。
-      <code>.item + *</code>：.item 标签往下(之前)相邻的兄弟标签;
+      <code>.item + *</code>：.item 标签往下(之后)相邻的兄弟标签;
       <code>.item + * + *</code>：.item 标签往下(之后) +1 相邻的兄弟标签;
       <code>.item:hover + *</code>：当鼠标悬停在 .item 标签时，往下(之后)相邻的兄弟标签样式将会变化;
       <code>.item:has(+ *)</code>：.item 标签往上(之前)相邻的兄弟标签;
@@ -91,8 +91,7 @@ export default [
       date: '2024-09-06',
       cover: 'https://iili.io/dvlGSqX.gif',
       link: 'https://github.com/chokcoco/iCSS/issues/179',
-      info: `
-      rotateX = -(鼠标 y 坐标 - 元素左上角 y 坐标 - 元素高度的一半)deg / multiple(幅度);
+      info: `rotateX = -(鼠标 y 坐标 - 元素左上角 y 坐标 - 元素高度的一半)deg / multiple(幅度);
       rotateY =  (鼠标 x 坐标 - 元素左上角 x 坐标 - 元素宽度的一半)deg / multiple(幅度);
       <code>mousemove</code><code>mouseleave</code>：监听鼠标移动和移出,控制卡片的偏移;
       <code>transform-style: preserve-3d</code>：控制css的transform属性来实现标签的3D旋转;
