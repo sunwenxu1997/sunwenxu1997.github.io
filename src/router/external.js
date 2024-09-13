@@ -1,6 +1,22 @@
 // 外部引入文件
 export default [
   {
+    path: 'https://codepen.io/HighFlyer/pen/GRLZYKw',
+    name: 'css-鼠标经过卡片时波纹效果',
+    meta: {
+      date: '2024-09-13',
+      cover: 'https://iili.io/dgS5isj.gif',
+      link: '',
+      info: `今天发现一个很有意思的效果，起初认为只有canvas或者webGL才能实现。后来发现原来css也可以达到这种效果，主要用的是css的新特性 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:has" target="_blank">:has()</a> 伪类选择器。
+      <code>.item + *</code>：.item 标签往下(之前)相邻的兄弟标签;
+      <code>.item + * + *</code>：.item 标签往下(之后) +1 相邻的兄弟标签;
+      <code>.item:hover + *</code>：当鼠标悬停在 .item 标签时，往下(之后)相邻的兄弟标签样式将会变化;
+      <code>.item:has(+ *)</code>：.item 标签往上(之前)相邻的兄弟标签;
+      <code>.item:has(+ :hover)</code>：当鼠标悬停在 .item 标签时，往上(之前)相邻的兄弟标签样式将会变化;
+      `
+    }
+  },
+  {
     path: 'https://codepen.io/MarkBoots/pen/abMWxKm',
     name: 'svg-filter镂空文字',
     meta: {
