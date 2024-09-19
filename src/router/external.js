@@ -1,6 +1,21 @@
 // 外部引入文件
 export default [
   {
+    path: 'https://codepen.io/sunwenxu1997/pen/zYVgZeB',
+    name: 'css-电梯导航栏',
+    meta: {
+      date: '2024-09-19',
+      cover: 'https://iili.io/dP08thN.gif',
+      link: 'https://juejin.cn/post/7396342567867301927',
+      info: `想要达到这种效果一般还是用js比较常见，此处主要用到的是css得新特性 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/timeline-scope#result" target="_blank">timeline-scope</a> 时间线范围。不过兼容性不是很好，大家谨慎使用，或许以后就支持了呢~
+      不太懂得建议大家可以查看文章链接，文章中作者有更加详细的说明哦🙄。
+      <code><a href="#t1"></code> <code><h2 id="t1"></code>：通过id匹配方式，在点击a标签导航栏时自动锚点到对应位置;
+      <code>scroll-behavior: smooth</code> 页面的滚动会以平滑的动画效果进行过渡，而不是瞬间跳转到目标位置;
+      通过关联 <code>view-timeline-name</code> <code>animation-timeline</code> ，监测到元素在可视区（content）中给a标签加上动画效果;
+      `
+    }
+  },
+  {
     path: 'https://codepen.io/HighFlyer/pen/GRLZYKw',
     name: 'css-鼠标经过卡片时波纹效果',
     meta: {
