@@ -5,10 +5,14 @@ export default {
 </script>
 <script setup>
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { onMounted, ref } from 'vue'
+import { onMounted,onUnmounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
+
+// 离开页面时，清空所有动画
+onUnmounted(() => {
+  ScrollTrigger.killAll()
+})
 onMounted(() => {
   //  创建场景对象Scene
   var scene = new THREE.Scene()
