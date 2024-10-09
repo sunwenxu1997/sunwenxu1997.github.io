@@ -17,7 +17,7 @@
 ### 作品搜索
 你可以在作品栏中通过`长按鼠标左键`实现内容的搜索，即便这是一个可以悬浮移动的搜索框，maybe 还有一点点小小的bug！🍕
 
-<center><img src="https://sunwenxu1997.github.io/images/readme_4.jpg"  width="400"></center>
+<center><img src="https://sunwenxu1997.github.io/images/readme_4.jpg"  width="800"></center>
 
 ## 结构目录
 
@@ -55,7 +55,7 @@
 | sort | 排序数值越大越靠前 |
 | date | 日期（年月日） |
 
-<center><img src="https://sunwenxu1997.github.io/images/readme_3.jpg"  width="400"></center>
+<center><img src="https://sunwenxu1997.github.io/images/readme_3.jpg"  width="800"></center>
 
 ## 项目启动
 
