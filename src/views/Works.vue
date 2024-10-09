@@ -2,7 +2,7 @@
 import { ref, computed, onActivated, watch, onDeactivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import works from '@/router/works.js'
-import externalRoutes from '@/router/external.js'
+import defaultSet from '@/settings'
 import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
@@ -20,7 +20,7 @@ const textContentRef = ref(),
   searchIconShow = ref(true)
 const workRoutes = computed(() => {
   // 合入外部需要打开的页面
-  const _works = works.concat(externalRoutes)
+  const _works = works.concat(defaultSet.externalRoutes)
   // 过滤掉隐藏的路由,日期降序,sort降序
   return _works
     .filter((item) => !item.meta.hidden && item.name.toLowerCase().indexOf(searchValue.value.toLowerCase()) !== -1)
@@ -239,3 +239,4 @@ const toPath = (path) => {
   transform: scale(1.25);
 }
 </style>
+@/external.js
