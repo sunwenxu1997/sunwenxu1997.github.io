@@ -221,9 +221,14 @@ const toPath = (path) => {
     background: #000000;
     color: white;
     padding: 0 0.33rem;
+    margin: 0 0.2rem;
     &::selection {
       background-color: #2ae3e6 !important;
     }
+  }
+  a{
+    color: rgb(87 83 78);
+    font-weight: bold;
   }
 }
 </style>
@@ -239,4 +244,3 @@ const toPath = (path) => {
   transform: scale(1.25);
 }
 </style>
-@/external.js
