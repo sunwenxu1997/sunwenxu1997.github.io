@@ -15,7 +15,7 @@ export default {
                 date: '2024-11-25',
                 cover: 'https://iili.io/2aGRUHx.gif',
                 info: `今天网上看到有类似文章，发现自己之前也是实现过类似方法，但是回过头来却有点看不懂了😔。所以大家还是要多复习复习。
-            <code>radial-gradient</code> 径向渐变 radial-gradient(100px at ${x}px ${y}px, rgba(186, 10, 244, 0.5), rgba(255, 255, 255, 0));
+            <code>radial-gradient</code> 径向渐变 radial-gradient(100px at {x}px {y}px, rgba(186, 10, 244, 0.5), rgba(255, 255, 255, 0));
             <code>100px 渐变半径</code> 颜色从中心点开始按照设定的颜色节点进行过渡，在半径为 100px 的范围内完成整个渐变效果;
             <code>x,y</code> 圆心的中心点坐标位置;
             给每个按钮都设置一个径向渐变的背景，监听鼠标位置，因此在你移动时，所有的背景都在跟着移动和位置坐标变化，只是超出容器范围的背景不会展示而已。
