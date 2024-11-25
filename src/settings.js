@@ -9,7 +9,7 @@ export default {
     // 外部引入文件
     externalRoutes: [
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/zYVgZeB',
+            path: 'https://codepen.io/sunwenxu1997/pen/azoopBo',
             name: 'radial-gradient按钮周围边框高亮',
             meta: {
                 date: '2024-11-25',
