@@ -16,8 +16,7 @@ export default {
                 cover: 'https://iili.io/24nTWjj.gif',
                 link: 'https://juejin.cn/post/6963904955262435336',
                 info: `起初打算用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/shape-outside" target="_blank">shape-outside</a> 来让内容环绕按钮，但后面发现实现效果不如 浮动float 来的直接。而且网上也有现成的大佬踩坑实现，所以直接捡漏🎉。
-                <code>input type="checkbox"</code> html通过将复选框，整个定位📍覆盖到了右下角的按钮上；
-                css通过 <code>:checked</code> 选中属性和 <code>~</code> 兄弟选择器，控制展开收起操作；
+                <code>input type="checkbox"</code> 通过结合复选框的选中状态，控制展开收起操作。
             `
             }
         },
