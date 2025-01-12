@@ -13,10 +13,12 @@ export default {
             name: 'css-文本溢出展开收起',
             meta: {
                 date: '2025-01-12',
-                cover: 'https://iili.io/24nTWjj.gif',
+                cover: 'https://iili.io/24xceTB.gif',
                 link: 'https://juejin.cn/post/6963904955262435336',
                 info: `起初打算用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/shape-outside" target="_blank">shape-outside</a> 来让内容环绕按钮，但后面发现实现效果不如 浮动float 来的直接。而且网上也有现成的大佬踩坑实现，所以直接捡漏🎉。
-                <code>input type="checkbox"</code> 通过结合复选框的选中状态，控制展开收起操作。
+                其中有2种实现方式，<code>input type="checkbox"</code> 但都是通过结合复选框的选中状态，控制展开收起操作。
+                Ⅰ.<code>-webkit-line-clamp</code> 内容限制为指定的行数；
+                Ⅱ.<code>max-height</code> 控制内容最大高度，超出隐藏。给按钮模拟添加...，达到省略效果（此方式有 transition 过渡效果）；
             `
             }
         },
