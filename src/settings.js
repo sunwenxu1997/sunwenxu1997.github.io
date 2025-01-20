@@ -9,6 +9,22 @@ export default {
     // 外部引入文件
     externalRoutes: [
         {
+            path: 'https://codepen.io/sunwenxu1997/pen/qEWKjge',
+            name: 'gsap-3d圆环交错视图滚动',
+            meta: {
+                date: '2025-01-16',
+                cover: 'https://iili.io/2iHaHiu.gif',
+                link: '',
+                info: `这是一个很有意思的效果，有时可以用于产品或者照片墙的展示。主要是结合 GSAP 中的 ScrollTrigger，加上css的3D旋转等实现。你也可以 <a href="https://tympanus.net/codrops/2024/10/16/staggered-3d-grid-animations-with-scroll-triggered-effects/" target="_blank">👉点击这里</a> ，参考原网站的作品效果。 
+                1.通过grid布局创建2列标签块，定义好每个块的样式大小，以及设置好一些css 3D旋转属性。例如: <code>transform-style: preserve-3d;</code> <code>perspective</code>；
+                2.方法 isLeftSide 用来判断2列块的左右，用于设置 <code>rotateZ，skewX，x</code> 左右的旋转/倾斜/偏移；
+                3.为每个块创建一个带有ScrollTrigger的GSAP时间轴timeline动画，其中设置 <code>scrub: true</code>至关重要，这样才能把动画的执行和滚动操作绑定起来；
+                4.<code>.from</code> 为每个块定义之前的效果（你不用担心中途样式该如何定义，因为创建块时就是它最初的状态， <b>.from< 初始状态 <.to</b>）
+                5.<code>.to</code> 为每个块定义之后的效果（你可以理解为之前和之后时的效果是相反的，想要达到圆环的效果，是可以这么做的）
+            `
+            }
+        },
+        {
             path: 'https://codepen.io/sunwenxu1997/pen/emOGXqR',
             name: 'css-文本溢出展开收起',
             meta: {
