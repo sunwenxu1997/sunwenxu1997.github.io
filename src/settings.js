@@ -1,17 +1,37 @@
 export default {
-    userName:'sunwenxu',
-    email:'1291397693@qq.com',
-    github:'https://github.com/sunwenxu1997',
-    // 掘金
-    juejin:'https://juejin.cn/user/1291397693',
-    // github个人主页地址
+    /**
+     * userName 用户名
+     * email 邮箱
+     * github github地址
+     * juejin 掘金地址
+     * githubLink github个人主页地址
+     * externalRoutes 外部引入文件
+     *  path 打开地址
+     *  name 标题
+     *  meta 信息
+     *   date 日期
+     *   cover 封面图
+     *   link 文章链接
+     *   info 信息
+     *   sort 排序
+     *   hidden 是否隐藏
+     *   codepen codepen在线代码地址
+     *  
+     * 
+     * <code></code> 代码块
+     * <b></b> 加粗
+     * <a href="" target="_blank"></a> 超链接
+    */
+    userName: 'sunwenxu',
+    email: '1291397693@qq.com',
+    github: 'https://github.com/sunwenxu1997',
+    juejin: 'https://juejin.cn/user/1291397693',
     githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
-    // 外部引入文件
     externalRoutes: [
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/qEWKjge',
             name: 'gsap-3d圆环交错视图滚动',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/qEWKjge',
                 date: '2025-01-16',
                 cover: 'https://iili.io/2iHaHiu.gif',
                 link: '',
@@ -25,9 +45,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/emOGXqR',
             name: 'css-文本溢出展开收起',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/emOGXqR',
                 date: '2025-01-12',
                 cover: 'https://iili.io/24xceTB.gif',
                 link: 'https://juejin.cn/post/6963904955262435336',
@@ -39,9 +59,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/azoopBo',
             name: 'radial-gradient按钮周围边框高亮',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/azoopBo',
                 date: '2024-11-25',
                 cover: 'https://iili.io/2aGRUHx.gif',
                 info: `今天网上看到有类似文章，发现自己之前也是实现过类似方法，但是回过头来却有点看不懂了😔。所以大家还是要多复习复习。
@@ -53,9 +73,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/zYVgZeB',
             name: 'css-电梯导航栏',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/zYVgZeB',
                 date: '2024-09-19',
                 cover: 'https://iili.io/dP08thN.gif',
                 link: 'https://juejin.cn/post/7396342567867301927',
@@ -68,9 +88,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/HighFlyer/pen/GRLZYKw',
             name: 'css-鼠标经过卡片时波纹效果',
             meta: {
+                codepen: 'https://codepen.io/HighFlyer/pen/GRLZYKw',
                 date: '2024-09-13',
                 cover: 'https://iili.io/dgS5isj.gif',
                 link: '',
@@ -84,9 +104,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/MarkBoots/pen/abMWxKm',
             name: 'svg-filter镂空文字',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/abMWxKm',
                 date: '2024-01-23',
                 cover: 'https://iili.io/Ja4B6HN.png',
                 link: 'https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/feColorMatrix',
@@ -100,14 +120,16 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/codegridweb/pen/VwEzbqa',
             name: 'svg-path路径过渡',
-            meta: { cover: 'https://iili.io/Ja4qjQs.gif' }
+            meta: {
+                codepen: 'https://codepen.io/codegridweb/pen/VwEzbqa',
+                cover: 'https://iili.io/Ja4qjQs.gif'
+            }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/eYXGYwr',
             name: 'gsap-stagger交错动画',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/eYXGYwr',
                 date: '2024-01-24',
                 cover: 'https://iili.io/JampcRR.gif',
                 link: 'https://gsap.com/resources/getting-started/Staggers',
@@ -124,9 +146,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/vYPeeqa',
             name: 'mix-blend-mode混合模式-重复文字背景',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/vYPeeqa',
                 date: '2024-01-25',
                 cover: 'https://iili.io/Jc3Kant.png',
                 link: 'https://juejin.cn/post/6844903477429141517',
@@ -137,9 +159,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/bGPjMdK',
             name: 'radial-gradient圆角裁边入场券',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/bGPjMdK',
                 date: '2024-08-29',
                 cover: 'https://iili.io/djbneHP.png',
                 link: 'https://codepen.io/cbolson/pen/JjVVPPP',
@@ -152,9 +174,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/PorXbzO',
             name: '卡片3D旋转跟随效果',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/PorXbzO',
                 date: '2024-09-06',
                 cover: 'https://iili.io/dvlGSqX.gif',
                 link: 'https://github.com/chokcoco/iCSS/issues/179',
@@ -166,9 +188,9 @@ export default {
             }
         },
         {
-            path: 'https://codepen.io/sunwenxu1997/pen/dyBaOEW',
             name: '3D模型鼠标跟随旋转效果',
             meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/dyBaOEW',
                 date: '2024-09-09',
                 cover: 'https://iili.io/dSWocdJ.gif',
                 link: '',

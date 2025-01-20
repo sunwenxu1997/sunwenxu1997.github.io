@@ -8,6 +8,7 @@ import IconLink from '@/components/icons/link.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
 import IconImage from '@/components/icons/image.vue'
 import IconDate from '@/components/icons/date.vue'
+import IconCodepen from '@/components/icons/codepen.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
@@ -160,8 +161,11 @@ const toPath = (path) => {
             <a v-if="item.meta.code" :href="item.meta.code" title="Github地址" target="_blank">
               <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a title="打开内容" @click="toPath(item.path)">
+            <a v-if="item.path" title="打开内容" @click="toPath(item.path)">
               <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
+            </a>
+            <a v-if="item.meta.codepen" :href="item.meta.codepen" title="在线代码" target="_blank">
+              <IconCodepen class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
           </div>
         </div>
