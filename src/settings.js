@@ -34,7 +34,7 @@ export default {
                 codepen: 'https://codepen.io/sunwenxu1997/pen/RNbYMOX',
                 date: '2025-01-22',
                 cover: 'https://iili.io/2iko07e.gif',
-                link: '',
+                link: 'https://juejin.cn/post/7462303598707310603',
                 info: `🧨快过年了，后端的知识点看不进去，又来琢磨css了。本来想写其它效果的，歪打正着搞出来了这个，还是很奇妙的。主要是通过兄弟选择器 <code>+</code>  来达到点击时其他视图的变化效果。其中难点在于如何点击后者，控制之前的兄弟标签（基本上网上给的答案都是不能实现的），但是可以间接通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:has" target="_blank">:has</a> 和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not" target="_blank">:not</a> 选择器来配合实现。
                 以下这段是点击第4张元素，控制第3张元素的css代码（🙄你也可以理解为在第3张元素事先满足这些条件下，会有这种效果）。
                 <code>.x:nth-child(1):not(.y:checked)+*+.x:nth-child(3):not(.y:checked):has(+ .x .y:checked) .z</code> 
@@ -49,7 +49,7 @@ export default {
                 codepen: 'https://codepen.io/sunwenxu1997/pen/qEWKjge',
                 date: '2025-01-16',
                 cover: 'https://iili.io/2iHaHiu.gif',
-                link: '',
+                link: 'https://juejin.cn/post/7461829417750315062',
                 info: `这是一个很有意思的效果，有时可以用于产品或者照片墙的展示。主要是结合 GSAP 中的 ScrollTrigger，加上css的3D旋转等实现。你也可以 <a href="https://tympanus.net/codrops/2024/10/16/staggered-3d-grid-animations-with-scroll-triggered-effects/" target="_blank">👉点击这里</a> ，参考原网站的作品效果。 
                 1.通过grid布局创建2列标签块，定义好每个块的样式大小，以及设置好一些css 3D旋转属性。例如: <code>transform-style: preserve-3d;</code> <code>perspective</code>；
                 2.方法 isLeftSide 用来判断2列块的左右，用于设置 <code>rotateZ，skewX，x</code> 左右的旋转/倾斜/偏移；
