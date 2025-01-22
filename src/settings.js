@@ -29,6 +29,21 @@ export default {
     githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
     externalRoutes: [
         {
+            name: 'css-视图切换(:has,:not选择器)',
+            meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/RNbYMOX',
+                date: '2025-01-22',
+                cover: 'https://iili.io/2iko07e.gif',
+                link: '',
+                info: `🧨快过年了，后端的知识点看不进去，又来琢磨css了。本来想写其它效果的，歪打正着搞出来了这个，还是很奇妙的。主要是通过兄弟选择器 <code>+</code>  来达到点击时其他视图的变化效果。其中难点在于如何点击后者，控制之前的兄弟标签（基本上网上给的答案都是不能实现的），但是可以间接通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:has" target="_blank">:has</a> 和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not" target="_blank">:not</a> 选择器来配合实现。
+                以下这段是点击第4张元素，控制第3张元素的css代码（🙄你也可以理解为在第3张元素事先满足这些条件下，会有这种效果）。
+                <code>.x:nth-child(1):not(.y:checked)+*+.x:nth-child(3):not(.y:checked):has(+ .x .y:checked) .z</code> 
+                1. 控制 /①元素（不是选中）+ ②元素（不是选中）+ ③元素（没有选中）但存在（+ ④元素被选中）/时满足以上条件的③元素样式；
+                2. 即便我们不能直接控制之前的元素，但是我们可以事先要求之前的元素满足一定条件，来达到提前预判；
+            `
+            }
+        },
+        {
             name: 'gsap-3d圆环交错视图滚动',
             meta: {
                 codepen: 'https://codepen.io/sunwenxu1997/pen/qEWKjge',
@@ -53,8 +68,8 @@ export default {
                 link: 'https://juejin.cn/post/6963904955262435336',
                 info: `起初打算用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/shape-outside" target="_blank">shape-outside</a> 来让内容环绕按钮，但后面发现实现效果不如 浮动float 来的直接。而且网上也有现成的大佬踩坑实现，所以直接捡漏🎉。
                 其中有2种实现方式，<code>input type="checkbox"</code> 但都是通过结合复选框的选中状态，控制展开收起操作。
-                Ⅰ.<code>-webkit-line-clamp</code> 内容限制为指定的行数；
-                Ⅱ.<code>max-height</code> 控制内容最大高度，超出隐藏。给按钮模拟添加...，达到省略效果（此方式有 transition 过渡效果）；
+                1.<code>-webkit-line-clamp</code> 内容限制为指定的行数；
+                2.<code>max-height</code> 控制内容最大高度，超出隐藏。给按钮模拟添加...，达到省略效果（此方式有 transition 过渡效果）；
             `
             }
         },

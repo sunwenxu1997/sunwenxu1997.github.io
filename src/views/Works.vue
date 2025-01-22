@@ -178,6 +178,7 @@ const toPath = (path) => {
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
+            style="word-break: break-all; "
             v-html="handleHtmlContent(item.meta.info)"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
