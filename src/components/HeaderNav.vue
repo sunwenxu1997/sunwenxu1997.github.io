@@ -75,8 +75,11 @@ const toTop = () => {
   <!-- 默认只会在对应导航和首页显示 -->
   <div v-if="navShow">
     <!-- pc端导航显示 -->
+    <!-- 任意属性值，解决mask不支持问题 https://tailwind.nodejs.cn/docs/adding-custom-styles#-2 -->
     <div
       class="fixed flex sm:absolute z-50 w-full left-0 top-0 box-border text-base justify-between items-center px-12 py-10 sm:px-24"
+      :class="!isHome && !navMobileShow ? 'backdrop-blur-sm bg-gradient-to-b from-white from-20% to-transparent sm:bg-none sm:backdrop-blur-none nav-mobile-mask sm:[mask-image:none]' : ''
+      "
     >
       <div
         class="sm:fixed text-lg flex items-center font-bold"
@@ -216,4 +219,7 @@ const toTop = () => {
 </template>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+.nav-mobile-mask{
+  mask-image:linear-gradient(to bottom, white 55%, transparent 100%)
+}
 </style>
