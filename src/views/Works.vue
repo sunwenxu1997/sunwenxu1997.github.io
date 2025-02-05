@@ -197,7 +197,7 @@ const toPath = (path) => {
     @mouseenter="onMouseenterElement"
     @mouseleave="onMouseleaveElement"
     @click="toTop()"
-    class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md fixed bottom-10 right-8 sm:right-20 cursor-pointer hover:shadow"
+    class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md fixed z-10 bottom-10 right-8 sm:right-20 cursor-pointer hover:shadow"
     :class="bodyScrollTop < 200 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
   >
     <svg
