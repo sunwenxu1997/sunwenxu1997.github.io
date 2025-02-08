@@ -123,7 +123,7 @@ const toPath = (path) => {
     >
       <div
         v-if="item.meta.date"
-        class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-4 text-black sm:flex"
+        class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-16 text-black sm:flex"
       >
         <IconDate class="mr-1 relative -top-[1px]" />
         {{ item.meta.date }}
