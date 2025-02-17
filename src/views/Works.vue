@@ -22,11 +22,32 @@ const textContentRef = ref(),
 const workRoutes = computed(() => {
   // 合入外部需要打开的页面
   const _works = works.concat(defaultSet.externalRoutes)
-  // 过滤掉隐藏的路由,日期降序,sort降序
-  return _works
-    .filter((item) => !item.meta.hidden && item.name.toLowerCase().indexOf(searchValue.value.toLowerCase()) !== -1)
+  const _w = _works
+    .filter(
+      (item) =>
+        !item.meta.hidden && item.name.toLowerCase().indexOf(searchValue.value.toLowerCase()) !== -1
+    )
+    // 日期降序
     .sort((a, b) => new Date(b.meta.date || 0).getTime() - new Date(a.meta.date || 0).getTime())
+    // 优先展示存在封面的作品
+    .sort((a, b) => (b.meta.cover ? 1 : 0) - (a.meta.cover ? 1 : 0))
+    // 优先展示sort排序
     .sort((a, b) => (b.meta.sort || 0) - (a.meta.sort || 0))
+  // console.log(
+  //   _w.map((item) => {
+  //     return {
+  //       name: item.name,
+  //       path: item.path,
+  //       date: item.meta.date,
+  //       code: item.meta.code,
+  //       link: item.meta.link,
+  //       codepen: item.meta.codepen,
+  //       cover: item.meta.cover
+  //     }
+  //   })
+  // )
+  // 过滤掉隐藏的路由,日期降序,sort降序
+  return _w
 })
 // 通过监听works作品变化，重新执行动画 避免快速搜索时，部分元素未执行动画
 watch(workRoutes, () => {
@@ -130,13 +151,15 @@ const toPath = (path) => {
       </div>
       <div class="w-full aspect-video relative bg-stone-100">
         <div
-          class="w-full h-full flex justify-center items-center absolute top-0 left-0 animate-pulse"
+          class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
         >
           <IconImage />
+          <p v-if="!item.meta.cover" class="text-xs">暂无上传</p>
         </div>
         <img
+          v-if="item.meta.cover"
           class="w-full h-full block object-cover relative z-10"
-          :src="item.meta.cover || `https://picsum.photos/1920/1080?random=${index}`"
+          :src="item.meta.cover"
           loading="lazy"
           alt=""
         />
@@ -178,7 +201,7 @@ const toPath = (path) => {
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
-            style="word-break: break-all; "
+            style="word-break: break-all"
             v-html="handleHtmlContent(item.meta.info)"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
@@ -231,7 +254,7 @@ const toPath = (path) => {
       background-color: #2ae3e6 !important;
     }
   }
-  a{
+  a {
     color: rgb(87 83 78);
     font-weight: bold;
   }
