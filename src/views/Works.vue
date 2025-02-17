@@ -223,31 +223,8 @@ const openChatbot = () => {
     <div
       @mouseenter="onMouseenterElement"
       @mouseleave="onMouseleaveElement"
-      @click="openChatbot()"
-      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md  cursor-pointer hover:shadow mb-4"
-    >
-      <svg
-        t="1739781492755"
-        class="icon"
-        viewBox="0 0 1024 1024"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        p-id="3064"
-        width="200"
-        height="200"
-      >
-        <path
-          d="M274.048 736H800a64.832 64.832 0 0 0 64-64V256a64.768 64.768 0 0 0-64-64h-576a64.768 64.768 0 0 0-64 64v571.008L273.92 736z m21.952 64l-148.032 118.016a30.144 30.144 0 0 1-33.472 3.52 31.232 31.232 0 0 1-18.496-28.544V256c0.64-36.032 13.184-66.176 37.504-90.496 24.32-24.32 54.528-36.8 90.496-37.504h576c36.032 0.64 66.176 13.184 90.496 37.504 24.32 24.32 36.8 54.528 37.504 90.496v416c-0.64 36.032-13.184 66.176-37.504 90.496-24.32 24.32-54.528 36.8-90.496 37.504H296zM512 499.008A49.472 49.472 0 0 1 460.992 448 49.472 49.472 0 0 1 512 396.992 49.472 49.472 0 0 1 563.008 448 49.472 49.472 0 0 1 512 499.008z m192 0A49.536 49.536 0 0 1 652.992 448 49.472 49.472 0 0 1 704 396.992a49.536 49.536 0 0 1 51.008 51.008 49.472 49.472 0 0 1-51.008 51.008z m-384 0A49.472 49.472 0 0 1 268.992 448 49.472 49.472 0 0 1 320 396.992 49.472 49.472 0 0 1 371.008 448 49.472 49.472 0 0 1 320 499.008z"
-          fill="#2c2c2c"
-          p-id="3065"
-        ></path>
-      </svg>
-    </div>
-    <div
-      @mouseenter="onMouseenterElement"
-      @mouseleave="onMouseleaveElement"
       @click="toTop()"
-      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow"
+      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow mb-4"
       :class="bodyScrollTop < 200 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
     >
       <svg
@@ -257,6 +234,29 @@ const openChatbot = () => {
         data-v-ea893728=""
       >
         <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
+      </svg>
+    </div>
+    <div
+      @mouseenter="onMouseenterElement"
+      @mouseleave="onMouseleaveElement"
+      @click="openChatbot()"
+      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow"
+    >
+      <svg
+        t="1739782650202"
+        class="icon"
+        viewBox="0 0 1024 1024"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        p-id="11460"
+        width="200"
+        height="200"
+      >
+        <path
+          d="M896 128a42.666667 42.666667 0 0 1 42.666667 42.666667v597.333333a42.666667 42.666667 0 0 1-42.666667 42.666667H275.413333L85.333333 960V170.666667a42.666667 42.666667 0 0 1 42.666667-42.666667h768zM448.64 316.245333C372.394667 349.312 320 416.213333 320 490.88c0 42.453333 11.818667 68.650667 33.792 91.946667 13.824 14.72 35.712 25.173333 58.624 25.173333a74.666667 74.666667 0 0 0 74.666667-74.666667 75.093333 75.093333 0 0 0-68.864-74.453333 89.770667 89.770667 0 0 0-20.437334 0.426667v-3.925334c0.256-18.773333 4.266667-74.24 69.930667-109.781333l-19.072-29.354667z m213.333333 0c-76.245333 33.066667-128.64 99.968-128.64 174.634667 0 42.453333 11.818667 68.650667 33.792 91.946667 13.824 14.72 35.712 25.173333 58.624 25.173333a74.666667 74.666667 0 0 0 74.666667-74.666667 75.093333 75.093333 0 0 0-68.864-74.453333 89.770667 89.770667 0 0 0-20.437333 0.426667v-3.925334c0.256-18.773333 4.266667-74.24 69.930666-109.781333l-19.072-29.354667z"
+          fill="#000000"
+          p-id="11461"
+        ></path>
       </svg>
     </div>
   </div>
