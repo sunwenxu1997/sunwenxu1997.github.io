@@ -1,88 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3YKXTTWG9P"></script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-3YKXTTWG9P"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-3YKXTTWG9P');
-    </script>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta property="og:title" content="誰在花里胡哨的主页">
-    <meta property="og:description" content="一个喜欢花里胡哨的，前端彩鸡🐔">
-    <meta property="og:image" content="https://sunwenxu1997.github.io/images/favicon.jpg">
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-3YKXTTWG9P')
+    </script> -->
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <!-- <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap"
+    /> -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta property="og:title" content="誰在花里胡哨的主页" />
+    <meta property="og:description" content="一个喜欢花里胡哨的，前端彩鸡🐔" />
+    <meta property="og:image" content="https://sunwenxu1997.github.io/images/favicon.jpg" />
     <title>誰在花里胡哨</title>
     <style>
-        #loading-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f8f8f8;
-            z-index: 9999;
-            display: grid;
-            place-content: center;
-            color: #333333;
-        }
+      #loading-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f8f8f8;
+        z-index: 9999;
+        display: grid;
+        place-content: center;
+        color: #333333;
+      }
 
-        #loading-progress .loading {
-            width: 5rem;
-            text-align: center;
-            font-size: 0.88rem;
-            font-weight: 400;
-            position: relative;
-            z-index: 2;
-            font-family: 'Rajdhani', sans-serif;
-        }
+      #loading-progress .loading {
+        width: 5rem;
+        text-align: center;
+        font-size: 0.88rem;
+        font-weight: 400;
+        position: relative;
+        z-index: 2;
+        font-family: 'Rajdhani', sans-serif;
+      }
 
-        #loading-progress .value {
-            margin-right: 0.2rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
+      #loading-progress .value {
+        margin-right: 0.2rem;
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
 
-        #loading-progress .progress {
-            width: 0%;
-            height: 2px;
-            background-color: #333333;
-            margin-top: 0.33rem;
-            transition: 0.3s;
-        }
+      #loading-progress .progress {
+        width: 0%;
+        height: 2px;
+        background-color: #333333;
+        margin-top: 0.33rem;
+        transition: 0.3s;
+      }
 
-        #loading-progress .progress::after {
-            content: '';
-            width: 100%;
-            height: 2px;
-            position: absolute;
-            left: 0;
-            z-index: -1;
-            background-color: #dfdfdf;
-        }
+      #loading-progress .progress::after {
+        content: '';
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        background-color: #dfdfdf;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <div id="loading-progress">
-            <div class="loading">
-                <div><span class="value">0</span>%</div>
-                <div class="progress"></div>
-            </div>
+      <div id="loading-progress">
+        <div class="loading">
+          <div><span class="value">0</span>%</div>
+          <div class="progress"></div>
         </div>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
-</body>
-
-<script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
-<script>
+  </body>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.1.0-beta.3/libs/cn/index.js"></script>
+  <script>
+    const token = 'pat_xFIDz8MA21VGnNdJ8DAeTMAOptcTFvWYnJ5EFEvxa9n9UbL4N1uL6cv2lcv9cJhx'
+    window.cozeWebSDK = new CozeWebSDK.WebChatClient({
+      auth: {
+        // 身份验证方法，默认类型为‘unauth’，这意味着不需要身份验证；建议设置为“token”，表示通过PAT （Personal Access token）或OAuth进行身份验证
+        type: 'token',
+        // 当类型设置为“令牌”时，需要配置PAT（个人访问令牌）或OAuth访问令牌进行身份验证。
+        token: token,
+        // 当访问令牌过期时，请使用新的令牌并根据需要进行设置。
+        onRefreshToken: () => token
+      },
+      config: {
+        bot_id: '7472275735093395482'
+      },
+      componentProps: {
+        title: '誰在花里胡哨'
+      },
+      ui: {
+        base: {
+          zIndex: 99
+        },
+        asstBtn: {
+          isNeed: false
+        },
+        footer: {
+          isShow: false
+        }
+      }
+    })
+  </script>
+  <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+  <script>
     window.NProgress = NProgress
     window.NProgress.configure({ showSpinner: false }) // NProgress Configuration
     window.NProgress.start()
@@ -90,23 +126,24 @@
     const elValue = document.querySelector('#loading-progress .value')
     const elProgress = document.querySelector('#loading-progress .progress')
     window.NProgressTimer = setInterval(() => {
-        let value = Math.floor(window.NProgress.status * 100)
-        elValue.innerHTML = value
-        elProgress.style.width = value + '%'
-    }, 100);
+      let value = Math.floor(window.NProgress.status * 100)
+      elValue.innerHTML = value
+      elProgress.style.width = value + '%'
+    }, 100)
     window.NProgress.close = () => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                elValue.innerHTML = 100
-                elProgress.style.width = 100 + '%'
-                window.NProgress.done()
-                clearInterval(window.NProgressTimer)
-                // 防止app挂载过快导致没有加载到100%的进度
-                setTimeout(() => { resolve() }, 300);
-                // 默认给一个0.5s的延迟，主要是为了实现效果
-            }, 500);
-        })
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          elValue.innerHTML = 100
+          elProgress.style.width = 100 + '%'
+          window.NProgress.done()
+          clearInterval(window.NProgressTimer)
+          // 防止app挂载过快导致没有加载到100%的进度
+          setTimeout(() => {
+            resolve()
+          }, 300)
+          // 默认给一个0.5s的延迟，主要是为了实现效果
+        }, 500)
+      })
     }
-</script>
-
+  </script>
 </html>

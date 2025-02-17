@@ -130,11 +130,14 @@ const toPath = (path) => {
   if (path.indexOf('http') !== -1) window.open(path, '_blank')
   else $router.push(path)
 }
+const openChatbot = () => {
+  window.cozeWebSDK.showChatBot()
+}
 </script>
 <template>
   <div
     id="works-page"
-    class="px-4 pt-28 sm:px-60 sm:max-w-screen-sm sm:m-auto bg-white selection:bg-stone-700 selection:text-white"
+    class="px-4 pt-28 sm:px-60 sm:max-w-screen-sm sm:m-auto selection:bg-stone-700 selection:text-white"
   >
     <div
       cursor="search"
@@ -216,21 +219,46 @@ const toPath = (path) => {
       @input="searchInput"
     />
   </div>
-  <div
-    @mouseenter="onMouseenterElement"
-    @mouseleave="onMouseleaveElement"
-    @click="toTop()"
-    class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md fixed z-10 bottom-10 right-8 sm:right-20 cursor-pointer hover:shadow"
-    :class="bodyScrollTop < 200 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
-  >
-    <svg
-      class="icon -top-[0.5px] relative"
-      viewBox="0 0 1024 1024"
-      xmlns="http://www.w3.org/2000/svg"
-      data-v-ea893728=""
+  <div class="fixed z-10 bottom-10 right-4 sm:right-20">
+    <div
+      @mouseenter="onMouseenterElement"
+      @mouseleave="onMouseleaveElement"
+      @click="openChatbot()"
+      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md  cursor-pointer hover:shadow mb-4"
     >
-      <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
-    </svg>
+      <svg
+        t="1739781492755"
+        class="icon"
+        viewBox="0 0 1024 1024"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        p-id="3064"
+        width="200"
+        height="200"
+      >
+        <path
+          d="M274.048 736H800a64.832 64.832 0 0 0 64-64V256a64.768 64.768 0 0 0-64-64h-576a64.768 64.768 0 0 0-64 64v571.008L273.92 736z m21.952 64l-148.032 118.016a30.144 30.144 0 0 1-33.472 3.52 31.232 31.232 0 0 1-18.496-28.544V256c0.64-36.032 13.184-66.176 37.504-90.496 24.32-24.32 54.528-36.8 90.496-37.504h576c36.032 0.64 66.176 13.184 90.496 37.504 24.32 24.32 36.8 54.528 37.504 90.496v416c-0.64 36.032-13.184 66.176-37.504 90.496-24.32 24.32-54.528 36.8-90.496 37.504H296zM512 499.008A49.472 49.472 0 0 1 460.992 448 49.472 49.472 0 0 1 512 396.992 49.472 49.472 0 0 1 563.008 448 49.472 49.472 0 0 1 512 499.008z m192 0A49.536 49.536 0 0 1 652.992 448 49.472 49.472 0 0 1 704 396.992a49.536 49.536 0 0 1 51.008 51.008 49.472 49.472 0 0 1-51.008 51.008z m-384 0A49.472 49.472 0 0 1 268.992 448 49.472 49.472 0 0 1 320 396.992 49.472 49.472 0 0 1 371.008 448 49.472 49.472 0 0 1 320 499.008z"
+          fill="#2c2c2c"
+          p-id="3065"
+        ></path>
+      </svg>
+    </div>
+    <div
+      @mouseenter="onMouseenterElement"
+      @mouseleave="onMouseleaveElement"
+      @click="toTop()"
+      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow"
+      :class="bodyScrollTop < 200 ? 'opacity-0 pointer-events-none' : 'opacity-100'"
+    >
+      <svg
+        class="icon -top-[0.5px] relative"
+        viewBox="0 0 1024 1024"
+        xmlns="http://www.w3.org/2000/svg"
+        data-v-ea893728=""
+      >
+        <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
+      </svg>
+    </div>
   </div>
 </template>
 <style lang="scss">
