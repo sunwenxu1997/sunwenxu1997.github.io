@@ -35,3 +35,36 @@ export function debounce(fn, interval) {
     }, gapTime)
   }
 }
+
+// 创建BroadcastChannel消息通道
+export function createBroadcastChannel(channelName, data) {
+  if (!window.broadcastChannel) {
+    window.broadcastChannel = {};
+  }
+  if (!window.broadcastChannel[channelName]) {
+    window.broadcastChannel[channelName] = new BroadcastChannel(channelName);
+  }
+  const broadcastChannel = window.broadcastChannel[channelName];
+  if (data) broadcastChannel.postMessage(data);
+  return broadcastChannel;
+}
+
+// 监听BroadcastChannel消息通道
+export function listenBroadcastChannel(channelName, callback) {
+  const broadcastChannel = createBroadcastChannel(channelName);
+    broadcastChannel.onmessage = (event) => {
+        callback(event);
+    };
+}
+
+// 关闭BroadcastChannel消息通道
+export function closeBroadcastChannel(channelName) {
+  const broadcastChannel = window.broadcastChannel && window.broadcastChannel[channelName];
+  if (broadcastChannel) {
+    broadcastChannel.close();
+    delete window.broadcastChannel[channelName];
+    if (Object.keys(window.broadcastChannel).length === 0) {
+      delete window.broadcastChannel;
+    }
+  }
+}
