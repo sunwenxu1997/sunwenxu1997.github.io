@@ -7,7 +7,10 @@ export default {
   <div class="app-center">
     <div>
       <ul class="navigation">
-        <li v-for="item in list" :key="item" class="nav-item">{{ item }}</li>
+        <li v-for="(item, index) in list" :key="item" class="nav-item" @click="clickNavItem(index)">
+          {{ item }}
+        </li>
+        <div class="plan"></div>
       </ul>
       <div id="bounded-flick" class="flicker container margin">
         <ul class="carousel">
@@ -22,20 +25,36 @@ export default {
   </div>
 </template>
 <script setup>
-import { reactive, onMounted, toRefs } from 'vue'
-import { animate, createDraggable, utils } from 'animejs'
+import { reactive, onMounted, toRefs, ref } from 'vue'
+import { animate, createDraggable, createTimeline, utils } from 'animejs'
 const state = reactive({
   boundedFlicker: null,
   boundedFlickWidth: 280 + 10, //定义每个轮播项的宽度（280px内容 + 10px间距）
   boundedFlickLength: 0,
   list: [1, 2, 3, 4, 5],
-  activeIndex: 0
+  activeIndex: 0,
+  planAnimation: null
 })
 const { list } = toRefs(state)
 onMounted(() => {
   // 获取轮播项的数量（计算轮播内容的总宽度需要）
   state.boundedFlickLength = utils.$('#bounded-flick .carousel-item').length
 
+  // 创建进度条动画
+  /**
+   * animate() 方法不解析从 CSS 样式声明中声明的转换，并且转换属性必须直接在元素的内联样式中设置。您可以使用内置的
+   * utils.set()
+   * 函数来独立设置您的转换值，然后再动画化元素，并定义它们必须设置的顺序。
+   */
+  utils.set('.plan', {
+    width: 0,
+    transformOrigin: 'left'
+  })
+  state.planAnimation = animate('.plan', {
+    autoplay: false,
+    width: '100%',
+    ease: 'linear' //如果想要等比动画，这里一定要设置匀速！！！！
+  })
   // 创建可拖拽的轮播容器
   state.boundedFlicker = createDraggable('#bounded-flick .carousel', {
     // Array<Number> ([top, right, bottom, left]) 设置X轴可拖动范围
@@ -50,6 +69,12 @@ onMounted(() => {
     onUpdate: (e) => {
       // 获取当前位置小标
       // console.log(e.x)
+      getActiveIndex(e.x)
+      // console.log(e.x)
+      // 根据当前拖拽距离计算进度条动画的播放时间，默认动画时间为1000ms
+      state.planAnimation.seek(
+        (e.x / (-state.boundedFlickWidth * state.boundedFlickLength)) * 1000 + 200
+      )
     }
   })
 
@@ -57,6 +82,7 @@ onMounted(() => {
   utils.set('#bounded-flick .carousel', {
     width: `${state.boundedFlickLength * state.boundedFlickWidth}`
   })
+  clickNavItem(state.activeIndex, true)
 })
 // 导航控制函数
 const slide = (offset) => {
@@ -74,31 +100,48 @@ const slide = (offset) => {
     }
   })
 }
-// 获取当前位置下标
-const getActiveIndex = (x) => {
-  const index = utils.round(x / -state.boundedFlickWidth, 0)
-  state.activeIndex = index
-  console.log(index)
-  utils.$('.navigation .nav-item').forEach((item, i) => {
-    if (index === i) {
-      item.classList.add('active')
-    } else {
-      item.classList.remove('active')
-    }
-  })
-  const activeItem = utils.$('.navigation .nav-item.active')
-  animate(activeItem, {
-    color: '#409eff',
-    duration: 500,
-    scale: 1.5,
-    ease: 'out(4)'
-  })
-}
 const prevSlide = () => {
   slide(-state.boundedFlickWidth)
 }
 const nextSlide = () => {
   slide(state.boundedFlickWidth)
+}
+// 导航点击事件
+const clickNavItem = (index, isInit = false) => {
+  state.activeIndex = index
+  // 根据坐标计算当前位置下标
+  animate(state.boundedFlicker, {
+    x: -index * state.boundedFlickWidth,
+    duration: isInit ? 0 : 500,
+    ease: 'out(4)'
+  })
+}
+// 获取当前位置下标
+const getActiveIndex = (x) => {
+  const index = utils.round(x / -state.boundedFlickWidth, 0)
+  state.activeIndex = index
+  updateActiveIndexClass(index)
+}
+// 根据当前下标移除并添加样式
+const updateActiveIndexClass = (index) => {
+  utils.$('.nav-item').forEach((el, i) => {
+    if (index === i) {
+      animate(el, {
+        color: '#fff',
+        background: 'var(--color)',
+        duration: 500,
+        ease: 'out(4)'
+      })
+    } else {
+      animate(el, {
+        y: 0,
+        color: '#000',
+        background: 'none',
+        duration: 500,
+        ease: 'out(4)'
+      })
+    }
+  })
 }
 </script>
 <style scoped>
@@ -107,16 +150,15 @@ const nextSlide = () => {
   display: grid;
   place-content: center;
   overflow: hidden;
+  --bounded-flick-width: 280px;
+  --color: #987eec;
+  --color1: #b09def;
 }
 ul {
   padding: 0;
   margin: 0;
   list-style: none;
   display: flex;
-}
-#bounded-flick {
-  --bounded-flick-width: 280px;
-  --yellow: rgb(238, 185, 78);
 }
 .container {
   width: var(--bounded-flick-width);
@@ -133,7 +175,7 @@ ul {
 #bounded-flick .carousel-item {
   width: var(--bounded-flick-width);
   height: var(--bounded-flick-width);
-  background-color: rgb(239, 85, 85);
+  background-color: var(--color);
   border-radius: 10px;
   margin-right: 10px;
   display: flex;
@@ -144,7 +186,7 @@ ul {
   font-weight: bold;
 }
 .carousel-item:nth-child(2n) {
-  background-color: var(--yellow) !important;
+  background-color: var(--color1) !important;
 }
 .carousel-item:last-child {
   margin-right: 0;
@@ -154,13 +196,44 @@ ul {
   justify-content: space-between;
   margin-top: 20px;
 }
+.control-button {
+  border-radius: 20px;
+  padding: 10px 20px;
+  background-color: var(--color1);
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+.control-button:nth-child(2n) {
+  background-color: var(--color);
+}
+.control-button:active {
+  opacity: 0.8;
+}
 .navigation {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin-bottom: 20px;
+  position: relative;
 }
 .nav-item {
+  padding: 10px 0;
+  flex: 1;
   font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  color: #373737;
+  text-align: center;
+  border-radius: 20px;
+}
+.plan {
+  position: absolute;
+  height: 100%;
+  background: var(--color1);
+  z-index: -1;
+  border-radius: 20px;
+  left: 0;
 }
 </style>
