@@ -29,6 +29,19 @@ export default {
     githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
     externalRoutes: [
         {
+            name: 'Animejs-draggable导航拖拽切换',
+            meta: {
+                codepen: 'https://codepen.io/sunwenxu1997/pen/azzxeXo',
+                date: '2025-05-26',
+                cover: 'https://iili.io/3bObz9j.gif',
+                link: 'https://juejin.cn/post/7508556336540745728',
+                info: `有段时间没更文了，起初动画库选的 GSAP，奈何后面发现英文文档实在难以下咽🤮，而且官方案例又很少，学习难度增大。
+                20年刚入行开始学动画的时候也是选的 <a href="https://animejs.cn/documentation/" target="_blank">Animejs</a>，可能当时还没崛起。很多功能并没有GSAP那么全面，不过现在看起来。Animejs才是真正的神，这几年社区发展的很快，很多功能也都赶上了，更重要的是有 中文文档，案例也都很完善，建议大家少走弯路，直接选它👍！
+                这里不做过多陈述，建议直接点击↗右上角📕文章链接查看
+            `
+            }
+        },
+        {
             name: 'css-视图切换(:has,:not选择器)',
             meta: {
                 codepen: 'https://codepen.io/sunwenxu1997/pen/RNbYMOX',
