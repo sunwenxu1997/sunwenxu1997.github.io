@@ -1,6 +1,6 @@
 <script>
 export default {
-  // hidden: true
+  hidden: true
 }
 </script>
 <template>
