@@ -18,7 +18,8 @@ export default {
     './src/components/SearchButton.vue',
     './src/components/HeaderNav.vue',
     './src/views/works/cssHtml/tailwindcss使用.vue',
-    './src/views/works/cssHtml/tailwindcss使用1.vue'
+    './src/views/works/cssHtml/tailwindcss使用1.vue',
+    './src/views/404.vue'
   ],
   theme: {
     /**

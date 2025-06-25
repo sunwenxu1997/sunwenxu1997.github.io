@@ -22,7 +22,13 @@ const router = createRouter({
       component: () => import('../views/About.vue'),
       meta: { title: '关于' }
     },
-    ...routes
+    ...routes,
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('../views/404.vue'),
+      meta: { title: '404' }
+    }
   ]
 })
 // 路由守卫
