@@ -24,7 +24,7 @@ export default {
   </div>
 </template>
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap'); */
 
 .app-content-center {
   background-image: url('https://picsum.photos/id/821/1920/1080');

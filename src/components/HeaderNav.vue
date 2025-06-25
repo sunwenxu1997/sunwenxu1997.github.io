@@ -218,7 +218,7 @@ const toTop = () => {
   </div>
 </template>
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 .nav-mobile-mask{
   mask-image:linear-gradient(to bottom, white 55%, transparent 100%)
 }

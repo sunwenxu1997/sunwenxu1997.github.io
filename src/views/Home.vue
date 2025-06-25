@@ -68,7 +68,7 @@ const mouseListener = function (event) {
   </div>
 </template>
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 .home-glass {
   mask: linear-gradient(to left,transparent 0%,  #000 100%);
 }

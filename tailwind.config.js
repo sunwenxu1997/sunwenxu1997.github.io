@@ -19,7 +19,8 @@ export default {
     './src/components/HeaderNav.vue',
     './src/views/works/cssHtml/tailwindcss使用.vue',
     './src/views/works/cssHtml/tailwindcss使用1.vue',
-    './src/views/404.vue'
+    './src/views/404.vue',
+    './src/views/Login.vue'
   ],
   theme: {
     /**

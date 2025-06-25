@@ -13,6 +13,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "animejs": "^4.0.2",
+    "axios": "^1.10.0",
     "css-doodle": "^0.38.3",
     "element-plus": "^2.3.9",
     "gsap": "^3.12.2",

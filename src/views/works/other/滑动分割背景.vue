@@ -27,7 +27,7 @@ const mousemove = (e) => {
   </div>
 </template>
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 $--light: white;
 $--dark: black;
 

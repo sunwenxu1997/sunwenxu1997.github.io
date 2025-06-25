@@ -22,6 +22,12 @@ const router = createRouter({
       component: () => import('../views/About.vue'),
       meta: { title: '关于' }
     },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('../views/Login.vue'),
+      meta: { title: '登录' }
+    },
     ...routes,
     {
       path: '/:pathMatch(.*)*',
