@@ -4,7 +4,7 @@
     style="-webkit-text-stroke: 0.02rem #c3c3c3"
     class="absolute top-0 left-0 z-0 overflow-hidden w-full h-full flex items-center justify-center"
   >
-    <span class="text-[45vmax] text-transparent bg-clip-text font-bold rotate-90 sm:rotate-12 relative left-6 sm:left-0"
+    <span class="text-[40vmax] text-transparent bg-clip-text font-bold rotate-90 sm:rotate-12 relative"
       >WHO</span
     >
   </div>
