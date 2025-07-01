@@ -21,9 +21,9 @@ const mouseListener = function (event) {
 }
 </script>
 <template>
-  <div class="w-screen h-screen flex items-center justify-center overflow-hidden">
+  <div class="w-screen h-svh flex items-center justify-center overflow-hidden">
     <div
-      class="w-screen h-screen box-border relative flex items-center overflow-hidden sm:bg-clip-content sm:w-[calc(100%-12rem)] sm:max-w-screen-lg sm:h-2/3"
+      class="w-screen h-svh box-border relative flex items-center overflow-hidden sm:bg-clip-content sm:w-[calc(100%-12rem)] sm:max-w-screen-lg sm:h-2/3"
     >
       <div
         ref="layer"
