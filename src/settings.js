@@ -29,6 +29,16 @@ export default {
   githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
   externalRoutes: [
     {
+      name: 'animejs-鼠标跟随赞助爱心',
+      meta: {
+        codepen: 'https://codepen.io/sunwenxu1997/pen/azvNBVY',
+        date: '2025-07-22',
+        cover: 'https://iili.io/FND8Vl2.gif',
+        info: `在animejs官网右上角赞助看到的效果，感觉很有意思就尝试复现了下，顺便巩固了下动画知识(๑•̀ㅂ•́)و✧
+            `
+      }
+    },
+    {
       name: 'Animejs-draggable导航拖拽切换',
       meta: {
         codepen: 'https://codepen.io/sunwenxu1997/pen/azzxeXo',
