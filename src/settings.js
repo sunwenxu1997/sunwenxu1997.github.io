@@ -32,10 +32,11 @@ export default {
       name: 'animejs-鼠标跟随赞助爱心',
       meta: {
         codepen: 'https://codepen.io/sunwenxu1997/pen/azvNBVY',
+        code: 'https://sunwenxu1997.github.io/#/anime/anime-%E8%B7%9F%E9%9A%8F%E5%B0%8F%E7%88%B1%E5%BF%83',
         date: '2025-07-22',
         cover: 'https://iili.io/FND8Vl2.gif',
-        info: `在animejs官网右上角赞助看到的效果，感觉很有意思就尝试复现了下，顺便巩固了下动画知识(๑•̀ㅂ•́)و✧
-            `
+        link: 'https://juejin.cn/post/7529834029219856399',
+        info: `在animejs官网右上角赞助看到的效果，感觉很有意思就尝试复现了下，顺便巩固了下动画知识(๑•̀ㅂ•́)و✧`
       }
     },
     {
