@@ -7,7 +7,7 @@ for (const path in routeFiles) {
     const routeConfig = routeFiles[path].default
     const routerPath = path.replace(/.vue*$/g, '').split('../views/works')[1]
     const routerName = routerPath.split('/').reverse()[0]
-    const { link, hidden, code, cover, info, sort, date } = routeConfig
+    const { link, hidden, code, cover, info, sort, date, codepen } = routeConfig
     const element = {
       path: encodeURI(routerPath), //处理中文路径乱码问题
       name: routerName,
@@ -28,7 +28,8 @@ for (const path in routeFiles) {
         cover,
         info,
         sort,
-        date
+        date,
+        codepen
       }
     }
     routes.push(element)

@@ -1,3 +1,14 @@
+<script>
+export default {
+  name: 'anime-礼花效果🎉',
+  cover: 'https://iili.io/FeMPOKP.gif',
+  date: '2025-07-24',
+  codepen: 'https://codepen.io/sunwenxu1997/pen/raOLjzr',
+  info: `近期将要做活动中奖相关需求，就想着能不能做一个这种效果。因为之前有见过类似🎉喷洒的动画，后来找又找不到了，其次看到网上的效果也不是很理想，所以就考虑打算自己手搓一个。
+         实际效果还可以，主要还是通过animejs动画控制，创建很多随机的彩带元素。点击绽放的效果不是特别流畅，后期可以根据animejs提供不同的 <a href="https://codepen.io/juliangarnier/pen/gbOqbVR" target="_blank">缓动函数Easings</a> 来调整优化。
+            `
+}
+</script>
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { animate, createAnimatable, utils, createTimer } from 'animejs'
