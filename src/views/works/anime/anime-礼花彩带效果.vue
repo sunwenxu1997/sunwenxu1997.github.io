@@ -133,10 +133,11 @@ onMounted(() => {
     bgFlowerArr = []
     createBgFlower()
   }
-  // 页面加载完成时执行
-  window.addEventListener('load', () => {
-    draw()
-  })
+  draw()
+  // // 页面加载完成时执行
+  // window.addEventListener('load', () => {
+  //   draw()
+  // })
   // 监听窗口尺寸改变重绘
   window.addEventListener('resize', () => {
     draw()
