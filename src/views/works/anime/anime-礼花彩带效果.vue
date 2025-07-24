@@ -159,7 +159,7 @@ onMounted(() => {
 .body {
   background: #127de9;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   justify-content: center;

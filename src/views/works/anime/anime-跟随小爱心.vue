@@ -126,7 +126,7 @@ onMounted(() => {
 .body {
   background: #1a1a1a;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   align-items: center;
