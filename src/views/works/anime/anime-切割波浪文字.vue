@@ -52,19 +52,19 @@ onMounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
+@import "https://fonts.googleapis.com/css?family=Anton";
 .app-content-center {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #1a1a1a;
-  perspective: 500px;
+  perspective: 1000px;
 }
 .text-box {
   position: absolute;
   font-size: 12vmax;
   font-weight: 900;
-  //   font-family: Rajdhani, sans-serif;
-  line-height: 1;
+  font-family: "Anton", sans-serif;
   transform-style: preserve-3d;
   mix-blend-mode: screen;
   color: #fff;
