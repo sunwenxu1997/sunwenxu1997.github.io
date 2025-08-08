@@ -61,7 +61,7 @@ onMounted(() => {
 }
 .text-box {
   position: absolute;
-  font-size: 10vw;
+  font-size: 12vmax;
   font-weight: 900;
   //   font-family: Rajdhani, sans-serif;
   line-height: 1;
