@@ -6,7 +6,7 @@ export default {
     link: 'https://juejin.cn/post/7412490116793909286',
     info: `闲逛掘金时发现的一个好玩效果🌊，作者是通过scss实现的动画效果，这里我尝试用 animejs 做了实现。
            <code>.cloneNode:</code> 克隆复制dom节点，批量创建26（涉及到后面的裁切，这个数量基本能达到100%的裁切）个文字元素层；
-           <code>clip-path:</code> 第一块裁切比例 clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%)，以此类推...
+           <code>clip-path:</code> 第一块裁切比例 clip-path: polygon(-30% 0, -20% 0, 20% 100%, 0% 100%)，clip-path: polygon(-25% 0, -15% 0, 25% 100%, 5% 100%)，以此类推...
            动画执行时间和旋转角度这些就不做过多陈述了，基本都是经过实践得到的最优效果👻
            `
 }
