@@ -29,7 +29,7 @@ export default {
   githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
   externalRoutes: [
     {
-      name: '微信小程序实现陀螺仪卡片景深效果🏔',
+      name: '微信小程序实现陀螺仪卡片景深效果',
       meta: {
         codepen: 'https://developers.weixin.qq.com/s/RxZLJpme862B',
         code: 'https://github.com/sunwenxu1997/gyroscope-wx-app/blob/master/utils/GyroToTranslate.js',
@@ -40,7 +40,7 @@ export default {
         近期在做小程序的一些需求时，有发现官方提供的<a href="https://developers.weixin.qq.com/miniprogram/dev/api/device/gyroscope/wx.onGyroscopeChange.html" target="_blank">👉wx.onGyroscopeChange</a> ，调研之后发现是可以达到我的预期效果的😁。(虽然后面产品没采纳😑，但是学到了，以后贺卡，产品展示等也都可以用到~)
         1.<code>wx.onGyroscopeChange</code> 微信官方提供的陀螺仪监听api，返回<code>x，y，z</code>分别为不同轴转动方向的角速度；
         2.<code>角速度（rad/s）× 时间（s）= 旋转角度（rad）</code> 关键是如何拿到时间差，通过每次监听数据变化时的本次时间和上次时间戳获取；
-        3.<code>旋转角度 × 转换系数 = 位移偏移量（px）</code> 拿到了角度，再根据自定义的转换系数，就得到了位移偏移量（px）了🎉;
+        3.<code>旋转角度 × 转换系数 = 位移偏移量</code> 拿到了角度，再根据自定义的转换系数，就得到了位移偏移量了🎉;
         `
       }
     },
