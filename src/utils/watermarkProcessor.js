@@ -14,6 +14,8 @@ class WatermarkProcessor {
    * @param {string} options.font - 水印字体，默认"Arial, sans-serif"
    * @param {number} options.maxWidth - 处理后图片最大宽度，默认800
    * @param {number} options.maxHeight - 处理后图片最大高度，默认600
+   * @param {number} options.gap - 水印x,y轴的交错倍数
+   * @param {number} options.gapY - 水印y轴偏移量px
    */
   constructor(options = {}) {
     // 默认配置
@@ -25,7 +27,9 @@ class WatermarkProcessor {
       position: 'tiled',
       font: 'Arial, sans-serif',
       maxWidth: 1920,
-      maxHeight: 1080
+      maxHeight: 1080,
+      gap: 1.2,
+      gapY: 10,
     };
 
     // 合并用户配置
@@ -269,11 +273,11 @@ class WatermarkProcessor {
     const tileWidth =
       textWidth * Math.cos(rotation) + textHeight * Math.sin(rotation);
     const tileHeight =
-      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation) - 10;
+      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation) - gapY;
 
     // 计算平铺间隔（在实际尺寸基础上增加一些间距）
-    const gapX = tileWidth * 1.2; // 1.2倍间距，可调整
-    const gapY = tileHeight * 1.2;
+    const gapX = tileWidth * gap; // 1.2倍间距，可调整
+    const gapY = tileHeight * gap;
 
     // 计算起始偏移量（让水印从画布外开始，避免边缘空白）
     const startX = -gapX / 2;
