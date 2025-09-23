@@ -15,7 +15,7 @@ class WatermarkProcessor {
    * @param {number} options.maxWidth - 处理后图片最大宽度，默认800
    * @param {number} options.maxHeight - 处理后图片最大高度，默认600
    * @param {number} options.gap - 水印x,y轴的交错倍数
-   * @param {number} options.gapY - 水印y轴偏移量px
+   * @param {number} options.gapTop - 水印y轴偏移量px
    */
   constructor(options = {}) {
     // 默认配置
@@ -29,7 +29,7 @@ class WatermarkProcessor {
       maxWidth: 1920,
       maxHeight: 1080,
       gap: 1.2,
-      gapY: 10,
+      gapTop: 10,
     };
 
     // 合并用户配置
