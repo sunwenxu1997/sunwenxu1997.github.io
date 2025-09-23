@@ -262,6 +262,7 @@ class WatermarkProcessor {
     textWidth,
     textHeight
   ) {
+    const { gapTop, gap } = this.options;
     // 旋转角度（30度）
     const rotation = Math.PI / 6;
 
@@ -273,7 +274,7 @@ class WatermarkProcessor {
     const tileWidth =
       textWidth * Math.cos(rotation) + textHeight * Math.sin(rotation);
     const tileHeight =
-      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation) - gapY;
+      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation) - gapTop;
 
     // 计算平铺间隔（在实际尺寸基础上增加一些间距）
     const gapX = tileWidth * gap; // 1.2倍间距，可调整
