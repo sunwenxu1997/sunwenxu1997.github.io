@@ -274,11 +274,11 @@ class WatermarkProcessor {
     const tileWidth =
       textWidth * Math.cos(rotation) + textHeight * Math.sin(rotation);
     const tileHeight =
-      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation) - gapTop;
+      textWidth * Math.sin(rotation) + textHeight * Math.cos(rotation);
 
     // 计算平铺间隔（在实际尺寸基础上增加一些间距）
     const gapX = tileWidth * gap; // 1.2倍间距，可调整
-    const gapY = tileHeight * gap;
+    const gapY = tileHeight * gap + gapTop;
 
     // 计算起始偏移量（让水印从画布外开始，避免边缘空白）
     const startX = -gapX / 2;
