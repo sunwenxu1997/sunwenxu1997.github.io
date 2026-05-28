@@ -29,6 +29,27 @@ export default {
   githubLink: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io',
   externalRoutes: [
     {
+      name: 'vue-组件页面装修demo',
+      meta: {
+        code: 'https://github.com/sunwenxu1997/decoration-demo',
+        open: 'https://sunwenxu1997.github.io/decoration-demo',
+        date: '2026-05-28',
+        cover: 'https://iili.io/C2Bnigt.gif',
+        link: 'https://juejin.cn/post/7629167699948240948',
+        info: `公司项目中需要实现一个页面装修的功能，结合原有的项目思路 + ai（Trae），重新搭建了一个优化后的页面装修demo。
+        目前包括以下功能🥳：
+        1.<code>拖拽排序</code>: 支持组件预览区域拖拽排序
+        2.<code>添加删除</code>：支持组件选择添加，预览区右上角删除
+        3.<code>页面发布</code>：发布支持json格式数据输出
+        4.<code>预览功能</code>：支持实时预览，预览区右上角切换预览模式
+        5.<code>组件选择</code>：轮播图、新闻列表、锚点导航...
+        6.<code>尺寸编辑</code>：支持组件尺寸编辑
+        7.<code>素材库选择</code>：支持从素材库选择图片，跨页签实时同步选择数据
+        🐱‍🏍更多内容尽情期待，可以多关注 <a href="https://github.com/sunwenxu1997/decoration-demo" target="_blank">github</a> 更新~
+        `
+      }
+    },
+    {
       name: '微信小程序实现陀螺仪卡片景深效果',
       meta: {
         codepen: 'https://developers.weixin.qq.com/s/RxZLJpme862B',

@@ -187,7 +187,7 @@ const openChatbot = () => {
             <a v-if="item.meta.code" :href="item.meta.code" title="Github地址" target="_blank">
               <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a v-if="item.path" title="打开内容" @click="toPath(item.path)">
+            <a v-if="item.path || item.meta.open" title="打开内容" @click="toPath(item.path || item.meta.open)">
               <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
             <a v-if="item.meta.codepen" :href="item.meta.codepen" title="在线代码" target="_blank">
