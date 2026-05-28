@@ -2,26 +2,20 @@
 name: Deploy static content to Pages
 
 on:
-  # 仅在推送到默认分支时运行。
   push:
     branches: ['main']
-
-  # 这个选项可以使你手动在 Action tab 页面触发工作流
   workflow_dispatch:
 
-# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages。
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 允许一个并发的部署
 concurrency:
   group: 'pages'
   cancel-in-progress: true
 
 jobs:
-  # 单次部署的工作描述
   deploy:
     environment:
       name: github-pages
@@ -30,22 +24,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '16.x' # node版本号
-          registry-url: 'https://registry.npmjs.org'
+          node-version: 20  # 升级到支持更好的 Node 20（解决编译异常）
+          cache: 'npm'      # 加缓存，加速安装
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # 比 npm install 更稳定
+
       - name: Build
         run: npm run build
+
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
+
+      # ✅ 修复点1：降级到 v2 + 增加上传超时
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v2
         with:
-          # Upload dist repository
           path: './dist'
+        env:
+          UPLOAD_PAGES_ARTIFACT_UPLOAD_TIMEOUT: 300
+
+      # ✅ 修复点2：使用稳定 v2 版本部署
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v2
