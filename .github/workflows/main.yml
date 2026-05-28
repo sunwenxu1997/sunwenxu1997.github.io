@@ -1,4 +1,3 @@
-# 将静态内容部署到 GitHub Pages 的简易工作流程
 name: Deploy static content to Pages
 
 on:
@@ -28,11 +27,11 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20  # 升级到支持更好的 Node 20（解决编译异常）
-          cache: 'npm'      # 加缓存，加速安装
+          node-version: 20
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci  # 比 npm install 更稳定
+        run: npm ci
 
       - name: Build
         run: npm run build
@@ -40,15 +39,14 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # ✅ 修复点1：降级到 v2 + 增加上传超时
+      # 关键：用 v3（内部是 upload-artifact@v4）+ 超时
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
         env:
           UPLOAD_PAGES_ARTIFACT_UPLOAD_TIMEOUT: 300
 
-      # ✅ 修复点2：使用稳定 v2 版本部署
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
