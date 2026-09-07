@@ -1,8 +1,7 @@
 <script setup>
 import { ref, computed, onActivated, watch, onDeactivated, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import works from '@/router/works.js'
-import defaultSet from '@/settings'
+import { useWorksStore } from '@/stores/works'
 import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
@@ -19,35 +18,14 @@ const textContentRef = ref(),
   searchValue = ref(''),
   searchButtonRef = ref(null),
   searchIconShow = ref(true)
+const worksStore = useWorksStore()
 const workRoutes = computed(() => {
-  // 合入外部需要打开的页面
-  const _works = works.concat(defaultSet.externalRoutes)
-  const _w = _works
-    .filter(
-      (item) =>
-        !item.meta.hidden && item.name.toLowerCase().indexOf(searchValue.value.toLowerCase()) !== -1
-    )
-    // 日期降序
-    .sort((a, b) => new Date(b.meta.date || 0).getTime() - new Date(a.meta.date || 0).getTime())
-    // 优先展示存在封面的作品
-    .sort((a, b) => (b.meta.cover ? 1 : 0) - (a.meta.cover ? 1 : 0))
-    // 优先展示sort排序
-    .sort((a, b) => (b.meta.sort || 0) - (a.meta.sort || 0))
-  // console.log(
-  //   _w.map((item) => {
-  //     return {
-  //       name: item.name,
-  //       path: item.path,
-  //       date: item.meta.date,
-  //       code: item.meta.code,
-  //       link: item.meta.link,
-  //       codepen: item.meta.codepen,
-  //       cover: item.meta.cover
-  //     }
-  //   })
-  // )
-  // 过滤掉隐藏的路由,日期降序,sort降序
-  return _w
+  // 数据由 store 合并 DB + glob 并排序，这里只做搜索过滤
+  const keyword = searchValue.value.toLowerCase()
+  return worksStore.works.filter(
+    (item) =>
+      !item.meta.hidden && item.name.toLowerCase().indexOf(keyword) !== -1
+  )
 })
 // 通过监听works作品变化，重新执行动画 避免快速搜索时，部分元素未执行动画
 watch(workRoutes, () => {
@@ -60,6 +38,7 @@ watch(workRoutes, () => {
 onActivated(() => {
   onBus('searchInput', searchInput)
   searchIconShow.value = true
+  worksStore.init()
   gsap.registerPlugin(ScrollTrigger)
   bodyScrollTrigger()
   elementScrollAnimation(titleRef.value)
