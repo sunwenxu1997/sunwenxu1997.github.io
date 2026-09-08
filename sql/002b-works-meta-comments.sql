@@ -19,7 +19,7 @@ comment on column public.profiles.role
 comment on table public.works_meta
   is '作品元数据：存储 settings.js externalRoutes 的「运营态」字段。Vue demo 组件代码仍留在 src/views/works/，本表只存封面/介绍/链接/排序等';
 comment on column public.works_meta.id
-  is '自增主键';
+  is 'UUID 主键，由 gen_random_uuid() 自动生成';
 comment on column public.works_meta.slug
   is '路由标识（唯一），需要和前端路由 path 一致才能关联到 Vue demo。例："/anime/anime-跟随小爱心"；外部链接类用 "/external/vue-组件页面装修demo" 这种前缀';
 comment on column public.works_meta.name
@@ -41,9 +41,7 @@ comment on column public.works_meta.date
 comment on column public.works_meta.sort_weight
   is '排序权重（数值越大越靠前）；同权重按 date 降序；再同按 id 降序。默认 0，重要作品可设为 100/200 置顶';
 comment on column public.works_meta.is_published
-  is '发布标志：false 时匿名访问看不到，admin 后台能看到，用于草稿态';
-comment on column public.works_meta.is_hidden
-  is '隐藏标志：true 时从随机推荐和默认列表隐藏，但管理员后台能看到。适合「不想公开展示但留档」的作品';
+  is '发布标志：false 时匿名访问看不到，admin 后台能看到，用于草稿态。是作品可见性的唯一控制字段';
 comment on column public.works_meta.tags
   is '分类标签数组，用于前端筛选。例：{css,gsap,3d}、{anime,动画}、{vue,装修}';
 comment on column public.works_meta.created_at

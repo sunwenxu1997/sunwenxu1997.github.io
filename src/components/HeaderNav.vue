@@ -3,6 +3,7 @@ import 'element-plus/es/components/message/style/css'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { emitBus } from '@/utils/bus.js'
+import { User } from 'lucide-vue-next'
 import defaultSet from '../settings'
 import IconGithub from '@/components/icons/github.vue'
 import IconEmail from '@/components/icons/email.vue'
@@ -209,7 +210,10 @@ const toTop = () => {
             class="my-0 mt-10 text-xs flex justify-between"
             style="font-family: 'Rajdhani', sans-serif"
           >
-            <span>©2023 {{ defaultSet.userName }}</span>
+            <a href="/#/admin/works" target="_blank" rel="noopener" title="后台管理" class="admin-link">
+              ©2023 {{ defaultSet.userName }}
+              <User :size="12" />
+            </a>
             <span>github.io</span>
           </p>
         </div>
@@ -222,4 +226,10 @@ const toTop = () => {
 .nav-mobile-mask{
   mask-image:linear-gradient(to bottom, white 55%, transparent 100%)
 }
+.admin-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  opacity: 0.5; transition: opacity 0.2s;
+  color: inherit; text-decoration: none;
+}
+.admin-link:hover { opacity: 1; }
 </style>

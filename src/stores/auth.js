@@ -56,6 +56,15 @@ export const useAuthStore = defineStore('auth', () => {
     return { error }
   }
 
+  async function checkAdmin() {
+    const { data, error } = await supabase.rpc('is_admin')
+    if (error) {
+      console.error('[auth] checkAdmin failed:', error)
+      return false
+    }
+    return !!data
+  }
+
   return {
     user,
     session,
@@ -66,6 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
     signInWithOAuth,
     signInWithPassword,
     signUp,
-    signOut
+    signOut,
+    checkAdmin
   }
 })

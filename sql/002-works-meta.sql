@@ -5,7 +5,7 @@
 
 -- 1. 建表
 create table if not exists public.works_meta (
-  id          bigint generated always as identity primary key,
+  id          uuid default gen_random_uuid() primary key,
   slug        text unique not null,            -- 路由标识，如 '/anime/anime-跟随小爱心'
   name        text not null,                   -- 显示标题
   cover_url   text,                            -- 封面图 URL（后续可迁到 Supabase Storage）
@@ -17,7 +17,6 @@ create table if not exists public.works_meta (
   date        date,                            -- 发布日期
   sort_weight int not null default 0,          -- 排序权重，越大越靠前
   is_published boolean not null default true,  -- 是否发布
-  is_hidden   boolean not null default false,  -- 是否在随机/列表中隐藏
   tags        text[] default '{}',             -- 分类标签，如 '{css,gsap,anime}'
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
@@ -40,10 +39,10 @@ drop policy if exists "works_meta: admin write"        on public.works_meta;
 drop policy if exists "works_meta: admin update"       on public.works_meta;
 drop policy if exists "works_meta: admin delete"       on public.works_meta;
 
--- 匿名只能读已发布且未隐藏
+-- 匿名只能读已发布
 create policy "works_meta: anon read published"
   on public.works_meta for select to anon
-  using (is_published = true and is_hidden = false);
+  using (is_published = true);
 
 -- 登录用户（含 admin）能读所有行（方便后台管理列表）
 create policy "works_meta: auth read all"
@@ -66,7 +65,7 @@ create policy "works_meta: admin delete"
 
 -- 5. 索引：常用查询优化
 create index if not exists idx_works_meta_sort
-  on public.works_meta (sort_weight desc, date desc nulls last, id desc);
+  on public.works_meta (sort_weight desc, date desc nulls last, created_at desc);
 create index if not exists idx_works_meta_slug
   on public.works_meta (slug) where is_published = true;
 

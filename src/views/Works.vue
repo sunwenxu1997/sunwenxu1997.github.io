@@ -13,8 +13,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
 import SearchButton from '@/components/SearchButton.vue'
 import { onBus } from '@/utils/bus.js'
 const bodyScrollTop = ref(0)
-const textContentRef = ref(),
-  titleRef = ref(),
+const workItemRef = ref(),
   searchValue = ref(''),
   searchButtonRef = ref(null),
   searchIconShow = ref(true)
@@ -27,12 +26,10 @@ const workRoutes = computed(() => {
       !item.meta.hidden && item.name.toLowerCase().indexOf(keyword) !== -1
   )
 })
-// 通过监听works作品变化，重新执行动画 避免快速搜索时，部分元素未执行动画
+// 通过监听works作品变化，重新执行动画
 watch(workRoutes, () => {
-  // 搜索结果变化时，等待dom更新后执行动画
   nextTick(() => {
-    elementScrollAnimation(titleRef.value)
-    elementScrollAnimation(textContentRef.value, 0.2)
+    initWorkAnimations()
   })
 })
 onActivated(() => {
@@ -41,8 +38,7 @@ onActivated(() => {
   worksStore.init()
   gsap.registerPlugin(ScrollTrigger)
   bodyScrollTrigger()
-  elementScrollAnimation(titleRef.value)
-  elementScrollAnimation(textContentRef.value, 0.2)
+  initWorkAnimations()
 })
 onDeactivated(() => {
   ScrollTrigger.killAll()
@@ -62,27 +58,35 @@ const bodyScrollTrigger = () => {
     }
   })
 }
-// 元素滚动动画
-const elementScrollAnimation = (elements, delay = 0) => {
-  // 清除指定目标元素的所有动画
-  // gsap.killTweensOf(elements)
-  elements.forEach((el) => {
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 20 },
-      {
-        duration: 1,
-        opacity: 1,
-        delay: delay,
-        y: 0,
-        ease: 'power4.out',
-        scrollTrigger: {
-          // markers: true,
-          trigger: el, // 触发滚动的元素
-          start: 'top bottom' // 触发动画的滚动位置
-        }
+// 每个作品进入视口时，内部元素依次淡入
+const initWorkAnimations = () => {
+  const items = workItemRef.value
+  if (!items) return
+  items.forEach((el) => {
+    const cover = el.querySelector('.work-cover')
+    const title = el.querySelector('.title-ref')
+    const tags = el.querySelectorAll('.works-tag')
+    const info = el.querySelector('.info-ref')
+    const children = []
+    if (cover) children.push(cover)
+    if (title) children.push(title)
+    children.push(...tags)
+    if (info) children.push(info)
+    gsap.set(children, { opacity: 0, y: 20 })
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        gsap.to(children, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out'
+        })
       }
-    )
+    })
   })
 }
 const searchInput = (val) => {
@@ -120,6 +124,7 @@ const openChatbot = () => {
   >
     <div
       cursor="search"
+      ref="workItemRef"
       class="pt-12 mb-12 w-full relative"
       v-for="(item, index) in workRoutes"
       :key="index"
@@ -131,7 +136,7 @@ const openChatbot = () => {
         <IconDate class="mr-1 relative -top-[1px]" />
         {{ item.meta.date }}
       </div>
-      <div class="w-full aspect-video relative bg-stone-100">
+      <div class="work-cover w-full aspect-video relative bg-stone-100">
         <div
           class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
         >
@@ -147,7 +152,7 @@ const openChatbot = () => {
         />
       </div>
       <div class="px-8 sm:px-0">
-        <div ref="titleRef" class="py-6 flex justify-between title-ref">
+        <div class="py-6 flex justify-between title-ref">
           <div
             class="uppercase text-stone-800 text-sm font-bold"
             @mouseenter="onMouseenterElement"
@@ -174,12 +179,14 @@ const openChatbot = () => {
             </a>
           </div>
         </div>
+        <div v-if="item.meta.tags && item.meta.tags.length" class="works-tags">
+          <span v-for="tag in item.meta.tags" :key="tag" class="works-tag">{{ tag }}</span>
+        </div>
         <div v-if="item.meta.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
           <IconDate class="mr-1 relative -top-[1px]" />
           <span class="text-xs font-bold">{{ item.meta.date }}</span>
         </div>
         <div
-          ref="textContentRef"
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
@@ -277,5 +284,18 @@ const openChatbot = () => {
 #works-page:active .cursor {
   transform-origin: center;
   transform: scale(1.25);
+}
+.works-tags {
+  display: flex; gap: 6px; margin-bottom: 8px;
+  overflow-x: auto; white-space: nowrap;
+  scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;
+}
+.works-tags::-webkit-scrollbar { height: 3px; }
+.works-tags::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 2px; }
+.works-tags::-webkit-scrollbar-track { background: transparent; }
+.works-tag {
+  font-size: 11px; padding: 2px 8px; border-radius: 4px;
+  background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
+  white-space: nowrap; flex-shrink: 0;
 }
 </style>

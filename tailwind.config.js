@@ -14,6 +14,7 @@ export default {
     './src/views/Home.vue',
     './src/views/Works.vue',
     './src/views/About.vue',
+    './src/views/admin/*.vue',
     './src/components/AppleWindow.vue',
     './src/components/SearchButton.vue',
     './src/components/HeaderNav.vue',

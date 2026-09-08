@@ -1,5 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import { Toaster } from 'vue-sonner'
 import HeaderNav from './components/HeaderNav.vue'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -12,6 +13,7 @@ const keepAliveRoutes = computed(() => {
 </script>
 
 <template>
+  <Toaster position="bottom-right" />
   <HeaderNav />
   <router-view v-slot="{ Component }">
     <keep-alive :include="keepAliveRoutes">

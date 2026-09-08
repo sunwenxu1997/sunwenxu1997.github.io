@@ -1,6 +1,6 @@
-import { useAppStore } from '../stores/index'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import routes from './works'
+import { useAuthStore } from '../stores/auth'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -28,6 +28,12 @@ const router = createRouter({
       component: () => import('../views/Login.vue'),
       meta: { title: '登录' }
     },
+    {
+      path: '/admin/works',
+      name: 'AdminWorks',
+      component: () => import('../views/admin/WorksAdmin.vue'),
+      meta: { title: '作品管理', requiresAdmin: true }
+    },
     ...routes,
     {
       path: '/:pathMatch(.*)*',
@@ -37,10 +43,25 @@ const router = createRouter({
     }
   ]
 })
+
 // 路由守卫
-router.beforeEach((to, from, next) => {
-  // // 滚动条置顶
-  // window.scrollTo(0, 0)
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  await authStore.init()
+
+  // 需要管理员权限
+  if (to.meta.requiresAdmin) {
+    if (!authStore.isAuthenticated) {
+      return next('/login')
+    }
+    const isAdmin = await authStore.checkAdmin()
+    if (!isAdmin) {
+      window.alert('需要管理员权限')
+      await authStore.signOut()
+      return next('/login')
+    }
+  }
+
   next()
 })
 

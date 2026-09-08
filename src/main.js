@@ -1,5 +1,6 @@
 import './assets/main.css'
 import "tailwindcss/tailwind.css" // 引入 tailwindcss 样式
+import 'vue-sonner/style.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

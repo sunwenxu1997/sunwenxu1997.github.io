@@ -1,6 +1,7 @@
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
+import { User } from 'lucide-vue-next'
 import defaultSet from '../settings'
 const layer = ref(null)
 onMounted(() => {
@@ -42,7 +43,10 @@ const mouseListener = function (event) {
       class="absolute bottom-12 left-12 sm:left-24 font-bold text-white sm:text-black text-xs"
       style="font-family: 'Rajdhani', sans-serif"
     >
-      ©2023 {{ defaultSet.userName }}
+      <a href="/#/admin/works" target="_blank" rel="noopener" title="后台管理" class="admin-link">
+        ©2023 {{ defaultSet.userName }}
+        <User :size="12" />
+      </a>
     </div>
     <svg width="0" height="0">
       <defs>
@@ -72,4 +76,10 @@ const mouseListener = function (event) {
 .home-glass {
   mask: linear-gradient(to left,transparent 0%,  #000 100%);
 }
+.admin-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  opacity: 0.5; transition: opacity 0.2s;
+  color: inherit; text-decoration: none;
+}
+.admin-link:hover { opacity: 1; }
 </style>
