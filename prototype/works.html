@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Works Admin</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f5f5f4; color: #292524; min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== layout ===== */
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ===== top nav ===== */
+  .topnav {
+    grid-column: 1 / -1;
+    background: #fff;
+    border-bottom: 1px solid #e7e5e4;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 56px;
+  }
+
+  /* drag handle */
+  .drag-handle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 6px; border: none; background: transparent;
+    cursor: grab; flex-shrink: 0;
+    color: #a8a29e; transition: all 0.15s;
+  }
+  .drag-handle:hover { background: #f5f5f4; color: #292524; }
+  .drag-handle:active { cursor: grabbing; }
+  .drag-handle svg { width: 14px; height: 14px; }
+  .work-row.dragging { opacity: 0.4; }
+  .work-row.drag-over {
+    box-shadow: 0 -2px 0 0 #292524 inset;
+  }
+
+  .topnav-tabs {
+    display: inline-flex; gap: 2px; justify-content: center;
+    background: #f5f5f4; border-radius: 8px; padding: 3px;
+    flex-shrink: 0;
+  }
+  .topnav-tab {
+    padding: 5px 14px; border-radius: 6px; border: none;
+    background: transparent; font-size: 13px; font-weight: 500;
+    color: #78716c; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  }
+  .topnav-tab svg { width: 14px; height: 14px; }
+  .topnav-tab.active {
+    background: #fff; color: #292524;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .topnav-tab:not(.active):hover { color: #292524; }
+  .topnav-badge {
+    background: #e7e5e4; color: #57534e;
+    font-size: 11px; font-weight: 600;
+    padding: 1px 6px; border-radius: 4px;
+  }
+
+  /* ===== sidebar (modal) ===== */
+  .sidebar {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    padding: 24px 16px;
+    background: #fff;
+    border-radius: 16px;
+    display: flex; flex-direction: column; gap: 20px;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    z-index: 50;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+  .sidebar.open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .profile-card {
+    display: flex; flex-direction: column;
+    align-items: center; text-align: center;
+    padding-bottom: 20px; border-bottom: 1px solid #e7e5e4;
+  }
+  .profile-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #292524;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .profile-name { font-size: 14px; font-weight: 600; color: #292524; }
+  .profile-email { font-size: 12px; color: #a8a29e; margin-top: 2px; }
+  .profile-bio {
+    font-size: 12px; color: #78716c; margin-top: 8px;
+    line-height: 1.6; padding: 0 4px;
+  }
+  .sidebar-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  }
+  .stat-item {
+    background: #fafaf9; border: 1px solid #f5f5f4;
+    border-radius: 10px; padding: 10px 8px; text-align: center;
+  }
+  .stat-val { font-size: 18px; font-weight: 700; color: #292524; }
+  .stat-lbl { font-size: 11px; color: #a8a29e; margin-top: 2px; }
+
+  .sidebar-footer {
+    margin-top: auto; padding-top: 16px; border-top: 1px solid #e7e5e4;
+  }
+  .btn-logout {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px; border-radius: 8px; border: 1px solid #e7e5e4;
+    background: transparent; color: #78716c; font-size: 13px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-logout:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+  .btn-logout svg { width: 14px; height: 14px; }
+
+  /* ===== main ===== */
+  .main {
+    padding: 24px 32px; overflow-y: auto; background: #f5f5f4;
+  }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ===== shared ===== */
+  .card { background: #fff; border-radius: 12px; border: 1px solid #e7e5e4; }
+  .input {
+    width: 100%; padding: 10px 14px;
+    background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 8px;
+    font-size: 14px; color: #292524; outline: none; transition: border 0.2s;
+  }
+  .input:focus { border-color: #44403c; }
+  .input::placeholder { color: #a8a29e; }
+  textarea.input { resize: vertical; min-height: 90px; line-height: 1.6; }
+  .label {
+    font-size: 12px; color: #78716c; font-weight: 500;
+    letter-spacing: 0.03em; margin-bottom: 6px; display: block;
+  }
+  .btn-primary {
+    background: #292524; color: #fff; border: none;
+    padding: 9px 22px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #1c1917; }
+  .btn-ghost {
+    background: transparent; color: #78716c; border: 1px solid #e7e5e4;
+    padding: 8px 16px; border-radius: 8px; font-size: 13px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-ghost:hover { background: #f5f5f4; color: #292524; }
+
+  /* toggle */
+  .toggle-track {
+    width: 34px; height: 18px; border-radius: 9px;
+    background: #d6d3d1; position: relative; cursor: pointer; transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle-track.on { background: #292524; }
+  .toggle-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: #fff;
+    position: absolute; top: 2px; left: 2px; transition: transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .toggle-track.on .toggle-dot { transform: translateX(16px); }
+
+  /* tag */
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 4px;
+    background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
+    white-space: nowrap;
+  }
+
+  /* ===== editor specific ===== */
+  .cover-preview {
+    width: 100%; max-width: 480px; aspect-ratio: 16/9;
+    border-radius: 8px; object-fit: cover;
+    border: 1px solid #e7e5e4; background: #fafaf9;
+    margin: 8px auto 0; display: block;
+  }
+  .cover-placeholder {
+    width: 100%; max-width: 480px; aspect-ratio: 16/9;
+    border-radius: 8px;
+    border: 2px dashed #d6d3d1; background: #fafaf9;
+    margin: 8px auto 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 6px;
+    color: #a8a29e; font-size: 13px;
+  }
+  .cover-placeholder svg { width: 28px; height: 28px; opacity: 0.5; }
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px;
+    padding: 28px;
+  }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  /* ===== list ===== */
+  .work-row {
+    display: grid;
+    grid-template-columns: 28px 48px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f5f5f4;
+    transition: background 0.15s;
+  }
+  .work-row:last-child { border-bottom: none; }
+  .work-row:hover { background: #fafaf9; }
+  .thumb {
+    width: 48px; height: 48px; border-radius: 8px;
+    object-fit: cover; border: 1px solid #e7e5e4; flex-shrink: 0;
+  }
+  .row-content { min-width: 0; }
+  .row-title {
+    font-size: 14px; font-weight: 500; color: #292524;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .row-meta {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: #a8a29e; margin-top: 4px;
+  }
+  .row-meta .tag { margin: 0; }
+  .row-right {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.15s; border: none; background: transparent;
+  }
+  .icon-btn:hover { background: #f5f5f4; }
+  .icon-btn.danger:hover { background: #fef2f2; }
+  .icon-btn svg { width: 15px; height: 15px; color: #a8a29e; transition: color 0.15s; }
+  .icon-btn:hover svg { color: #292524; }
+  .icon-btn.danger:hover svg { color: #dc2626; }
+  .filter-btn {
+    padding: 5px 12px; border-radius: 6px; border: 1px solid #e7e5e4;
+    background: #fff; font-size: 12px; color: #78716c;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .filter-btn:hover { background: #f5f5f4; }
+  .filter-btn.active { background: #292524; color: #fff; border-color: #292524; }
+
+  /* ===== hamburger ===== */
+  .hamburger {
+    position: absolute;
+    left: 24px;
+    display: inline-flex;
+    width: 36px; height: 36px; border-radius: 8px;
+    border: none; background: transparent; cursor: pointer;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s;
+  }
+  .hamburger:hover { background: #f5f5f4; }
+  .hamburger svg { width: 20px; height: 20px; color: #292524; }
+
+  /* ===== drawer backdrop ===== */
+  .drawer-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(28, 25, 23, 0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 40;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== mobile ===== */
+  @media (max-width: 767px) {
+    .topnav { padding: 0 14px; }
+    .hamburger { left: 14px; }
+
+    .topnav-tab { padding: 5px 12px; font-size: 12px; }
+    .topnav-tab svg { display: none; }
+
+    /* hide drag handle on mobile (touch drag not ideal) */
+    .drag-handle { display: none; }
+    .work-row { grid-template-columns: 48px 1fr; }
+
+    /* main content */
+    .main { padding: 16px 14px; }
+
+    /* editor */
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px;
+    }
+    .cover-preview { max-width: 100%; }
+
+    /* list */
+    .work-row {
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+    .row-right {
+      grid-column: 1 / -1;
+      justify-content: flex-end;
+      padding-top: 8px;
+      border-top: 1px dashed #f5f5f4;
+      gap: 6px;
+    }
+    .row-meta { gap: 6px; flex-wrap: wrap; }
+    .row-title { font-size: 13px; }
+
+    /* panel header */
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 10px;
+    }
+    .panel-header > div:first-child { width: 100%; }
+
+    /* filter bar */
+    .filter-bar {
+      padding: 10px 14px !important;
+      gap: 8px !important;
+    }
+    .filter-bar-search { flex: 1 1 100% !important; }
+    .filter-tags { flex-wrap: wrap; }
+    .filter-btn { padding: 4px 10px; font-size: 11px; }
+
+    /* sidebar modal narrower on mobile */
+    .sidebar { width: min(300px, 88vw); }
+  }
+
+  /* ===== tablet ===== */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .main { padding: 20px; }
+    .form-grid { padding: 22px; gap: 16px 20px; }
+  }
+
+  /* prevent body scroll when drawer open */
+  body.drawer-open { overflow: hidden; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ========== TOP NAV ========== -->
+  <nav class="topnav">
+    <button class="hamburger" onclick="toggleDrawer()" aria-label="菜单">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="topnav-tabs">
+      <button class="topnav-tab active" onclick="switchTab('editor', this)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+        编辑
+      </button>
+      <button class="topnav-tab" onclick="switchTab('list', this)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        列表
+        <span class="topnav-badge">17</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== DRAWER BACKDROP ========== -->
+  <div class="drawer-backdrop" onclick="toggleDrawer()"></div>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="profile-card">
+      <div class="profile-avatar">SW</div>
+      <div class="profile-name">sunwenxu</div>
+      <div class="profile-email">admin@sunwenxu.dev</div>
+      <div class="profile-bio">前端工程师，关注 CSS 动画与交互体验</div>
+    </div>
+
+    <div class="sidebar-stats">
+      <div class="stat-item"><div class="stat-val">17</div><div class="stat-lbl">作品总数</div></div>
+      <div class="stat-item"><div class="stat-val">14</div><div class="stat-lbl">已发布</div></div>
+      <div class="stat-item"><div class="stat-val">11</div><div class="stat-lbl">有封面</div></div>
+      <div class="stat-item"><div class="stat-val">3</div><div class="stat-lbl">Vue Demo</div></div>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        退出登录
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+
+    <!-- ====== PANEL: EDITOR ====== -->
+    <div class="panel active" id="panel-editor">
+      <div class="panel-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+        <div>
+          <h1 style="font-size:20px; font-weight:600; color:#292524;" id="editorTitle">新建作品</h1>
+          <p style="font-size:13px; color:#a8a29e; margin-top:4px;">填写作品信息后保存</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-ghost" onclick="resetForm()">清空</button>
+          <button class="btn-primary" onclick="saveWork()">保存</button>
+        </div>
+      </div>
+
+      <div class="card" style="overflow:hidden;">
+        <div class="form-grid">
+          <!-- 封面预览 (full width) -->
+          <div class="full">
+            <div class="label">封面预览</div>
+            <div id="coverWrap">
+              <img class="cover-preview" src="https://iili.io/C2Bnigt.gif" alt="cover" id="coverImg" onerror="showCoverPlaceholder()" />
+              <div class="cover-placeholder" id="coverPlaceholder" style="display:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z"/></svg>
+                <span>暂无封面</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 名称 + Slug -->
+          <div>
+            <div class="label">名称</div>
+            <input class="input" placeholder="作品显示名称" value="vue-组件页面装修demo" id="nameInput" oninput="autoSlug()" />
+          </div>
+          <div>
+            <div class="label">Slug</div>
+            <input class="input" placeholder="/external/..." value="/external/vue-组件页面装修demo" id="slugInput" />
+          </div>
+
+          <!-- 封面 URL + 日期 -->
+          <div>
+            <div class="label">封面 URL</div>
+            <input class="input" placeholder="https://..." value="https://iili.io/C2Bnigt.gif" id="coverUrlInput" oninput="updateCover()" />
+          </div>
+          <div>
+            <div class="label">日期</div>
+            <input type="date" class="input" value="2026-05-28" />
+          </div>
+
+          <!-- 代码 + 文章 -->
+          <div>
+            <div class="label">代码地址</div>
+            <input class="input" placeholder="https://github.com/..." value="https://github.com/sunwenxu1997/decoration-demo" />
+          </div>
+          <div>
+            <div class="label">文章链接</div>
+            <input class="input" placeholder="https://juejin.cn/..." value="https://juejin.cn/post/7629167699948240948" />
+          </div>
+
+          <!-- CodePen + 打开地址 -->
+          <div>
+            <div class="label">CodePen</div>
+            <input class="input" placeholder="https://codepen.io/..." />
+          </div>
+          <div>
+            <div class="label">打开地址</div>
+            <input class="input" placeholder="https://..." value="https://sunwenxu1997.github.io/decoration-demo" />
+          </div>
+
+          <!-- 介绍 (full width) -->
+          <div class="full">
+            <div class="label">介绍 (HTML)</div>
+            <textarea class="input" rows="4" placeholder="支持 HTML 标签...">公司项目中需要实现一个页面装修的功能，结合原有的项目思路 + ai（Trae），重新搭建了一个优化后的页面装修demo。</textarea>
+          </div>
+
+          <!-- 排序 + 标签 -->
+          <div>
+            <div class="label">排序</div>
+            <input type="number" class="input" value="100" style="width:90px;" />
+          </div>
+          <div>
+            <div class="label">标签</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+              <span class="tag">vue</span>
+              <span class="tag">装修</span>
+              <input class="input" placeholder="+ 添加" style="width:90px; padding:6px 10px; font-size:12px;" />
+            </div>
+          </div>
+
+          <!-- 开关 (full width) -->
+          <div class="full" style="display:flex; gap:28px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <span style="font-size:13px; color:#57534e;">发布</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="toggle-track" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <span style="font-size:13px; color:#57534e;">隐藏</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== PANEL: LIST ====== -->
+    <div class="panel" id="panel-list">
+      <div class="panel-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+        <div>
+          <h1 style="font-size:20px; font-weight:600; color:#292524;">全部作品</h1>
+          <p style="font-size:13px; color:#a8a29e; margin-top:4px;">拖拽排序，点击编辑跳转至编辑页</p>
+        </div>
+        <button class="btn-primary" onclick="switchTab('editor', document.querySelector('.topnav-tab'))">+ 新建</button>
+      </div>
+
+      <div class="card" style="overflow:hidden;">
+        <!-- filter -->
+        <div class="filter-bar" style="padding:12px 20px; border-bottom:1px solid #e7e5e4; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div class="filter-bar-search" style="position:relative; flex:0 0 180px;">
+            <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); width:13px; height:13px; color:#a8a29e;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input class="input" placeholder="搜索列表..." style="padding:6px 10px 6px 30px; font-size:13px;" />
+          </div>
+          <div class="filter-tags" style="display:flex; gap:4px; flex-wrap:wrap;">
+            <button class="filter-btn active" onclick="filterTag(this)">All</button>
+            <button class="filter-btn" onclick="filterTag(this)">css</button>
+            <button class="filter-btn" onclick="filterTag(this)">gsap</button>
+            <button class="filter-btn" onclick="filterTag(this)">anime</button>
+            <button class="filter-btn" onclick="filterTag(this)">svg</button>
+            <button class="filter-btn" onclick="filterTag(this)">vue</button>
+            <button class="filter-btn" onclick="filterTag(this)">小程序</button>
+          </div>
+        </div>
+
+        <!-- list -->
+        <div id="worksList">
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/C2Bnigt.gif" />
+            <div class="row-content">
+              <div class="row-title">vue-组件页面装修demo</div>
+              <div class="row-meta">
+                <span>/external/vue-组件页面装修demo</span>
+                <span>2026-05-28</span>
+                <span class="tag">vue</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/FDjuxsV.gif" />
+            <div class="row-content">
+              <div class="row-title">微信小程序实现陀螺仪卡片景深效果</div>
+              <div class="row-meta">
+                <span>/external/微信小程序实现陀螺仪卡片景深效果</span>
+                <span>2025-08-15</span>
+                <span class="tag">小程序</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/FND8Vl2.gif" />
+            <div class="row-content">
+              <div class="row-title">animejs-鼠标跟随赞助爱心</div>
+              <div class="row-meta">
+                <span>/external/animejs-鼠标跟随赞助爱心</span>
+                <span>2025-07-22</span>
+                <span class="tag">anime</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/3bObz9j.gif" />
+            <div class="row-content">
+              <div class="row-title">Animejs-draggable导航拖拽切换</div>
+              <div class="row-meta">
+                <span>/external/Animejs-draggable导航拖拽切换</span>
+                <span>2025-05-26</span>
+                <span class="tag">anime</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/2iko07e.gif" />
+            <div class="row-content">
+              <div class="row-title">css-视图切换(:has,:not选择器)</div>
+              <div class="row-meta">
+                <span>/external/css-视图切换</span>
+                <span>2025-01-22</span>
+                <span class="tag">css</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+          <div class="work-row">
+            <button class="drag-handle" draggable="false" aria-label="拖拽排序">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="19" r="1.2"/><circle cx="15" cy="5" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="19" r="1.2"/></svg>
+            </button>
+            <img class="thumb" src="https://iili.io/2iHaHiu.gif" />
+            <div class="row-content">
+              <div class="row-title">gsap-3d圆环交错视图滚动</div>
+              <div class="row-meta">
+                <span>/external/gsap-3d圆环交错视图滚动</span>
+                <span>2025-01-16</span>
+                <span class="tag">gsap</span>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="toggle-track on" onclick="this.classList.toggle('on')"><div class="toggle-dot"></div></div>
+              <button class="icon-btn" title="编辑" onclick="editRow(this)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button>
+              <button class="icon-btn danger" title="删除"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+              <button class="icon-btn" title="打开"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- footer -->
+        <div style="padding:12px 20px; display:flex; align-items:center; justify-content:space-between; background:#fafaf9;">
+          <span style="font-size:12px; color:#a8a29e;">显示 6 / 17 条</span>
+          <div style="display:flex; gap:4px;">
+            <button class="icon-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+            <button style="width:30px; height:30px; border-radius:6px; border:none; background:#292524; color:#fff; font-size:12px; cursor:pointer;">1</button>
+            <button style="width:30px; height:30px; border-radius:6px; border:1px solid #e7e5e4; background:#fff; color:#78716c; font-size:12px; cursor:pointer;">2</button>
+            <button class="icon-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.querySelector('.drawer-backdrop');
+  const isOpen = sidebar.classList.toggle('open');
+  backdrop.classList.toggle('open', isOpen);
+  document.body.classList.toggle('drawer-open', isOpen);
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.topnav-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function resetForm() {
+  document.querySelectorAll('#panel-editor .input').forEach(el => {
+    if (el.tagName === 'TEXTAREA') el.value = '';
+    else if (el.type !== 'date' && el.type !== 'number') el.value = '';
+  });
+  document.getElementById('editorTitle').textContent = '新建作品';
+  document.getElementById('slugInput').value = '/external/';
+  _prevAutoSlug = '/external/';
+  document.getElementById('coverImg').src = '';
+  showCoverPlaceholder();
+}
+
+function saveWork() {
+  alert('保存成功（原型演示）');
+}
+
+function editRow(btn) {
+  const row = btn.closest('.work-row');
+  const title = row.querySelector('.row-title');
+  if (title) {
+    document.getElementById('editorTitle').textContent = '编辑: ' + title.textContent;
+  }
+  switchTab('editor', document.querySelector('.topnav-tab'));
+}
+
+function filterTag(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateCover() {
+  const url = document.getElementById('coverUrlInput').value.trim();
+  const img = document.getElementById('coverImg');
+  const ph = document.getElementById('coverPlaceholder');
+  if (!url) {
+    img.style.display = 'none';
+    ph.style.display = 'flex';
+  } else {
+    img.src = url;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  }
+}
+
+function showCoverPlaceholder() {
+  const img = document.getElementById('coverImg');
+  const ph = document.getElementById('coverPlaceholder');
+  img.style.display = 'none';
+  ph.style.display = 'flex';
+}
+
+let _prevAutoSlug = '/external/' + (document.getElementById('nameInput')?.value?.trim() || '');
+function autoSlug() {
+  const name = document.getElementById('nameInput').value.trim();
+  const slugInput = document.getElementById('slugInput');
+  const expected = '/external/' + name;
+  if (slugInput.value === _prevAutoSlug || !slugInput.value) {
+    slugInput.value = name ? expected : '/external/';
+    _prevAutoSlug = slugInput.value;
+  }
+}
+
+function initDragDrop() {
+  const list = document.getElementById('worksList');
+  if (!list) return;
+  let draggedRow = null;
+
+  list.querySelectorAll('.work-row').forEach(row => {
+    const handle = row.querySelector('.drag-handle');
+    if (handle) {
+      handle.addEventListener('mousedown', () => row.setAttribute('draggable', 'true'));
+    }
+    row.addEventListener('dragstart', e => {
+      draggedRow = row;
+      row.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', () => {
+      if (draggedRow) draggedRow.classList.remove('dragging');
+      list.querySelectorAll('.work-row').forEach(r => r.classList.remove('drag-over'));
+      draggedRow = null;
+      row.removeAttribute('draggable');
+    });
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (row !== draggedRow) row.classList.add('drag-over');
+    });
+    row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      row.classList.remove('drag-over');
+      if (draggedRow && row !== draggedRow) list.insertBefore(draggedRow, row);
+    });
+  });
+}
+initDragDrop();
+</script>
+
+</body>
+</html>

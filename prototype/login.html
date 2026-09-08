@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Jost', sans-serif; }
+  body { background: #f5f5f4; }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+  <!-- login card -->
+  <div class="w-full max-w-[400px] mx-4 bg-white rounded-[20px] p-10 shadow-sm">
+    <!-- avatar -->
+    <div class="flex flex-col items-center mb-8">
+      <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#292524] to-[#78716c] flex items-center justify-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <h1 class="text-[#292524] text-xl font-semibold">Welcome Back</h1>
+      <p class="text-[#a8a29e] text-sm mt-1">sunwenxu1997.github.io</p>
+    </div>
+
+    <!-- form -->
+    <form onsubmit="event.preventDefault()">
+      <!-- email -->
+      <div class="mb-5">
+        <label class="block text-[#78716c] text-xs font-medium uppercase tracking-wider mb-2">Email</label>
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#a8a29e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <input
+            type="email"
+            value="admin@example.com"
+            class="w-full pl-12 pr-4 py-3.5 bg-[#fafaf9] border border-[#e7e5e4] rounded-[14px] text-[#292524] text-sm focus:outline-none focus:border-[#44403c] transition-colors"
+            placeholder="your@email.com"
+          />
+        </div>
+      </div>
+
+      <!-- password -->
+      <div class="mb-7">
+        <label class="block text-[#78716c] text-xs font-medium uppercase tracking-wider mb-2">Password</label>
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#a8a29e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <input
+            type="password"
+            value="password123"
+            class="w-full pl-12 pr-12 py-3.5 bg-[#fafaf9] border border-[#e7e5e4] rounded-[14px] text-[#292524] text-sm focus:outline-none focus:border-[#44403c] transition-colors"
+            placeholder="••••••••"
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[#a8a29e] cursor-pointer hover:text-[#57534e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- login button -->
+      <button
+        type="submit"
+        class="w-full py-3.5 bg-[#292524] text-white rounded-[14px] text-sm font-medium tracking-wide hover:bg-[#1c1917] active:scale-[0.98] transition-all"
+      >
+        Sign In
+      </button>
+    </form>
+
+    <!-- divider -->
+    <div class="flex items-center gap-4 my-6">
+      <div class="flex-1 h-px bg-[#e7e5e4]"></div>
+      <span class="text-xs text-[#a8a29e]">or</span>
+      <div class="flex-1 h-px bg-[#e7e5e4]"></div>
+    </div>
+
+    <!-- supabase button -->
+    <button class="w-full py-3.5 bg-[#f5f5f4] text-[#292524] rounded-[14px] text-sm font-medium hover:bg-[#e7e5e4] transition-all flex items-center justify-center gap-2">
+      <svg class="w-4 h-4" viewBox="0 0 109 113" fill="none">
+        <path d="M63.7618 0.272827L1.57543 69.6792C-1.47943 73.158 -0.0805584 78.6248 4.39305 80.1128L52.4019 95.9792C55.6402 97.0576 59.0598 95.2472 60.1383 91.8276L72.695 51.8252C73.1736 50.3072 74.7485 49.434 76.2665 49.9128L85.0811 52.6908C86.5992 53.1696 87.4724 54.744 86.9936 56.262L76.1531 90.868C73.0668 100.748 63.1748 106.068 53.6708 103.892L5.662 88.0256C-5.22199 84.448 -8.64059 72.236 -2.05903 64.7436L60.1273 -4.66277C62.8025 -7.71764 67.7468 -5.6944 67.3931 -1.5916L63.7618 0.272827Z" fill="currentColor"/>
+        <path d="M95.9031 40.7628L75.1671 28.0356C73.692 27.1296 73.1256 25.2 73.9608 23.646L78.9608 14.37C79.796 12.816 81.7256 12.2496 83.2008 13.1556L103.937 25.8828C105.412 26.7888 105.978 28.7184 105.143 30.2724L100.143 39.5484C99.3078 41.1024 97.3782 41.6688 95.9031 40.7628Z" fill="currentColor"/>
+      </svg>
+      Supabase 登录
+    </button>
+
+    <!-- footer -->
+    <p class="text-center text-xs text-[#a8a29e] mt-6">
+      Protected area · Admin access only
+    </p>
+  </div>
+
+</body>
+</html>
