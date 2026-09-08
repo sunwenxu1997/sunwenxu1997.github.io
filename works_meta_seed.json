@@ -115,7 +115,7 @@
     "slug": "/cssHtml/mask-网点图",
     "name": "mask-网点图",
     "cover_url": "https://iili.io/JqJOFUl.png",
-    "info_html": null,
+    "info_html": "通过 CSS <code>mask</code> 配合 <code>linear-gradient</code> 实现网点网格遮罩效果，底层使用渐变色动画背景。<br>知识点：<br>1. <code>mask</code> 遮罩属性，通过渐变定义可见区域<br>2. <code>mask-size</code> 控制网格密度<br>3. <code>linear-gradient</code> + <code>background-size</code> 实现重复网格",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -123,7 +123,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "cssHtml"
+      "cssHtml",
+      "mask"
     ],
     "is_published": true
   },
@@ -131,7 +132,7 @@
     "slug": "/cssHtml/mask-镂空文字",
     "name": "mask-镂空文字",
     "cover_url": "https://iili.io/JqJOTfj.png",
-    "info_html": null,
+    "info_html": "参考 <a href='https://github.com/chokcoco/iCSS/issues/80' target='_blank'>iCSS</a> 的效果，利用 CSS <code>mask</code> 引入 SVG 图形作为遮罩，实现文字/图形镂空效果，底层使用背景图 + 模糊滤镜。<br>知识点：<br>1. <code>mask: url()</code> 引入 SVG 作为遮罩<br>2. <code>filter: blur() brightness()</code> 背景模糊和亮度调节<br>3. <code>background-size: cover</code> 背景自适应",
     "code_url": null,
     "link_url": "https://github.com/chokcoco/iCSS/issues/80",
     "codepen_url": null,
@@ -139,7 +140,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "cssHtml"
+      "cssHtml",
+      "mask"
     ],
     "is_published": true
   },
@@ -147,7 +149,7 @@
     "slug": "/cssHtml/tailwindcss使用",
     "name": "tailwindcss使用",
     "cover_url": "https://iili.io/Jq64QqJ.gif",
-    "info_html": null,
+    "info_html": "项目集成 <a href='https://tailwindcss.com/' target='_blank'>TailwindCSS</a> 的简单示例，通过原子化 CSS 类快速构建页面布局，配合自定义 <code>AppleWindow</code> 组件展示效果。<br>知识点：<br>1. <code>npm install -D tailwindcss</code> 安装配置<br>2. <code>tailwind.config.js</code> 配置模板扫描路径<br>3. 常用工具类：<code>grid</code>、<code>place-content-center</code>、<code>h-screen</code>",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7290740395914362921",
     "codepen_url": null,
@@ -155,7 +157,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "cssHtml"
+      "cssHtml",
+      "tailwindcss"
     ],
     "is_published": true
   },
@@ -291,7 +294,7 @@
     "slug": "/gsap/draggable-细节放大镜",
     "name": "draggable-细节放大镜",
     "cover_url": "https://iili.io/Jq64iWg.gif",
-    "info_html": null,
+    "info_html": "基于 GSAP <code>Draggable</code> 插件实现的图片细节放大镜效果，小窗口和大图视图双向同步联动。<br>知识点：<br>1. <code>Draggable.create()</code> 创建可拖拽实例，设置 <code>bounds</code> 限制范围<br>2. <code>gsap.quickSetter()</code> 高性能属性设置器<br>3. 通过 <code>imageScale</code> 比例换算实现大小视图位置同步",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -299,7 +302,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "draggable"
     ],
     "is_published": true
   },
@@ -307,7 +311,7 @@
     "slug": "/gsap/scrollTrigger-倾斜滚动特效",
     "name": "scrollTrigger-倾斜滚动特效",
     "cover_url": "https://iili.io/Jq64ssa.gif",
-    "info_html": null,
+    "info_html": "基于 <code>ScrollTrigger</code> 监听滚动速率，动态控制元素的 <code>skewY</code> 倾斜角度，实现滚动时的倾斜特效。<br>知识点：<br>1. <code>self.getVelocity()</code> 获取实时滚动速率<br>2. <code>gsap.quickSetter()</code> 批量设置 skewY 变换<br>3. <code>gsap.utils.clamp()</code> 限制倾斜角度范围（-20° ~ 20°）<br>4. 只在倾斜更严重时才干预，避免减速时的跳变",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -315,7 +319,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger"
     ],
     "is_published": true
   },
@@ -323,7 +328,7 @@
     "slug": "/gsap/scrollTrigger-头部导航栏收缩",
     "name": "scrollTrigger-头部导航栏收缩",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "基于 <code>ScrollTrigger</code> 监听滚动方向，实现导航栏下拉隐藏、上拉显示的交互效果。<br>知识点：<br>1. <code>self.direction</code> 判断滚动方向（1=向下，-1=向上）<br>2. <code>gsap.from()</code> + <code>yPercent: -100</code> 向上收缩动画<br>3. <code>.play()</code> / <code>.reverse()</code> 控制动画正向/反向播放",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -331,7 +336,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger"
     ],
     "is_published": true
   },
@@ -339,7 +345,7 @@
     "slug": "/gsap/scrollTrigger-横屏滚动",
     "name": "scrollTrigger-横屏滚动",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "基于 <code>ScrollTrigger</code> 将纵向滚动转化为横向滚动效果，常用于产品展示、画廊等场景。<br>知识点：<br>1. <code>pin: true</code> 钉住容器，<code>scrub: true</code> 动画进度与滚动同步<br>2. <code>xPercent: -100 * (n-1)</code> 横向位移总距离<br>3. <code>snap: 1/(n-1)</code> 滚动吸附到每个面板<br>4. <code>end: '+=5000'</code> 控制总滚动距离",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -347,7 +353,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger"
     ],
     "is_published": true
   },
@@ -355,7 +362,7 @@
     "slug": "/gsap/scrollTrigger-烟雾消散效果",
     "name": "scrollTrigger-烟雾消散效果",
     "cover_url": "https://iili.io/Jq6Qtgs.gif",
-    "info_html": null,
+    "info_html": "结合 <code>ScrollTrigger</code> 和 <code>Three.js</code> 烟雾粒子效果，通过滚动进度控制烟雾的消散动画。<br>知识点：<br>1. <code>ScrollTrigger</code> 的 <code>pin: true</code> + <code>onUpdate</code> 获取滚动进度<br>2. <code>smoke.progress</code> 将滚动进度映射到 Three.js 烟雾动画<br>3. <code>self.getVelocity()</code> 获取滚动速度用于增强效果",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -363,7 +370,9 @@
     "sort_weight": 0,
     "date": "2023-10-10",
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger",
+      "three"
     ],
     "is_published": true
   },
@@ -371,7 +380,7 @@
     "slug": "/gsap/scrollTrigger-烟雾飘过效果",
     "name": "scrollTrigger-烟雾飘过效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "使用 <code>Three.js</code> 渲染烟雾/云层粒子效果，配合时间段动态切换天空渐变色背景。<br>知识点：<br>1. Three.js 烟雾粒子 Canvas 渲染<br>2. <code>mix-blend-mode: screen</code> 混合模式让烟雾与背景融合<br>3. 根据当前时间（<code>getHours()</code>）切换不同天空渐变色<br>4. <code>contain: strict</code> 性能优化",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -379,7 +388,9 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "three",
+      "canvas"
     ],
     "is_published": true
   },
@@ -387,7 +398,7 @@
     "slug": "/gsap/scrollTrigger-简单过渡效果",
     "name": "scrollTrigger-简单过渡效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "基于 <code>ScrollTrigger</code> 实现元素进入/离开视口时的滑入滑出过渡动画，支持左右交替方向。<br>知识点：<br>1. <code>onEnter</code> / <code>onEnterBack</code> / <code>onLeave</code> 回调控制动画触发<br>2. <code>gsap.fromTo()</code> 从偏移位置过渡到原位<br>3. <code>autoAlpha</code> 同时控制透明度和可见性<br>4. 通过 class 区分从左/从右进入方向",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7165808796462219295",
     "codepen_url": null,
@@ -395,7 +406,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger"
     ],
     "is_published": true
   },
@@ -403,7 +415,7 @@
     "slug": "/gsap/scrollTrigger-视频帧跟随滚动",
     "name": "scrollTrigger-视频帧跟随滚动",
     "cover_url": "https://iili.io/JRaX80B.gif",
-    "info_html": null,
+    "info_html": "基于 <code>ScrollTrigger</code> 将滚动进度映射到视频播放进度，实现视频帧跟随滚动的效果。<br>知识点：<br>1. <code>ScrollTrigger</code> 的 <code>pin: true</code> + <code>onUpdate</code> 获取进度<br>2. <code>video.currentTime = progress * duration</code> 控制视频帧<br>3. <code>self.progress.toFixed(3)</code> 精确到三位小数<br>4. 使用 <code>webm</code> 格式视频兼容性更好",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7162001311225888782",
     "codepen_url": null,
@@ -411,7 +423,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "scrollTrigger"
     ],
     "is_published": true
   },
@@ -419,7 +432,7 @@
     "slug": "/gsap/光影文字特效",
     "name": "光影文字特效",
     "cover_url": "https://iili.io/JRSZ1Sf.gif",
-    "info_html": null,
+    "info_html": "通过多层文字叠加 + <code>perspective</code> 3D 透视 + 鼠标跟踪，实现光影随鼠标偏移的文字特效。<br>知识点：<br>1. <code>perspective: 2000px</code> + <code>translateZ</code> 构建 3D 层级<br>2. <code>background-clip: text</code> 将径向渐变裁剪到文字<br>3. <code>gsap.to()</code> 控制 <code>rotationX/Y</code> 实现 3D 旋转跟随<br>4. <code>radial-gradient</code> 动态计算光源位置",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -427,7 +440,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "3d"
     ],
     "is_published": true
   },
@@ -451,7 +465,7 @@
     "slug": "/gsap/数字加载效果",
     "name": "数字加载效果",
     "cover_url": "https://iili.io/JRahFql.gif",
-    "info_html": null,
+    "info_html": "使用 GSAP 实现数字从 0 动态递增的加载效果，支持整数、小数和金额格式化三种模式。<br>知识点：<br>1. <code>gsap.to(proxy)</code> 通过代理对象实现数值动画<br>2. <code>Math.ceil()</code> 向上取整控制显示精度<br>3. 直接操作 <code>innerHTML</code> 的替代方案<br>4. 金额千位分隔符正则：<code>/(\\d)(?=(?:\\d{3})+$)/g</code>",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7273680035096494099",
     "codepen_url": null,
@@ -459,7 +473,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "animation"
     ],
     "is_published": true
   },
@@ -467,7 +482,7 @@
     "slug": "/gsap/文字探照灯效果",
     "name": "文字探照灯效果",
     "cover_url": "https://iili.io/JRaVVB2.gif",
-    "info_html": null,
+    "info_html": "通过 SVG <code>clipPath</code> 将文字作为裁剪路径，多个彩色圆灯跟随鼠标移动，形成探照灯透过文字的效果。<br>知识点：<br>1. SVG <code>&lt;clipPath&gt;</code> + <code>&lt;text&gt;</code> 定义文字裁剪区域<br>2. <code>gsap.to()</code> + <code>back</code> 缓动让圆灯平滑跟随鼠标<br>3. 多个不同大小的彩色圆 + <code>opacity</code> 叠加形成光影效果",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -475,7 +490,8 @@
     "sort_weight": 0,
     "date": "2023-09-10",
     "tags": [
-      "gsap"
+      "gsap",
+      "svg"
     ],
     "is_published": true
   },
@@ -483,7 +499,7 @@
     "slug": "/gsap/水滴按钮效果",
     "name": "水滴按钮效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "结合 GSAP 弹性动画 + SVG <code>goo</code> 滤镜，实现水滴融合效果的按钮 hover 交互。<br>知识点：<br>1. SVG <code>feGaussianBlur</code> + <code>feColorMatrix</code> 实现 goo 粘性滤镜<br>2. <code>gsap.to()</code> + <code>elastic</code> 缓动函数模拟弹性运动<br>3. 多个球体不同方向和速度形成水滴散开/聚合效果<br>4. <code>filter: url('#shadowed-goo')</code> 应用 SVG 滤镜",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7159379138648735780",
     "codepen_url": null,
@@ -491,7 +507,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "svg"
     ],
     "is_published": true
   },
@@ -499,7 +516,7 @@
     "slug": "/gsap/深度视觉差效果",
     "name": "深度视觉差效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "通过多层 SVG 叠加 + 鼠标跟踪位移，实现 2.5D 深度视差效果。不同层级按不同系数偏移，营造空间感。<br>知识点：<br>1. 多层 SVG 绝对定位叠加，<code>filter: drop-shadow()</code> 增加层次<br>2. <code>gsap.to(layer, { x, y })</code> 根据鼠标位置偏移各层<br>3. 偏移系数 <code>x * i * 0.02</code> 随层级递增<br>4. <code>perspective</code> 和 <code>scale(1.1)</code> 避免边缘露出",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -507,7 +524,9 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "parallax",
+      "svg"
     ],
     "is_published": true
   },
@@ -515,7 +534,7 @@
     "slug": "/gsap/鼠标跟随高亮按钮效果",
     "name": "鼠标跟随高亮按钮效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "监听鼠标移动，动态计算鼠标相对于每个按钮的位置，通过 <code>radial-gradient</code> 实现跟随高亮效果。<br>知识点：<br>1. <code>mousemove</code> + <code>offsetLeft/offsetTop</code> 计算相对坐标<br>2. <code>radial-gradient(100px at x y, ...)</code> 动态径向渐变<br>3. <code>gsap.to()</code> + <code>back</code> 缓动平滑过渡<br>4. <code>backgroundImage</code> 作为动画属性",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -523,7 +542,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "gsap"
+      "gsap",
+      "interaction"
     ],
     "is_published": true
   },
@@ -531,7 +551,7 @@
     "slug": "/other/canvas-波浪背景",
     "name": "canvas-波浪背景",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "使用 Canvas 2D API 绘制多层波浪动画，通过贝塞尔曲线和不同周期实现自然起伏效果。<br>知识点：<br>1. <code>quadraticCurveTo()</code> 绘制二次贝塞尔曲线<br>2. 多层 Canvas 叠加，不同颜色和周期（<code>setTimeout</code> 间隔）<br>3. <code>offset</code> 偏移量实现波浪水平运动<br>4. <code>scaleY(-1)</code> 翻转 Canvas 让波浪朝上",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -539,7 +559,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "canvas"
     ],
     "is_published": true
   },
@@ -547,7 +568,7 @@
     "slug": "/other/canvas-粒子svg浮层",
     "name": "canvas-粒子svg浮层",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "通过 Canvas 读取 SVG/图片像素数据，将每个像素转化为粒子，支持鼠标靠近时冲散和自动聚合效果。<br>知识点：<br>1. <code>drawImage()</code> 绘制图片 + <code>getImageData()</code> 获取像素数据<br>2. <code>Particle</code> 类封装粒子属性（位置/速度/半径/方向）<br>3. <code>requestAnimationFrame</code> 驱动动画循环<br>4. 鼠标距离检测实现冲散效果，<code>drag</code> 参数控制聚合速度",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -555,7 +576,9 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "canvas",
+      "svg"
     ],
     "is_published": true
   },
@@ -563,7 +586,7 @@
     "slug": "/other/slidev简单使用",
     "name": "slidev简单使用",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "使用 <a href='https://sli.dev/' target='_blank'>Slidev</a> 搭建的 Markdown 驱动演示文稿，通过 iframe 嵌入展示。<br>知识点：<br>1. Slidev 基于 Vite + Vue + Markdown<br>2. 支持代码高亮、动画、LaTeX 等<br>3. <code>npx slidev</code> 启动开发服务器",
     "code_url": "https://github.com/sunwenxu1997/slidev",
     "link_url": "https://juejin.cn/post/7288963700538556470",
     "codepen_url": null,
@@ -571,7 +594,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "slidev"
     ],
     "is_published": true
   },
@@ -579,7 +603,7 @@
     "slug": "/other/富文本编辑器-wangeditor",
     "name": "富文本编辑器-wangeditor",
     "cover_url": "https://iili.io/JqJOzib.png",
-    "info_html": null,
+    "info_html": "集成 <a href='https://www.wangeditor.com/v5/for-frame.html#vue3' target='_blank'>WangEditor v5</a> 富文本编辑器，支持 Vue 3 <code>v-model</code> 双向绑定。<br>知识点：<br>1. <code>@wangeditor/editor</code> + <code>@wangeditor/editor-for-vue</code> 安装<br>2. 自定义工具栏和图片上传配置<br>3. <code>v-model</code> 绑定编辑器 HTML 内容",
     "code_url": null,
     "link_url": "https://www.wangeditor.com/v5/for-frame.html#vue3",
     "codepen_url": null,
@@ -587,7 +611,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "editor"
     ],
     "is_published": true
   },
@@ -595,7 +620,7 @@
     "slug": "/other/抽奖-九宫格",
     "name": "抽奖-九宫格",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "经典九宫格抽奖效果，通过定时器控制高亮位置循环移动，先加速后减速停在目标位置。<br>知识点：<br>1. <code>setTimeout</code> 递归调用实现变速循环<br>2. <code>speed</code> 动态调整：加速阶段 <code>speed -= 10</code>，减速阶段 <code>speed += 20</code><br>3. <code>cycle</code> 控制最少转动次数后再确定中奖位置<br>4. 支持指定结果和随机两种模式",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -603,7 +628,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "lottery"
     ],
     "is_published": true
   },
@@ -611,7 +637,7 @@
     "slug": "/other/抽奖-大转盘",
     "name": "抽奖-大转盘",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "大转盘抽奖效果，CSS <code>@keyframes</code> 动画驱动旋转，支持动态奖品数量和 CSS 变量控制。<br>知识点：<br>1. CSS <code>var(--nums)</code> 动态计算旋转角度<br>2. <code>skew</code> 变换实现扇形背景<br>3. <code>animation-fill-mode: both</code> 保持动画终态<br>4. <code>classList.remove/add</code> 技巧实现动画重播",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7165676884460568590",
     "codepen_url": null,
@@ -619,7 +645,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "lottery"
     ],
     "is_published": true
   },
@@ -627,7 +654,7 @@
     "slug": "/other/抽奖-老虎机",
     "name": "抽奖-老虎机",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "3D 老虎机抽奖效果，使用 CSS <code>rotateX</code> + <code>translateZ</code> 构建 3D 圆柱滚动动画。<br>知识点：<br>1. <code>transform-style: preserve-3d</code> + <code>perspective</code> 构建 3D 场景<br>2. <code>rotateX</code> + <code>translateZ</code> 排列奖品到圆柱面<br>3. 三个轮盘不同 <code>animation-delay</code> 依次停止<br>4. CSS 变量 <code>var(--nums)</code> 动态适配奖品数量",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -635,7 +662,9 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "lottery",
+      "3d"
     ],
     "is_published": true
   },
@@ -643,7 +672,7 @@
     "slug": "/other/滑动分割背景",
     "name": "滑动分割背景",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "鼠标水平滑动控制左右两个面板的分割位置，实现明暗对比的动态分割背景效果。<br>知识点：<br>1. 两个绝对定位面板叠加，左侧 <code>z-index</code> 更高<br>2. <code>mousemove</code> 监听 + <code>clientX/innerWidth</code> 计算百分比<br>3. 动态修改 <code>width</code> 实现分割线跟随<br>4. 纯 CSS + 极简 JS 实现",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -651,7 +680,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "interaction"
     ],
     "is_published": true
   },
@@ -659,7 +689,7 @@
     "slug": "/other/自定义拖拽滑块",
     "name": "自定义拖拽滑块",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "封装的自定义拖拽滑块组件 <code>SliderPlan</code>，支持 <code>v-model</code> 双向绑定和自定义渐变色。<br>知识点：<br>1. Vue 组件 <code>v-model:planNum</code> 自定义 prop 绑定<br>2. 渐变色 <code>:color</code> prop 支持单色/双色渐变<br>3. 拖拽交互 + 数值实时反馈",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -667,7 +697,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "component"
     ],
     "is_published": true
   },
@@ -691,7 +722,7 @@
     "slug": "/other/鼠标经过发出声音",
     "name": "鼠标经过发出声音",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "鼠标移入按钮时播放音效，利用 HTML5 <code>&lt;audio&gt;</code> 元素实现简单的交互音效。<br>知识点：<br>1. <code>mouseenter</code> 事件触发音频播放<br>2. <code>audio.load()</code> + <code>audio.play()</code> 控制播放<br>3. 浏览器安全策略：需要用户首次点击授权后才能播放音频",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -699,7 +730,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "other"
+      "other",
+      "audio"
     ],
     "is_published": true
   },
@@ -707,7 +739,7 @@
     "slug": "/svg/2023兔年大吉",
     "name": "2023兔年大吉",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "SVG 兔子剪影 + <code>textPath</code> 文字环绕动画的新年贺卡效果，路径片段随机淡入淡出。<br>知识点：<br>1. SVG <code>&lt;path&gt;</code> 拼接兔子剪影<br>2. <code>&lt;textPath&gt;</code> + <code>&lt;animate&gt;</code> 实现文字沿路径滚动<br>3. SCSS <code>@for</code> 循环 + <code>random()</code> 为每个路径片段生成随机动画延迟",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7187585110403711033",
     "codepen_url": null,
@@ -715,7 +747,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "animation"
     ],
     "is_published": true
   },
@@ -739,7 +772,7 @@
     "slug": "/svg/svg-文字环绕效果",
     "name": "svg-文字环绕效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "SVG <code>textPath</code> 文字沿路径环绕动画 + <code>clip-path</code> 路径裁剪填充文字内容。<br>知识点：<br>1. <code>&lt;textPath xlink:href&gt;</code> 让文字沿 SVG 路径排列<br>2. <code>&lt;animate startOffset&gt;</code> 驱动文字滚动动画<br>3. <code>clip-path: url('#clip-path')</code> 用同一路径裁剪文本区域",
     "code_url": null,
     "link_url": "https://juejin.cn/post/7187585110403711033",
     "codepen_url": null,
@@ -747,7 +780,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "animation"
     ],
     "is_published": true
   },
@@ -755,7 +789,7 @@
     "slug": "/svg/svg-文字边框效果",
     "name": "svg-文字边框效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "通过 SVG <code>stroke</code> 属性和 <code>dash-array</code> 动画，实现多种文字描边/边框效果。<br>知识点：<br>1. <code>stroke</code> + <code>stroke-width</code> 文字描边<br>2. <code>stroke-dasharray</code> + <code>stroke-dashoffset</code> 虚线动画<br>3. <code>stroke-linejoin: round</code> 圆角描边<br>4. <code>&lt;symbol&gt;</code> + <code>&lt;use&gt;</code> 复用 SVG 元素 + 多层不同颜色动画",
     "code_url": null,
     "link_url": "https://juejin.cn/spost/7267092779280695337",
     "codepen_url": null,
@@ -763,7 +797,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "animation"
     ],
     "is_published": true
   },
@@ -771,7 +806,7 @@
     "slug": "/svg/svg-波纹效果",
     "name": "svg-波纹效果",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "使用 SVG <code>feTurbulence</code> 噪声滤镜 + <code>feDisplacementMap</code> 置换映射，实现水面波纹效果。<br>知识点：<br>1. <code>feTurbulence type='fractalNoise'</code> 生成分形噪声<br>2. <code>feDisplacementMap</code> 根据噪声偏移像素实现波纹<br>3. <code>feColorMatrix hueRotate</code> + <code>&lt;animate&gt;</code> 动态色相旋转<br>4. <code>scale</code> 属性控制波纹强度",
     "code_url": null,
     "link_url": "https://www.zhangxinxu.com/wordpress/2020/10/svg-feturbulence",
     "codepen_url": null,
@@ -779,7 +814,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "filter"
     ],
     "is_published": true
   },
@@ -787,7 +823,7 @@
     "slug": "/svg/svg-褶皱纸张",
     "name": "svg-褶皱纸张",
     "cover_url": "https://iili.io/JqJOu0x.png",
-    "info_html": null,
+    "info_html": "使用 SVG 滤镜模拟褶皱纸张和手写文字的质感，营造书信复古效果。<br>知识点：<br>1. <code>feTurbulence</code> + <code>feDiffuseLighting</code> 生成纸张纹理光照<br>2. <code>feDistantLight azimuth elevation</code> 控制光源方向和高度<br>3. <code>feDisplacementMap</code> 对文字施加微小形变，模拟手写感<br>4. <code>filter: url()</code> 在 CSS 中引用 SVG 滤镜",
     "code_url": null,
     "link_url": "https://juejin.cn/post/6943032791122575390?searchId=20231025171909A1A3EA985C27827359F6#heading-18",
     "codepen_url": null,
@@ -795,7 +831,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "filter"
     ],
     "is_published": true
   },
@@ -803,7 +840,7 @@
     "slug": "/svg/svg滤镜粘性小球",
     "name": "svg滤镜粘性小球",
     "cover_url": null,
-    "info_html": null,
+    "info_html": "使用 SVG <code>goo</code> 滤镜实现小球的粘性聚合/分离动画效果，点击切换状态。<br>知识点：<br>1. <code>feGaussianBlur</code> + <code>feColorMatrix</code> 组合实现 goo 粘性效果<br>2. <code>feColorMatrix</code> 矩阵值 <code>0 0 0 18 -7</code> 提高对比度让模糊后的元素重新锐化<br>3. CSS <code>transition</code> 控制小球位置过渡<br>4. <code>filter: url('#shadowed-goo')</code> 应用滤镜",
     "code_url": null,
     "link_url": "https://www.jianshu.com/p/aaf14eb2a34a",
     "codepen_url": null,
@@ -811,7 +848,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "svg"
+      "svg",
+      "filter"
     ],
     "is_published": true
   },
@@ -835,7 +873,7 @@
     "slug": "/three/webGL-玻璃效果切换",
     "name": "webGL-玻璃效果切换",
     "cover_url": "https://iili.io/JRSZMAl.gif",
-    "info_html": null,
+    "info_html": "基于 <code>Three.js</code> + <code>displacement map</code> 置换贴图实现图片间的玻璃扭曲过渡切换效果。<br>知识点：<br>1. Three.js <code>hoverEffect</code> 库封装了 WebGL 图片过渡<br>2. <code>displacementImage</code> 置换贴图控制像素偏移方向<br>3. <code>intensity</code> / <code>speedIn</code> / <code>speedOut</code> 控制过渡参数<br>4. 16 种不同置换贴图实现不同扭曲风格",
     "code_url": null,
     "link_url": null,
     "codepen_url": null,
@@ -843,7 +881,8 @@
     "sort_weight": 0,
     "date": null,
     "tags": [
-      "three"
+      "three",
+      "webgl"
     ],
     "is_published": true
   }
