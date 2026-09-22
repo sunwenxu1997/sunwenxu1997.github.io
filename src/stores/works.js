@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchPublishedWorks, mapDbRowToMeta } from '@/api/works'
+import { fetchPublishedWorks } from '@/api/works'
 
 export const useWorksStore = defineStore('works', () => {
   const works = ref([])
@@ -11,12 +11,7 @@ export const useWorksStore = defineStore('works', () => {
     loading.value = true
     error.value = null
     try {
-      const dbWorks = await fetchPublishedWorks()
-      works.value = dbWorks.map((row) => ({
-        path: row.open_url || row.slug,
-        name: row.name,
-        meta: mapDbRowToMeta(row)
-      }))
+      works.value = await fetchPublishedWorks()
     } catch (e) {
       console.error('[works] 加载失败:', e)
       error.value = e.message

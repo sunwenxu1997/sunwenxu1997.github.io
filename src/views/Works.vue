@@ -19,11 +19,10 @@ const workItemRef = ref(),
   searchIconShow = ref(true)
 const worksStore = useWorksStore()
 const workRoutes = computed(() => {
-  // 数据由 store 合并 DB + glob 并排序，这里只做搜索过滤
+  // DB 已过滤 is_published=true，这里只做搜索过滤
   const keyword = searchValue.value.toLowerCase()
   return worksStore.works.filter(
-    (item) =>
-      !item.meta.hidden && item.name.toLowerCase().indexOf(keyword) !== -1
+    (item) => item.name.toLowerCase().indexOf(keyword) !== -1
   )
 })
 // 通过监听works作品变化，重新执行动画
@@ -111,7 +110,13 @@ const $router = useRouter()
 const toPath = (path) => {
   // 判断是否为外部链接
   if (path.indexOf('http') !== -1) window.open(path, '_blank')
-  else $router.push(path)
+  else $router.push(encodeURI(path))
+}
+/** 优先 slug（不含 /external），其次 code_url，最后 open_url */
+const resolveContentPath = (item) => {
+  if (item.slug && !item.slug.includes('/external')) return item.slug
+  if (item.code_url) return item.code_url
+  return item.open_url
 }
 const openChatbot = () => {
   window.cozeWebSDK.showChatBot()
@@ -130,23 +135,23 @@ const openChatbot = () => {
       :key="index"
     >
       <div
-        v-if="item.meta.date"
+        v-if="item.date"
         class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-16 text-black sm:flex"
       >
         <IconDate class="mr-1 relative -top-[1px]" />
-        {{ item.meta.date }}
+        {{ item.date }}
       </div>
       <div class="work-cover w-full aspect-video relative bg-stone-100">
         <div
           class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
         >
           <IconImage />
-          <p v-if="!item.meta.cover" class="text-xs">暂无上传</p>
+          <p v-if="!item.cover_url" class="text-xs">暂无上传</p>
         </div>
         <img
-          v-if="item.meta.cover"
+          v-if="item.cover_url"
           class="w-full h-full block object-cover relative z-10"
-          :src="item.meta.cover"
+          :src="item.cover_url"
           loading="lazy"
           alt=""
         />
@@ -165,33 +170,33 @@ const openChatbot = () => {
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           >
-            <a v-if="item.meta.link" :href="item.meta.link" title="推荐链接" target="_blank">
+            <a v-if="item.link_url" :href="item.link_url" title="推荐链接" target="_blank">
               <IconLink class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a v-if="item.meta.code" :href="item.meta.code" title="Github地址" target="_blank">
+            <a v-if="item.code_url" :href="item.code_url" title="Github地址" target="_blank">
               <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a v-if="item.path || item.meta.open" title="打开内容" @click="toPath(item.path || item.meta.open)">
+            <a v-if="resolveContentPath(item)" title="打开内容" @click="toPath(resolveContentPath(item))">
               <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
-            <a v-if="item.meta.codepen" :href="item.meta.codepen" title="在线代码" target="_blank">
+            <a v-if="item.codepen_url" :href="item.codepen_url" title="在线代码" target="_blank">
               <IconCodepen class="group-hover:opacity-50 hover:!opacity-100" />
             </a>
           </div>
         </div>
-        <div v-if="item.meta.tags && item.meta.tags.length" class="works-tags">
-          <span v-for="tag in item.meta.tags" :key="tag" class="works-tag">{{ tag }}</span>
+        <div v-if="item.tags && item.tags.length" class="works-tags">
+          <span v-for="tag in item.tags" :key="tag" class="works-tag">{{ tag }}</span>
         </div>
-        <div v-if="item.meta.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
+        <div v-if="item.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
           <IconDate class="mr-1 relative -top-[1px]" />
-          <span class="text-xs font-bold">{{ item.meta.date }}</span>
+          <span class="text-xs font-bold">{{ item.date }}</span>
         </div>
         <div
           class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
         >
           <div
             style="word-break: break-all"
-            v-html="handleHtmlContent(item.meta.info)"
+            v-html="handleHtmlContent(item.info_html)"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           ></div>

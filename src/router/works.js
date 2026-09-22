@@ -9,7 +9,7 @@ for (const path in routeFiles) {
     const routerName = routerPath.split('/').reverse()[0]
     const { link, hidden, code, cover, info, sort, date, codepen, open } = routeConfig
     const element = {
-      path: encodeURI(routerPath), //处理中文路径乱码问题
+      path: encodeURI(routerPath),
       name: routerName,
       component: routeConfig,
       /**

@@ -184,22 +184,3 @@ export async function deleteWork(id) {
   if (error) throw error
 }
 
-/**
- * DB 字段名 → Works.vue meta 字段名映射
- * 数据库用 snake_case（code_url），前端沿用原有驼峰命名（code）
- * @param {Object} row - works_meta 单行记录
- * @returns {Object} 与 settings.js externalRoutes.meta 兼容的对象
- */
-export function mapDbRowToMeta(row) {
-  return {
-    code: row.code_url || undefined,
-    link: row.link_url || undefined,
-    cover: row.cover_url || undefined,
-    info: row.info_html || undefined,
-    sort: row.sort_weight ?? 0,
-    date: row.date || undefined,
-    codepen: row.codepen_url || undefined,
-    open: row.open_url || undefined,
-    tags: row.tags || []
-  }
-}
