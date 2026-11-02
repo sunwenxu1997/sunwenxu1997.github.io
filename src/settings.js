@@ -1,5 +1,12 @@
 export default {
   /**
+   * useLocalWorks 作品数据源开关
+   *  false → 走 Supabase works_meta 表（线上行为，默认）
+   *  true  → 直接读 settings.js externalRoutes + src/views/works 组件 meta 的静态数据
+   * 仅本地调试时改为 true，提交前记得改回 false
+   */
+  useLocalWorks: true,
+  /**
    * userName 用户名
    * email 邮箱
    * github github地址
