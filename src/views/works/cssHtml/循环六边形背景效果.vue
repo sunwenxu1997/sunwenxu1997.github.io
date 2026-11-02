@@ -12,8 +12,8 @@ export default {
   link: 'https://juejin.cn/post/7186572424807186490',
   info: `可能使用价值不太高，娱乐学习一下~
     知识点：
-    1. <code>clip-path</code> 路径裁切，实现⑥边形效果
-    2. <code>shape-outside</code> 说白了就是可以让文本围绕着你定义的样式环绕
+    1. \`clip-path\` 路径裁切，实现⑥边形效果
+    2. \`shape-outside\` 说白了就是可以让文本围绕着你定义的样式环绕
     `
 }
 </script>

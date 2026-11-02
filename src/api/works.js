@@ -1,4 +1,6 @@
 import { supabase } from '@/lib/supabase'
+import defaultSet from '@/settings'
+import { fetchLocalWorks } from './works.local'
 
 /**
  * works_meta 表 CRUD 封装
@@ -119,6 +121,19 @@ export async function fetchWorkBySlug(slug) {
     .maybeSingle()
   if (error) throw error
   return data
+}
+
+/**
+ * 按 slug 查询单条作品（详情页）
+ * useLocalWorks 开启时改读本地静态数据
+ * @param {string} slug - '/anime/anime-切割模糊文字'
+ * @returns {Promise<Object|null>}
+ */
+export async function fetchWorkDetail(slug) {
+  if (defaultSet.useLocalWorks) {
+    return fetchLocalWorks().find((item) => item.slug === slug) || null
+  }
+  return fetchWorkBySlug(slug)
 }
 
 /**

@@ -6,10 +6,10 @@
  * 降暗混合模式  darken,multiply,color-burn  减色模式，滤掉图像中高亮色，从而达到图像变暗
  */
 export default {
-  info: `🌈属于文字效果，但更适合于纯黑色背景，有点局限性。更推荐用背景裁切 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/background-clip">background-clip: text;</a>
+  info: `🌈属于文字效果，但更适合于纯黑色背景，有点局限性。更推荐用背景裁切 [background-clip: text;](https://developer.mozilla.org/zh-CN/docs/Web/CSS/background-clip)
     知识点：
-    1. <code>mix-blend-mode</code> 混合模式
-    2. <code>clamp()</code> 函数的作用是把一个值限制在一个上限和下限之间，当这个值超过最小值和最大值的范围时，在最小值和最大值之间选择一个值使用。它接收三个参数：最小值、首选值、最大值。 
+    1. \`mix-blend-mode\` 混合模式
+    2. \`clamp()\` 函数的作用是把一个值限制在一个上限和下限之间，当这个值超过最小值和最大值的范围时，在最小值和最大值之间选择一个值使用。它接收三个参数：最小值、首选值、最大值。 
     `
 }
 </script>

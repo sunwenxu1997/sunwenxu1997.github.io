@@ -3,10 +3,10 @@ export default {
   cover: 'https://iili.io/JRSZG94.gif',
   link: 'https://juejin.cn/post/7273435543677714495',
   info: `知识点：
-      <code>feGaussianBlur</code>高斯模糊。
-      <code>in</code>: in属性标识给定过滤器原语的输入。
-      <code>stdDeviation</code>👍: 它定义了平滑模糊操作的标准偏差，默认值为0。2个参数时为(水平，垂直)模糊方向
-      <code>edgeMode</code>: 它表示输入层边的多余像素。`
+      \`feGaussianBlur\`高斯模糊。
+      \`in\`: in属性标识给定过滤器原语的输入。
+      \`stdDeviation\`👍: 它定义了平滑模糊操作的标准偏差，默认值为0。2个参数时为(水平，垂直)模糊方向
+      \`edgeMode\`: 它表示输入层边的多余像素。`
 }
 </script>
 <script setup>

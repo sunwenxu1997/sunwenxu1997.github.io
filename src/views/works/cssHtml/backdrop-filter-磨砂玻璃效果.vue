@@ -11,10 +11,10 @@
 export default {
   link: 'https://juejin.cn/post/6979391400844460068?searchId=20230807153325C066903F9072D51F4CEE',
   cover: 'https://iili.io/JqJOBO7.png',
-  info: `之前尝试实现磨砂效果，都会想着用fliter滤镜加模糊实现。但是效果总是那么差点意思，后来css推出了 <b>backdrop-filter</b> 属性，值得一试。
+  info: `之前尝试实现磨砂效果，都会想着用fliter滤镜加模糊实现。但是效果总是那么差点意思，后来css推出了 **backdrop-filter** 属性，值得一试。
     知识点：
-    1. <code>backdrop-filter</code> 背景模块滤镜，类似于filter
-    2. <code>clip-path: inset(10px)</code> 相当于整体向内裁切10px
+    1. \`backdrop-filter\` 背景模块滤镜，类似于filter
+    2. \`clip-path: inset(10px)\` 相当于整体向内裁切10px
     `
 }
 </script>

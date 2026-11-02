@@ -1,0 +1,229 @@
+/**
+ * Markdown 正文样式
+ * 基础排版交给 Tailwind Typography（.prose），这里只做站点化微调
+ * 代码块外壳（.md-code）由 highlight.js 在高亮后补上工具条
+ */
+
+.md-body {
+  --md-text: #57534e;
+  --md-title: #292524;
+  --md-muted: #78716c;
+  --md-border: #e7e5e4;
+  color: var(--md-text);
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- 基础排版 ---------- */
+.md-body :where(p) {
+  margin: 0.85em 0;
+}
+.md-body :where(p:first-child) {
+  margin-top: 0;
+}
+.md-body :where(p:last-child) {
+  margin-bottom: 0;
+}
+.md-body :where(h1, h2, h3, h4) {
+  color: var(--md-title);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.md-body :where(h2) {
+  font-size: 1.05rem;
+  margin: 1.6em 0 0.6em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--md-border);
+}
+.md-body :where(h3) {
+  font-size: 0.95rem;
+  margin: 1.3em 0 0.5em;
+}
+.md-body :where(h2, h3) {
+  scroll-margin-top: 6rem;
+}
+.md-body :where(strong) {
+  color: var(--md-title);
+  font-weight: 700;
+}
+.md-body :where(a) {
+  color: var(--md-title);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: #d6d3d1;
+  transition: text-decoration-color 0.15s;
+}
+.md-body :where(a:hover) {
+  text-decoration-color: currentColor;
+}
+.md-body :where(hr) {
+  border: none;
+  border-top: 1px solid var(--md-border);
+  margin: 1.6em 0;
+}
+.md-body :where(blockquote) {
+  margin: 1.1em 0;
+  padding: 0.2em 0 0.2em 14px;
+  border-left: 2px solid var(--md-border);
+  color: var(--md-muted);
+  font-style: normal;
+}
+.md-body :where(blockquote p) {
+  margin: 0.4em 0;
+}
+.md-body :where(ul) {
+  list-style: disc;
+  padding-left: 1.35em;
+  margin: 0.85em 0;
+}
+.md-body :where(ol) {
+  list-style: decimal;
+  padding-left: 1.35em;
+  margin: 0.85em 0;
+}
+.md-body :where(li) {
+  margin: 0.3em 0;
+}
+.md-body :where(li)::marker {
+  color: #a8a29e;
+}
+.md-body :where(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1em 0;
+}
+.md-body :where(table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.1em 0;
+  font-size: 12px;
+}
+.md-body :where(th, td) {
+  border: 1px solid var(--md-border);
+  padding: 6px 10px;
+  text-align: left;
+  white-space: nowrap;
+}
+.md-body :where(th) {
+  background: #fafaf9;
+  color: var(--md-title);
+  font-weight: 700;
+}
+
+/* ---------- 行内代码：承接原站的“黑底白字” ---------- */
+.md-body :where(code)::before,
+.md-body :where(code)::after {
+  content: none;
+}
+.md-body :where(code) {
+  background: #000;
+  color: #fff;
+  padding: 1px 5px;
+  margin: 0 2px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-weight: 400;
+  white-space: break-spaces;
+}
+
+/* ---------- 代码块外壳 ---------- */
+.md-body .md-code {
+  margin: 1.1em 0;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #121212;
+}
+.md-body .md-code__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 12px;
+  background: #1a1a1a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.md-body .md-code__lang {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+}
+.md-body .md-code__copy {
+  font-family: inherit;
+  font-size: 11px;
+  color: #8a8a8a;
+  background: transparent;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+.md-body .md-code:hover .md-code__copy,
+.md-body .md-code__copy:focus-visible,
+.md-body .md-code__copy.is-done {
+  opacity: 1;
+}
+.md-body .md-code__copy:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.md-body .md-code__copy.is-done {
+  color: #6ee7b7;
+}
+
+/* 未高亮时的纯文本兜底 */
+.md-body .md-code > pre {
+  margin: 0;
+  padding: 14px 16px;
+  overflow-x: auto;
+  background: transparent;
+}
+
+/* shiki 输出 */
+.md-body .md-code pre.shiki {
+  margin: 0;
+  padding: 14px 16px;
+  overflow-x: auto;
+  border-radius: 0;
+  background-color: #121212 !important;
+}
+.md-body .md-code pre.shiki code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+  font-weight: 400;
+  white-space: pre;
+}
+
+/* 触屏设备没有 hover，复制按钮常驻 */
+@media (hover: none) {
+  .md-body .md-code__copy {
+    opacity: 1;
+  }
+}
+
+/* ---------- 列表卡片摘要 ---------- */
+.md-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+  color: var(--md-text, #57534e);
+  font-size: 12px;
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+}

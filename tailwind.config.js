@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import typography from '@tailwindcss/typography'
+
 export default {
   // important 选项可让你控制 Tailwind 的工具是否应标记为 !important。
   //这在将 Tailwind 与具有高特异性选择器的现有 CSS 结合使用时非常有用。
@@ -21,7 +23,9 @@ export default {
     './src/views/works/cssHtml/tailwindcss使用.vue',
     './src/views/works/cssHtml/tailwindcss使用1.vue',
     './src/views/404.vue',
-    './src/views/Login.vue'
+    './src/views/Login.vue',
+    './src/views/WorkDetail.vue',
+    './src/components/markdown/*.vue'
   ],
   theme: {
     /**
@@ -48,5 +52,5 @@ export default {
     },
     extend: {}
   },
-  plugins: []
+  plugins: [typography]
 }

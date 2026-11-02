@@ -10,7 +10,7 @@ import defaultSet from '@/settings'
  * 字段对应关系：
  *   settings/router 侧        →  works_meta 侧
  *   cover                     →  cover_url
- *   info                      →  info_html
+ *   info                      →  info_md（Markdown）
  *   code                      →  code_url
  *   link                      →  link_url
  *   codepen                   →  codepen_url
@@ -36,7 +36,7 @@ function fromRoute(route) {
     slug,
     name: route.name,
     cover_url: cover || null,
-    info_html: info || null,
+    info_md: info || null,
     code_url: code || null,
     link_url: link || null,
     codepen_url: codepen || null,
@@ -57,7 +57,7 @@ function fromExternal(item) {
     slug,
     name: item.name,
     cover_url: cover || null,
-    info_html: info || null,
+    info_md: info || null,
     code_url: code || null,
     link_url: link || null,
     codepen_url: codepen || null,

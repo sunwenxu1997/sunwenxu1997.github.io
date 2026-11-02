@@ -14,8 +14,8 @@ export default {
   cover: 'https://iili.io/JRSzVKg.gif',
   info: `多用于导航栏文字效果，让人感觉有种吸附的效果，主要用的就是监听鼠标得移入移出。
     知识点：
-    1. <code>addEventListener</code>监听进入按钮时得 mousemove mouseleave
-    2. <code>rotate3d(x, y, z, angle)</code>
+    1. \`addEventListener\`监听进入按钮时得 mousemove mouseleave
+    2. \`rotate3d(x, y, z, angle)\`
        x：表示绕着X轴旋转的角度。
        y：表示绕着Y轴旋转的角度。
        z：表示绕着Z轴旋转的角度。

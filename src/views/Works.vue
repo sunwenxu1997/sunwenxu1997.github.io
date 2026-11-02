@@ -21,9 +21,7 @@ const worksStore = useWorksStore()
 const workRoutes = computed(() => {
   // DB 已过滤 is_published=true，这里只做搜索过滤
   const keyword = searchValue.value.toLowerCase()
-  return worksStore.works.filter(
-    (item) => item.name.toLowerCase().indexOf(keyword) !== -1
-  )
+  return worksStore.works.filter((item) => item.name.toLowerCase().indexOf(keyword) !== -1)
 })
 // 通过监听works作品变化，重新执行动画
 watch(workRoutes, () => {
@@ -65,12 +63,10 @@ const initWorkAnimations = () => {
     const cover = el.querySelector('.work-cover')
     const title = el.querySelector('.title-ref')
     const tags = el.querySelectorAll('.works-tag')
-    const info = el.querySelector('.info-ref')
     const children = []
     if (cover) children.push(cover)
     if (title) children.push(title)
     children.push(...tags)
-    if (info) children.push(info)
     gsap.set(children, { opacity: 0, y: 20 })
     ScrollTrigger.create({
       trigger: el,
@@ -101,16 +97,16 @@ const onMouseleaveElement = () => {
   searchIconShow.value = true
 }
 // 加工处理html格式
-const handleHtmlContent = (html) => {
-  if (!html) return '' // 作者🐔很懒啥也没写。建议直接点击右上↗链接...
-  // 换行加<br/>
-  return html.replace(/\n/g, '<br/>')
-}
 const $router = useRouter()
 const toPath = (path) => {
   // 判断是否为外部链接
   if (path.indexOf('http') !== -1) window.open(path, '_blank')
   else $router.push(encodeURI(path))
+}
+// 返回作品详情页（可分享的独立地址）
+const goDetail = (item) => {
+  if (!item.slug) return
+  $router.push('/work' + encodeURI(item.slug))
 }
 /** 优先 slug（不含 /external），其次 code_url，最后 open_url */
 const resolveContentPath = (item) => {
@@ -141,7 +137,13 @@ const openChatbot = () => {
         <IconDate class="mr-1 relative -top-[1px]" />
         {{ item.date }}
       </div>
-      <div class="work-cover w-full aspect-video relative bg-stone-100">
+      <div
+        class="work-cover w-full aspect-video relative bg-stone-100 cursor-pointer"
+        title="查看详情"
+        @click="goDetail(item)"
+        @mouseenter="onMouseenterElement"
+        @mouseleave="onMouseleaveElement"
+      >
         <div
           class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
         >
@@ -159,7 +161,9 @@ const openChatbot = () => {
       <div class="px-8 sm:px-0">
         <div class="py-6 flex justify-between title-ref">
           <div
-            class="uppercase text-stone-800 text-sm font-bold"
+            class="work-title uppercase text-stone-800 text-sm font-bold"
+            title="查看详情"
+            @click="goDetail(item)"
             @mouseenter="onMouseenterElement"
             @mouseleave="onMouseleaveElement"
           >
@@ -190,16 +194,6 @@ const openChatbot = () => {
         <div v-if="item.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
           <IconDate class="mr-1 relative -top-[1px]" />
           <span class="text-xs font-bold">{{ item.date }}</span>
-        </div>
-        <div
-          class="m-0 text-xs text-stone-600 tracking-widest leading-7 info-ref"
-        >
-          <div
-            style="word-break: break-all"
-            v-html="handleHtmlContent(item.info_html)"
-            @mouseenter="onMouseenterElement"
-            @mouseleave="onMouseleaveElement"
-          ></div>
         </div>
       </div>
     </div>
@@ -258,24 +252,12 @@ const openChatbot = () => {
   a {
     cursor: pointer;
   }
-}
-.info-ref {
-  cursor: text !important;
-  p {
-    margin: 0 !important;
-  }
-  code {
-    background: #000000;
-    color: white;
-    padding: 0 0.33rem;
-    margin: 0 0.2rem;
-    &::selection {
-      background-color: #2ae3e6 !important;
+  .work-title {
+    cursor: pointer !important;
+    transition: opacity 0.2s;
+    &:hover {
+      opacity: 0.6;
     }
-  }
-  a {
-    color: rgb(87 83 78);
-    font-weight: bold;
   }
 }
 </style>

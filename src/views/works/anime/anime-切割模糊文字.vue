@@ -3,9 +3,9 @@ export default {
   cover: 'https://iili.io/K99P0Cv.gif',
   date: '2025-08-21',
   codepen: 'https://codepen.io/sunwenxu1997/pen/RNWMXOr',
-  info: `近期网上看到的一个效果，实现起来也很简单。同时挖掘到了一个很牛的<a href="https://codepen.io/filipz" target="_blank">Filip Zrnzevic😎大佬</a>，写的效果都很炫酷。
-           <code>animejs-text</code> 官方提供的文本 <a href="https://animejs.cn/documentation/text/split/split-parameters/class" target="_blank">分割插件</a>，相比于GSAP是不额外收费的，不过animejs版本要在4.0以上；
-           <code>fractalNoise</code> background-image 引入本地定义好的噪点svg，通过重复动画随即修改 background-size 实现噪点波动效果
+  info: `近期网上看到的一个效果，实现起来也很简单。同时挖掘到了一个很牛的[Filip Zrnzevic😎大佬](https://codepen.io/filipz)，写的效果都很炫酷。
+           \`animejs-text\` 官方提供的文本 [分割插件](https://animejs.cn/documentation/text/split/split-parameters/class)，相比于GSAP是不额外收费的，不过animejs版本要在4.0以上；
+           \`fractalNoise\` background-image 引入本地定义好的噪点svg，通过重复动画随即修改 background-size 实现噪点波动效果
            `
 }
 </script>

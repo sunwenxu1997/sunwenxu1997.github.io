@@ -5,7 +5,7 @@ export default {
   date:'2024-01-11',
   info:`通过多张图片的方式模拟视频动画，通过滚动条平滑过渡，控制图片播放。相比于直接控制视频进度动画可能会好一点。
   实现原理：
-  主要是通过 <code>gsap + scrollTrigger</code> 来实现的，通过控制 playhead 对象参数的 frame(图片index) 从0到最后一张图片的过程来实现图片的播放动画。
+  主要是通过 \`gsap + scrollTrigger\` 来实现的，通过控制 playhead 对象参数的 frame(图片index) 从0到最后一张图片的过程来实现图片的播放动画。
   `,
 }
 </script>

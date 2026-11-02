@@ -2,10 +2,10 @@
 export default {
   link: 'https://juejin.cn/post/7269797025863499837',
   cover:'https://iili.io/Jq644b1.gif',
-  info: `动画新属性 <b>animation-composition</b> 的学习，可能实际项目上用不到。
+  info: `动画新属性 **animation-composition** 的学习，可能实际项目上用不到。
     知识点：
-    1. <code>animation-composition</code> 动画合成
-    2. <code>steps</code> 按步执行动画
+    1. \`animation-composition\` 动画合成
+    2. \`steps\` 按步执行动画
     `
 }
 </script>

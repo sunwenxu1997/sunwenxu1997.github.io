@@ -1,5 +1,6 @@
 import './assets/main.css'
 import "tailwindcss/tailwind.css" // 引入 tailwindcss 样式
+import './assets/markdown.css' // Markdown 正文样式（prose 基础上做站点化微调）
 import 'vue-sonner/style.css'
 
 import { createApp } from 'vue'

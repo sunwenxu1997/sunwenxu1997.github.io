@@ -36,6 +36,12 @@ const router = createRouter({
     },
     ...routes,
     {
+      path: '/work/:slug(.*)',
+      name: 'WorkDetail',
+      component: () => import('../views/WorkDetail.vue'),
+      meta: { title: '作品详情' }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: '404',
       component: () => import('../views/404.vue'),

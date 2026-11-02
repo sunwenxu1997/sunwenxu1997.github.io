@@ -7,7 +7,7 @@ export default {
   知识点：
   1.通过伪元素制造多层表情标签，制造3D假象；
   2.通过记录下落转向上升的那一帧开始，更换表情和背景；
-  3.学会如何通过 <code>conic-gradient</code> <code>linear-gradient</code> <code>radial-gradient </code> 实现多样化的背景效果；
+  3.学会如何通过 \`conic-gradient\` \`linear-gradient\` \`radial-gradient\` 实现多样化的背景效果；
 `
 }
 </script>
