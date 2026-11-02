@@ -5,7 +5,7 @@ export default {
    *  true  → 直接读 settings.js externalRoutes + src/views/works 组件 meta 的静态数据
    * 仅本地调试时改为 true，提交前记得改回 false
    */
-  useLocalWorks: true,
+  useLocalWorks: false,
   /**
    * userName 用户名
    * email 邮箱
