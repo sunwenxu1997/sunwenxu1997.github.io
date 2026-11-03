@@ -75,10 +75,30 @@
           <input v-model="form.open_url" class="input" placeholder="https://..." />
         </div>
 
-        <!-- 介绍 -->
+        <!-- 介绍：Markdown 正文 + 实时预览，与详情页共用同一渲染器 -->
         <div class="full">
-          <label class="label">介绍 (HTML)</label>
-          <textarea v-model="form.info_html" class="input" rows="4" placeholder="支持 HTML 标签..."></textarea>
+          <div class="md-head">
+            <label class="label">介绍 (Markdown)</label>
+            <span class="md-count">{{ form.info_md.length }} 字符</span>
+          </div>
+          <p v-if="legacyHtmlOnly" class="md-warn">
+            这条作品的正文还是旧的 HTML 格式（info_html）。跑完 sql/005 迁移后才会显示在这里；
+            现在保存不会覆盖原 HTML，正文留空也没关系。
+          </p>
+          <div class="md-editor">
+            <div class="md-pane">
+              <textarea
+                v-model="form.info_md"
+                class="input md-input"
+                spellcheck="false"
+                placeholder="用 Markdown 写：## 小标题、`行内代码`、[链接](https://...)、**加粗**，代码块用三个反引号包裹"
+              ></textarea>
+            </div>
+            <div class="md-pane md-preview">
+              <MarkdownBody v-if="form.info_md.trim()" :content="form.info_md" />
+              <p v-else class="md-empty">预览区：左边写 Markdown，这里实时渲染</p>
+            </div>
+          </div>
         </div>
 
         <!-- 标签 -->
@@ -106,6 +126,7 @@ import { ref, reactive, computed } from 'vue'
 import { toast } from 'vue-sonner'
 import { ImageIcon } from 'lucide-vue-next'
 import { upsertWork } from '@/api/works'
+import MarkdownBody from '@/components/markdown/MarkdownBody.vue'
 
 defineProps({
   saving: Boolean
@@ -115,13 +136,15 @@ const emit = defineEmits(['saved', 'reset', 'save-start', 'save-end'])
 
 const tagInput = ref('')
 const tagInputRef = ref(null)
+// 仅在「有旧 HTML 正文、尚无 Markdown 正文」时为 true，用于提示先跑 005 迁移
+const legacyHtmlOnly = ref(false)
 
 const form = reactive({
   id: null,
   slug: '/external/',
   name: '',
   cover_url: '',
-  info_html: '',
+  info_md: '',
   code_url: '',
   link_url: '',
   codepen_url: '',
@@ -180,7 +203,7 @@ function resetForm() {
     slug: '/external/',
     name: '',
     cover_url: '',
-    info_html: '',
+    info_md: '',
     code_url: '',
     link_url: '',
     codepen_url: '',
@@ -192,14 +215,18 @@ function resetForm() {
   })
   prevAutoSlug = '/external/'
   slugManuallyEdited = false
+  legacyHtmlOnly.value = false
   emit('reset')
 }
 
 function editWork(work) {
   Object.assign(form, {
     ...work,
+    // info_md 列未建 / 值为 null 时统一成空串，避免模板里 .length 报错
+    info_md: work.info_md || '',
     tags: Array.isArray(work.tags) ? [...work.tags] : []
   })
+  legacyHtmlOnly.value = !work.info_md && !!work.info_html
   prevAutoSlug = work.slug || '/external/'
   slugManuallyEdited = true
 }
@@ -215,7 +242,8 @@ async function saveWork() {
       slug: form.slug,
       name: form.name,
       cover_url: form.cover_url || null,
-      info_html: form.info_html || null,
+      // 只写 info_md；info_html 保持原样，作为迁移前的回滚备份
+      info_md: form.info_md || null,
       code_url: form.code_url || null,
       link_url: form.link_url || null,
       codepen_url: form.codepen_url || null,
@@ -295,6 +323,45 @@ textarea.input { resize: vertical; min-height: 90px; line-height: 1.6; }
   font-size: 11px; padding: 2px 8px; border-radius: 4px;
   background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
   white-space: nowrap; cursor: pointer;
+}
+
+/* ===== Markdown 编辑器 ===== */
+.md-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.md-count { font-size: 11px; color: #a8a29e; }
+.md-warn {
+  margin: 0 0 10px; padding: 8px 12px; border-radius: 8px;
+  background: #fffbeb; border: 1px solid #fde68a;
+  font-size: 12px; line-height: 1.6; color: #92400e;
+}
+.md-editor {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.md-pane {
+  height: 340px; overflow: hidden;
+  display: flex; flex-direction: column;
+  background: #fafaf9;
+  border: 1px solid #e7e5e4; border-radius: 8px;
+}
+/* 用 textarea.md-input 提升优先级，覆盖上方 textarea.input 的 min-height / resize */
+textarea.md-input {
+  flex: 1; min-height: 0; resize: none;
+  border: none; border-radius: 0; background: transparent;
+  padding: 12px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px; line-height: 1.7;
+}
+textarea.md-input:focus { border-color: transparent; }
+.md-preview {
+  display: block; overflow-y: auto;
+  padding: 12px 16px; background: #fff;
+}
+.md-empty { margin: 0; font-size: 13px; color: #a8a29e; }
+
+@media (max-width: 1023px) {
+  .md-editor { grid-template-columns: 1fr; }
+  .md-pane { height: 240px; }
 }
 
 .form-grid {
