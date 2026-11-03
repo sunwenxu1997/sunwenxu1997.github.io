@@ -10,9 +10,12 @@ import IconDate from '@/components/icons/date.vue'
 import IconCodepen from '@/components/icons/codepen.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger.js'
+import { List, LayoutGrid } from 'lucide-vue-next'
 import SearchButton from '@/components/SearchButton.vue'
 import { onBus } from '@/utils/bus.js'
 const bodyScrollTop = ref(0)
+// 视图模式：list 竖列（默认）/ grid 平铺卡片，localStorage 记住选择
+const viewMode = ref(localStorage.getItem('works-view-mode') === 'grid' ? 'grid' : 'list')
 const workItemRef = ref(),
   searchValue = ref(''),
   searchButtonRef = ref(null),
@@ -87,6 +90,17 @@ const initWorkAnimations = () => {
 const searchInput = (val) => {
   searchValue.value = val
 }
+// 切换视图：DOM 更新后重建滚动动画（killAll 会连 body 滚动监听一起清掉，需一并重建）
+const setViewMode = (mode) => {
+  if (viewMode.value === mode) return
+  viewMode.value = mode
+  localStorage.setItem('works-view-mode', mode)
+  nextTick(() => {
+    ScrollTrigger.killAll()
+    bodyScrollTrigger()
+    initWorkAnimations()
+  })
+}
 // 部分选项操作不需要展示悬浮的搜索，需要展示默认鼠标样式
 const onMouseenterElement = () => {
   // toggle() 方法：切换元素的类，如果类已存在，则移除该类；如果类不存在，则添加该类。
@@ -119,81 +133,111 @@ const openChatbot = () => {
 }
 </script>
 <template>
+  <!-- 平铺模式左右边距与导航栏容器同轨（HeaderNav 为 sm:px-24），并取消居中限宽，
+       避免视口变宽时居中偏移导致与「WHO.」起始线错位 -->
   <div
     id="works-page"
-    class="px-4 pt-28 sm:px-60 sm:max-w-screen-sm sm:m-auto selection:bg-stone-700 selection:text-white"
+    class="px-4 pt-28 selection:bg-stone-700 selection:text-white sm:m-auto"
+    :class="viewMode === 'grid' ? 'sm:px-24' : 'sm:max-w-screen-sm sm:px-60'"
   >
+    <!-- 列表容器：平铺模式下变栅格（移动端单列 / sm 两列 / lg 三列 / 2xl 四列），竖列模式保持原单列流式布局 -->
     <div
-      cursor="search"
-      ref="workItemRef"
-      class="pt-12 mb-12 w-full relative"
-      v-for="(item, index) in workRoutes"
-      :key="index"
+      :class="
+        viewMode === 'grid'
+          ? 'grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
+          : ''
+      "
     >
       <div
-        v-if="item.date"
-        class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-16 text-black sm:flex"
-      >
-        <IconDate class="mr-1 relative -top-[1px]" />
-        {{ item.date }}
-      </div>
-      <div
-        class="work-cover w-full aspect-video relative bg-stone-100 cursor-pointer"
-        title="查看详情"
-        @click="goDetail(item)"
-        @mouseenter="onMouseenterElement"
-        @mouseleave="onMouseleaveElement"
+        cursor="search"
+        ref="workItemRef"
+        class="w-full relative"
+        :class="viewMode === 'grid' ? 'mb-0 pt-0' : 'pt-12 mb-12'"
+        v-for="(item, index) in workRoutes"
+        :key="index"
       >
         <div
-          class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
+          v-if="item.date && viewMode === 'list'"
+          class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-16 text-black sm:flex"
         >
-          <IconImage />
-          <p v-if="!item.cover_url" class="text-xs">暂无上传</p>
-        </div>
-        <img
-          v-if="item.cover_url"
-          class="w-full h-full block object-cover relative z-10"
-          :src="item.cover_url"
-          loading="lazy"
-          alt=""
-        />
-      </div>
-      <div class="px-8 sm:px-0">
-        <div class="py-6 flex justify-between title-ref">
-          <div
-            class="work-title uppercase text-stone-800 text-sm font-bold"
-            title="查看详情"
-            @click="goDetail(item)"
-            @mouseenter="onMouseenterElement"
-            @mouseleave="onMouseleaveElement"
-          >
-            {{ item.name }}
-          </div>
-          <div
-            class="group grid grid-rows-1 grid-flow-col gap-4"
-            @mouseenter="onMouseenterElement"
-            @mouseleave="onMouseleaveElement"
-          >
-            <a v-if="item.link_url" :href="item.link_url" title="推荐链接" target="_blank">
-              <IconLink class="group-hover:opacity-50 hover:!opacity-100" />
-            </a>
-            <a v-if="item.code_url" :href="item.code_url" title="Github地址" target="_blank">
-              <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
-            </a>
-            <a v-if="resolveContentPath(item)" title="打开内容" @click="toPath(resolveContentPath(item))">
-              <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
-            </a>
-            <a v-if="item.codepen_url" :href="item.codepen_url" title="在线代码" target="_blank">
-              <IconCodepen class="group-hover:opacity-50 hover:!opacity-100" />
-            </a>
-          </div>
-        </div>
-        <div v-if="item.tags && item.tags.length" class="works-tags">
-          <span v-for="tag in item.tags" :key="tag" class="works-tag">{{ tag }}</span>
-        </div>
-        <div v-if="item.date" class="text-stone-500 mb-2 flex items-center sm:hidden">
           <IconDate class="mr-1 relative -top-[1px]" />
-          <span class="text-xs font-bold">{{ item.date }}</span>
+          {{ item.date }}
+        </div>
+        <div
+          class="work-cover w-full aspect-video relative bg-stone-100 cursor-pointer"
+          :class="
+            viewMode === 'grid' &&
+            'overflow-hidden rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]'
+          "
+          title="查看详情"
+          @click="goDetail(item)"
+          @mouseenter="onMouseenterElement"
+          @mouseleave="onMouseleaveElement"
+        >
+          <div
+            class="w-full h-full flex flex-col justify-center items-center absolute top-0 left-0 animate-pulse"
+          >
+            <IconImage />
+            <p v-if="!item.cover_url" class="text-xs">暂无上传</p>
+          </div>
+          <img
+            v-if="item.cover_url"
+            class="w-full h-full block object-cover relative z-10"
+            :src="item.cover_url"
+            loading="lazy"
+            alt=""
+          />
+        </div>
+        <div :class="viewMode === 'grid' ? 'pt-3' : 'px-8 sm:px-0'">
+          <div
+            class="flex justify-between title-ref"
+            :class="viewMode === 'grid' ? 'py-0' : 'py-6'"
+          >
+            <div
+              class="work-title uppercase text-stone-800 text-sm font-bold"
+              :class="viewMode === 'grid' && 'truncate'"
+              title="查看详情"
+              @click="goDetail(item)"
+              @mouseenter="onMouseenterElement"
+              @mouseleave="onMouseleaveElement"
+            >
+              {{ item.name }}
+            </div>
+            <div
+              v-if="viewMode === 'list'"
+              class="group grid grid-rows-1 grid-flow-col gap-4"
+              @mouseenter="onMouseenterElement"
+              @mouseleave="onMouseleaveElement"
+            >
+              <a v-if="item.link_url" :href="item.link_url" title="推荐链接" target="_blank">
+                <IconLink class="group-hover:opacity-50 hover:!opacity-100" />
+              </a>
+              <a v-if="item.code_url" :href="item.code_url" title="Github地址" target="_blank">
+                <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
+              </a>
+              <a
+                v-if="resolveContentPath(item)"
+                title="打开内容"
+                @click="toPath(resolveContentPath(item))"
+              >
+                <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
+              </a>
+              <a v-if="item.codepen_url" :href="item.codepen_url" title="在线代码" target="_blank">
+                <IconCodepen class="group-hover:opacity-50 hover:!opacity-100" />
+              </a>
+            </div>
+          </div>
+          <div v-if="item.tags && item.tags.length" class="works-tags">
+            <span v-for="tag in item.tags" :key="tag" class="works-tag">{{ tag }}</span>
+          </div>
+          <div
+            v-if="item.date"
+            class="text-stone-500 flex items-center"
+            :class="viewMode === 'grid' ? 'mt-2 mb-0' : 'mb-2 sm:hidden'"
+          >
+            <IconDate class="mr-1 relative -top-[1px]" />
+            <span class="text-xs font-bold">{{ item.date }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -225,7 +269,7 @@ const openChatbot = () => {
       @mouseenter="onMouseenterElement"
       @mouseleave="onMouseleaveElement"
       @click="openChatbot()"
-      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow"
+      class="w-8 h-8 flex justify-center items-center rounded-full transition-opacity bg-white shadow-md cursor-pointer hover:shadow mb-4"
     >
       <svg
         t="1739782650202"
@@ -243,6 +287,18 @@ const openChatbot = () => {
           p-id="11461"
         ></path>
       </svg>
+    </div>
+    <!-- 视图切换：单按钮在竖列 / 平铺之间切换，图标展示即将切换到的视图 -->
+    <div @mouseenter="onMouseenterElement" @mouseleave="onMouseleaveElement">
+      <button
+        type="button"
+        :title="viewMode === 'list' ? '切换为平铺卡片' : '切换为竖列'"
+        class="w-8 h-8 flex justify-center items-center rounded-full border-0 bg-white text-stone-600 shadow-md cursor-pointer transition-colors hover:text-stone-800 hover:shadow"
+        @click="setViewMode(viewMode === 'list' ? 'grid' : 'list')"
+      >
+        <LayoutGrid v-if="viewMode === 'list'" :size="16" />
+        <List v-else :size="16" />
+      </button>
     </div>
   </div>
 </template>
@@ -273,16 +329,31 @@ const openChatbot = () => {
   transform: scale(1.25);
 }
 .works-tags {
-  display: flex; gap: 6px; margin-bottom: 8px;
-  overflow-x: auto; white-space: nowrap;
-  scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #d6d3d1 transparent;
 }
-.works-tags::-webkit-scrollbar { height: 3px; }
-.works-tags::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 2px; }
-.works-tags::-webkit-scrollbar-track { background: transparent; }
+.works-tags::-webkit-scrollbar {
+  height: 3px;
+}
+.works-tags::-webkit-scrollbar-thumb {
+  background: #d6d3d1;
+  border-radius: 2px;
+}
+.works-tags::-webkit-scrollbar-track {
+  background: transparent;
+}
 .works-tag {
-  font-size: 11px; padding: 1px 8px; border-radius: 4px;
-  background: #f5f5f4; color: #44403c;
-  white-space: nowrap; flex-shrink: 0;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: #f5f5f4;
+  color: #44403c;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 </style>
