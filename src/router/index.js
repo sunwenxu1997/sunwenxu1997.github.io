@@ -36,7 +36,7 @@ const router = createRouter({
     },
     ...routes,
     {
-      path: '/work/:slug(.*)',
+      path: '/work/:id(.*)',
       name: 'WorkDetail',
       component: () => import('../views/WorkDetail.vue'),
       meta: { title: '作品详情' }

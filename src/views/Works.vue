@@ -105,8 +105,8 @@ const toPath = (path) => {
 }
 // 返回作品详情页（可分享的独立地址）
 const goDetail = (item) => {
-  if (!item.slug) return
-  $router.push('/work' + encodeURI(item.slug))
+  if (!item.id) return
+  $router.push('/work/' + encodeURI(item.id))
 }
 /** 优先 slug（不含 /external），其次 code_url，最后 open_url */
 const resolveContentPath = (item) => {
@@ -281,8 +281,8 @@ const openChatbot = () => {
 .works-tags::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 2px; }
 .works-tags::-webkit-scrollbar-track { background: transparent; }
 .works-tag {
-  font-size: 11px; padding: 2px 8px; border-radius: 4px;
-  background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
+  font-size: 11px; padding: 1px 8px; border-radius: 4px;
+  background: #f5f5f4; color: #44403c;
   white-space: nowrap; flex-shrink: 0;
 }
 </style>

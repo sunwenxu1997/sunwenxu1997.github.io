@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { animate, stagger } from 'animejs'
 import { fetchWorkDetail } from '@/api/works'
 import { useWorksStore } from '@/stores/works'
 import MarkdownBody from '@/components/markdown/MarkdownBody.vue'
@@ -10,6 +11,8 @@ import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
 import IconCodepen from '@/components/icons/codepen.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
+import IconBack from '@/components/icons/back.vue'
+import IconCopy from '@/components/icons/copy.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -18,16 +21,32 @@ const worksStore = useWorksStore()
 const work = ref(null)
 const loading = ref(true)
 const toc = ref([])
+const actionsRef = ref(null)
 
-/** '/work/anime/xxx' -> '/anime/xxx'（兼容中文被编码的情况） */
-const slug = computed(() => {
-  const raw = route.params.slug
+/** 悬浮操作条入场：自上而下依次淡入下落 */
+function playActionsEnter() {
+  const els = actionsRef.value?.children
+  if (!els || !els.length) return
+  animate(els, {
+    opacity: [0, 1],
+    translateY: [-16, 0],
+    duration: 600,
+    delay: stagger(120),
+    ease: 'out(3)'
+  })
+}
+
+/** 路由参数：作品 id；多段路径视为旧版 slug 链接（补前导斜杠），单段视为 id */
+const workKey = computed(() => {
+  const raw = route.params.id
   const path = Array.isArray(raw) ? raw.join('/') : raw || ''
+  let key = path
   try {
-    return `/${decodeURIComponent(path)}`
+    key = decodeURIComponent(path)
   } catch {
-    return `/${path}`
+    /* 解码失败保留原串 */
   }
+  return key.includes('/') ? `/${key}` : key
 })
 
 const contentPath = computed(() => {
@@ -39,7 +58,7 @@ const contentPath = computed(() => {
 })
 
 const currentIndex = computed(() =>
-  worksStore.works.findIndex((item) => item.slug === slug.value)
+  worksStore.works.findIndex((item) => item.id === work.value?.id)
 )
 const prevWork = computed(() =>
   currentIndex.value > 0 ? worksStore.works[currentIndex.value - 1] : null
@@ -54,7 +73,7 @@ async function load() {
   loading.value = true
   toc.value = []
   try {
-    work.value = await fetchWorkDetail(slug.value)
+    work.value = await fetchWorkDetail(workKey.value)
   } catch (err) {
     console.error('[work-detail] 加载失败:', err)
     work.value = null
@@ -67,6 +86,10 @@ async function load() {
     const desc = document.querySelector('meta[name="description"]')
     if (desc) desc.setAttribute('content', work.value.name)
   }
+
+  // 外链按钮随 work 渲染，等 DOM 更新后再播入场动画
+  await nextTick()
+  playActionsEnter()
 }
 
 function scrollTo(id) {
@@ -91,7 +114,7 @@ async function copyLink() {
 }
 
 const goBack = () => router.push('/works')
-const goWork = (item) => router.push('/work' + encodeURI(item.slug))
+const goWork = (item) => router.push('/work/' + encodeURI(item.id))
 const previewCover = () => {
   if (work.value?.cover_url) window.open(work.value.cover_url, '_blank')
 }
@@ -101,376 +124,170 @@ onMounted(async () => {
   await load()
 })
 
-watch(slug, load)
+watch(workKey, load)
 </script>
 
 <template>
-  <div class="detail-page">
-    <div class="detail-shell">
-      <div class="detail-topbar">
-        <button type="button" class="detail-back" @click="goBack">
-          <span class="detail-back__arrow">←</span> 作品列表
+  <div class="flex min-h-screen flex-col bg-white px-4 pb-24 pt-12 max-sm:pb-20 max-sm:pt-10">
+    <!-- 目录：独立于内容列，固定在左侧空白区，不挤占正文宽度；<1240 隐藏 -->
+    <aside
+      v-if="toc.length"
+      class="fixed left-[max(24px,calc(50vw_-_610px))] top-24 hidden max-h-[calc(100vh_-_12rem)] w-[180px] overflow-y-auto border-r border-stone-100 pr-4 min-[1240px]:block"
+    >
+      <p class="mb-2.5 text-[11px] font-bold tracking-[0.16em] text-stone-400">目录</p>
+      <a
+        v-for="item in toc"
+        :key="item.id"
+        :class="[
+          'block w-full cursor-pointer text-left text-[11px] leading-[1.9] text-stone-400 transition-colors hover:text-stone-800',
+          item.level === 3 ? 'pl-2.5' : ''
+        ]"
+        role="button"
+        tabindex="0"
+        @click="scrollTo(item.id)"
+        @keydown.enter="scrollTo(item.id)"
+      >
+        {{ item.text }}
+      </a>
+    </aside>
+
+    <!-- 右侧悬浮操作条：返回 / 复制 / 外链，图标 + hover 提示文本；移动端贴右下角 -->
+    <div
+      ref="actionsRef"
+      class="fixed bottom-4 right-4 z-30 flex flex-col gap-2 min-[1240px]:bottom-10 min-[1240px]:right-[max(24px,calc(50vw_-_610px))] min-[1240px]:gap-2.5"
+    >
+      <button
+        type="button"
+        class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+        @click="goBack"
+      >
+        <IconBack />
+        <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">作品列表</span>
+      </button>
+      <button
+        type="button"
+        class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+        @click="copyLink"
+      >
+        <IconCopy />
+        <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">复制链接</span>
+      </button>
+      <template v-if="work">
+        <a
+          v-if="work.link_url"
+          :href="work.link_url"
+          target="_blank"
+          rel="noopener"
+          class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+        >
+          <IconLink />
+          <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">推荐链接</span>
+        </a>
+        <a
+          v-if="work.code_url"
+          :href="work.code_url"
+          target="_blank"
+          rel="noopener"
+          class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+        >
+          <IconGithub />
+          <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">Github地址</span>
+        </a>
+        <a
+          v-if="work.codepen_url"
+          :href="work.codepen_url"
+          target="_blank"
+          rel="noopener"
+          class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+        >
+          <IconCodepen />
+          <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">在线代码</span>
+        </a>
+        <button
+          v-if="contentPath"
+          type="button"
+          class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
+          @click="openContent"
+        >
+          <IconSkip />
+          <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">打开内容</span>
         </button>
-        <button type="button" class="detail-copy" @click="copyLink">复制链接</button>
+      </template>
+    </div>
+
+    <div class="mx-auto w-full max-w-[780px]">
+      <!-- 骨架 -->
+      <div v-if="loading">
+        <div class="mb-6 aspect-video w-full animate-pulse rounded-xl bg-stone-100"></div>
+        <div class="mb-3 h-3 w-60 animate-pulse rounded-md bg-stone-100"></div>
+        <div class="mb-3 h-3 w-full animate-pulse rounded-md bg-stone-100"></div>
+        <div class="mb-3 h-3 w-full animate-pulse rounded-md bg-stone-100"></div>
       </div>
 
-      <div v-if="loading" class="detail-skeleton">
-        <div class="detail-skeleton__cover"></div>
-        <div class="detail-skeleton__line w-60"></div>
-        <div class="detail-skeleton__line w-full"></div>
-        <div class="detail-skeleton__line w-full"></div>
-      </div>
-
-      <article v-else-if="work" class="detail-article">
-        <figure v-if="work.cover_url" class="detail-cover">
+      <article v-else-if="work">
+        <figure v-if="work.cover_url" class="group mx-auto mb-8 w-fit overflow-hidden rounded-xl bg-stone-100">
           <img
             :src="work.cover_url"
             :alt="work.name"
             loading="lazy"
+            class="block max-h-[380px] w-auto max-w-full cursor-zoom-in transition-transform duration-[400ms] ease-out group-hover:scale-[1.015]"
             @click="previewCover"
           />
         </figure>
 
-        <header class="detail-header">
-          <h1 class="detail-title">{{ work.name }}</h1>
-
-          <div class="detail-meta">
-            <span v-if="work.date" class="detail-meta__item">
+        <header class="border-b border-stone-200 pb-6">
+          <h1 class="text-2xl font-extrabold leading-[1.4] tracking-[0.02em] text-stone-800 max-sm:text-xl">
+            {{ work.name }}
+          </h1>
+          <div class="mt-3.5 flex flex-wrap items-center gap-2.5 text-[11px] text-stone-400">
+            <span v-if="work.date" class="inline-flex items-center">
               <IconDate class="mr-1 relative -top-[1px]" />{{ work.date }}
             </span>
-            <span v-for="tag in work.tags || []" :key="tag" class="detail-tag">{{ tag }}</span>
-          </div>
-
-          <div class="detail-links">
-            <a v-if="work.link_url" :href="work.link_url" target="_blank" rel="noopener" title="推荐链接">
-              <IconLink />
-            </a>
-            <a v-if="work.code_url" :href="work.code_url" target="_blank" rel="noopener" title="Github地址">
-              <IconGithub />
-            </a>
-            <a
-              v-if="work.codepen_url"
-              :href="work.codepen_url"
-              target="_blank"
-              rel="noopener"
-              title="在线代码"
-            >
-              <IconCodepen />
-            </a>
-            <button v-if="contentPath" type="button" title="打开内容" @click="openContent">
-              <IconSkip />
-            </button>
+            <span
+              v-for="tag in work.tags || []"
+              :key="tag"
+              class="rounded bg-stone-100 px-2 py-px text-[11px] text-stone-700"
+            >{{ tag }}</span>
           </div>
         </header>
 
-        <div class="detail-body">
+        <div class="pt-7">
           <MarkdownBody :content="work.info_md" @rendered="({ toc: list }) => (toc = list)" />
-
-          <aside v-if="toc.length" class="detail-toc">
-            <p class="detail-toc__title">目录</p>
-            <a
-              v-for="item in toc"
-              :key="item.id"
-              :class="['detail-toc__item', `lv-${item.level}`]"
-              role="button"
-              tabindex="0"
-              @click="scrollTo(item.id)"
-              @keydown.enter="scrollTo(item.id)"
-            >
-              {{ item.text }}
-            </a>
-          </aside>
         </div>
 
-        <nav v-if="prevWork || nextWork" class="detail-nav">
-          <button v-if="prevWork" type="button" class="detail-nav__item" @click="goWork(prevWork)">
-            <span class="detail-nav__dir">← 上一个</span>
-            <span class="detail-nav__name">{{ prevWork.name }}</span>
+        <nav v-if="prevWork || nextWork" class="mt-16 flex justify-between gap-4 border-t border-stone-200 pt-6">
+          <button
+            v-if="prevWork"
+            type="button"
+            class="group flex max-w-[46%] cursor-pointer flex-col gap-1 border-0 bg-transparent p-0 text-left"
+            @click="goWork(prevWork)"
+          >
+            <span class="text-[10px] font-bold tracking-[0.14em] text-stone-400">← 上一个</span>
+            <span class="truncate text-xs font-bold text-stone-600 transition-colors group-hover:text-stone-800">{{ prevWork.name }}</span>
           </button>
-          <span v-else class="detail-nav__placeholder"></span>
+          <span v-else></span>
           <button
             v-if="nextWork"
             type="button"
-            class="detail-nav__item detail-nav__item--right"
+            class="group ml-auto flex max-w-[46%] cursor-pointer flex-col gap-1 border-0 bg-transparent p-0 text-right"
             @click="goWork(nextWork)"
           >
-            <span class="detail-nav__dir">下一个 →</span>
-            <span class="detail-nav__name">{{ nextWork.name }}</span>
+            <span class="text-[10px] font-bold tracking-[0.14em] text-stone-400">下一个 →</span>
+            <span class="truncate text-xs font-bold text-stone-600 transition-colors group-hover:text-stone-800">{{ nextWork.name }}</span>
           </button>
         </nav>
       </article>
 
-      <div v-else class="detail-empty">
+      <div v-else class="flex flex-col items-start gap-4 py-10 text-[13px] text-stone-400">
         <p>作品不存在或已下线</p>
-        <button type="button" class="detail-copy" @click="goBack">返回作品列表</button>
+        <button
+          type="button"
+          class="inline-flex cursor-pointer items-center gap-1 rounded-full border border-stone-200 bg-white px-3 py-1.5 text-[11px] font-bold tracking-[0.12em] text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-800"
+          @click="goBack"
+        >
+          返回作品列表
+        </button>
       </div>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.detail-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 3rem 1rem 4rem;
-  background: #fff;
-}
-.detail-shell {
-  max-width: 780px;
-  margin: 0 auto;
-}
-
-/* ---------- 顶部操作条 ---------- */
-.detail-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-}
-.detail-back,
-.detail-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  border: 1px solid #e7e5e4;
-  border-radius: 999px;
-  background: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #78716c;
-  cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
-}
-.detail-back:hover,
-.detail-copy:hover {
-  color: #292524;
-  border-color: #a8a29e;
-}
-.detail-back__arrow {
-  font-size: 13px;
-  line-height: 1;
-}
-
-/* ---------- 骨架 ---------- */
-.detail-skeleton__cover {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 12px;
-  background: #f5f5f4;
-  margin-bottom: 24px;
-  animation: detail-pulse 1.6s ease-in-out infinite;
-}
-.detail-skeleton__line {
-  height: 12px;
-  border-radius: 6px;
-  background: #f5f5f4;
-  margin-bottom: 12px;
-  animation: detail-pulse 1.6s ease-in-out infinite;
-}
-@keyframes detail-pulse {
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* ---------- 封面 ---------- */
-.detail-cover {
-  margin: 0 0 32px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f5f5f4;
-}
-.detail-cover img {
-  display: block;
-  width: 100%;
-  height: auto;
-  cursor: zoom-in;
-  transition: transform 0.4s ease;
-}
-.detail-cover:hover img {
-  transform: scale(1.015);
-}
-
-/* ---------- 头部信息 ---------- */
-.detail-title {
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 1.4;
-  color: #292524;
-  letter-spacing: 0.02em;
-}
-.detail-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  margin-top: 14px;
-  font-size: 11px;
-  color: #a8a29e;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-.detail-meta__item {
-  display: inline-flex;
-  align-items: center;
-}
-.detail-tag {
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: #f5f5f4;
-  border: 1px solid #e7e5e4;
-  color: #57534e;
-  font-weight: 600;
-}
-.detail-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-top: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #e7e5e4;
-}
-/* 与列表保持一致：整体降透明度，当前项恢复 */
-.detail-links a,
-.detail-links button {
-  display: inline-flex;
-  align-items: center;
-  padding: 0;
-  border: none;
-  background: none;
-  color: #292524;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.detail-links:hover a,
-.detail-links:hover button {
-  opacity: 0.45;
-}
-.detail-links a:hover,
-.detail-links button:hover {
-  opacity: 1;
-}
-
-/* ---------- 正文 + 目录 ---------- */
-.detail-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 40px;
-  padding-top: 28px;
-}
-.detail-toc {
-  display: none;
-}
-.detail-toc__title {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: #a8a29e;
-  margin-bottom: 10px;
-}
-.detail-toc__item {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: none;
-  background: none;
-  text-align: left;
-  font-family: inherit;
-  font-size: 11px;
-  line-height: 1.9;
-  color: #a8a29e;
-  transition: color 0.15s;
-  cursor: pointer;
-}
-.detail-toc__item:hover {
-  color: #292524;
-}
-.detail-toc__item.lv-3 {
-  padding-left: 10px;
-}
-
-@media (min-width: 1024px) {
-  .detail-body {
-    grid-template-columns: minmax(0, 1fr) 160px;
-  }
-  .detail-toc {
-    display: block;
-    position: sticky;
-    top: 2rem;
-    align-self: start;
-    max-height: calc(100vh - 10rem);
-    overflow-y: auto;
-    padding-left: 16px;
-    border-left: 1px solid #f5f5f4;
-  }
-}
-
-/* ---------- 上下篇 ---------- */
-.detail-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 64px;
-  padding-top: 24px;
-  border-top: 1px solid #e7e5e4;
-}
-.detail-nav__item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-width: 46%;
-  padding: 0;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-}
-.detail-nav__item--right {
-  margin-left: auto;
-  text-align: right;
-}
-.detail-nav__dir {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: #a8a29e;
-}
-.detail-nav__name {
-  font-size: 12px;
-  font-weight: 700;
-  color: #57534e;
-  transition: color 0.15s;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.detail-nav__item:hover .detail-nav__name {
-  color: #292524;
-}
-
-/* ---------- 空态 ---------- */
-.detail-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 40px 0;
-  color: #a8a29e;
-  font-size: 13px;
-}
-
-@media (max-width: 640px) {
-  .detail-page {
-    padding: 2.5rem 1rem 3rem;
-  }
-  .detail-title {
-    font-size: 20px;
-  }
-}
-</style>

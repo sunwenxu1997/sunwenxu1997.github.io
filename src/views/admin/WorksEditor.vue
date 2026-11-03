@@ -1,130 +1,261 @@
 <template>
-  <div class="panel">
-    <div class="panel-header">
-      <div>
-        <h1 class="panel-title">{{ form.id ? `编辑: ${form.name}` : '新建作品' }}</h1>
-        <p class="panel-desc">填写作品信息后保存</p>
+  <div class="flex h-full min-h-[calc(100vh_-_56px)] flex-col">
+    <div class="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
+      <!-- 首行：名称即标题，操作按钮贴右上角，与正文共用 880px 居中容器 -->
+      <div class="box-border mx-auto flex h-14 w-full max-w-[880px] shrink-0 items-center gap-3 px-8 max-md:h-auto max-md:flex-wrap max-md:gap-2 max-md:px-3.5 max-md:py-3">
+        <input
+          v-model="form.name"
+          class="min-w-0 flex-1 border-0 bg-transparent py-1 text-[17px] font-semibold text-stone-800 outline-none placeholder:font-medium placeholder:text-stone-400 max-md:basis-[60%] max-md:text-base"
+          placeholder="作品名称"
+          @input="autoSlug"
+        />
+        <div class="flex shrink-0 gap-2 max-md:ml-auto">
+          <button
+            class="cursor-pointer rounded-lg border border-stone-200 bg-transparent px-4 py-2 text-[13px] text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800"
+            @click="onClear"
+          >
+            清空
+          </button>
+          <button
+            class="cursor-pointer rounded-lg border-0 bg-stone-800 px-[22px] py-[9px] text-[13px] font-medium text-white transition-colors hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-70"
+            :disabled="saving"
+            @click="openMeta"
+          >
+            {{ saving ? '保存中...' : primaryText }}
+          </button>
+        </div>
       </div>
-      <div class="panel-actions">
-        <button class="btn-ghost" @click="resetForm">清空</button>
-        <button class="btn-primary" :disabled="saving" @click="saveWork">{{ saving ? '保存中...' : '保存' }}</button>
+
+      <!-- 状态标识：独占一行，与名称输入框左缘对齐 -->
+      <div class="box-border mx-auto w-full max-w-[880px] shrink-0 px-8 pb-3 max-md:px-3.5 max-md:pb-2.5">
+        <span class="inline-block rounded border border-stone-200 bg-stone-100 px-2 py-px text-[11px] leading-tight text-stone-600">
+          {{ form.id ? '编辑中' : '新建' }}
+        </span>
       </div>
-    </div>
 
-    <div class="card">
-      <div class="form-grid">
-        <!-- 封面预览 + 发布开关 -->
-        <div class="full cover-row">
-          <div class="cover-left">
-            <label class="label">封面预览</label>
-            <div class="cover-center">
-              <img v-if="form.cover_url" class="cover-preview" :src="form.cover_url" alt="cover" @error="form.cover_url = ''" />
-              <div v-else class="cover-placeholder">
-                <ImageIcon :size="28" />
-                <span>暂无封面</span>
-              </div>
-            </div>
+      <!-- 封面区：始终 880 居中，不随预览开关变化 -->
+      <div class="box-border mx-auto w-full max-w-[880px] shrink-0 px-8 pb-4 pt-6 max-md:px-3.5 max-md:py-4">
+        <!-- 上：封面（整块 420px 居中，内部标签/缩略图/URL 左对齐同宽） -->
+        <div class="mx-auto flex w-full max-w-[420px] flex-col gap-2.5">
+          <label class="block text-xs font-medium tracking-[0.03em] text-stone-600">封面</label>
+          <img
+            v-if="form.cover_url"
+            class="box-border block w-full rounded-lg border border-stone-200 bg-stone-50 object-cover [aspect-ratio:16/9]"
+            :src="form.cover_url"
+            alt="cover"
+            @error="form.cover_url = ''"
+          />
+          <div
+            v-else
+            class="box-border flex w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-stone-300 bg-stone-50 text-[11px] text-stone-400 [aspect-ratio:16/9]"
+          >
+            <ImageIcon :size="16" class="opacity-60" />
+            <span>暂无封面</span>
           </div>
-          <div class="cover-right">
-            <label class="toggle-row">
-              <div class="toggle-track" :class="{ on: form.is_published }" @click="form.is_published = !form.is_published">
-                <div class="toggle-dot"></div>
-              </div>
-              <span>发布</span>
-            </label>
-          </div>
+          <input
+            v-model="form.cover_url"
+            class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-[7px] text-[13px] text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+            placeholder="封面图 URL"
+          />
         </div>
+      </div>
 
-        <!-- 名称 + Slug -->
-        <div>
-          <label class="label">名称</label>
-          <input v-model="form.name" class="input" placeholder="作品显示名称" @input="autoSlug" />
-        </div>
-        <div>
-          <label class="label">Slug</label>
-          <input v-model="form.slug" class="input" placeholder="/external/..." @input="onSlugInput" />
-        </div>
-
-        <!-- 封面 URL + 日期 -->
-        <div>
-          <label class="label">封面 URL</label>
-          <input v-model="form.cover_url" class="input" placeholder="https://..." />
-        </div>
-        <div>
-          <label class="label">日期</label>
-          <input v-model="form.date" type="date" class="input" />
-        </div>
-
-        <!-- 代码 + 文章 -->
-        <div>
-          <label class="label">代码地址</label>
-          <input v-model="form.code_url" class="input" placeholder="https://github.com/..." />
-        </div>
-        <div>
-          <label class="label">文章链接</label>
-          <input v-model="form.link_url" class="input" placeholder="https://juejin.cn/..." />
-        </div>
-
-        <!-- CodePen + 打开地址 -->
-        <div>
-          <label class="label">CodePen</label>
-          <input v-model="form.codepen_url" class="input" placeholder="https://codepen.io/..." />
-        </div>
-        <div>
-          <label class="label">打开地址</label>
-          <input v-model="form.open_url" class="input" placeholder="https://..." />
-        </div>
-
-        <!-- 介绍：Markdown 正文 + 实时预览，与详情页共用同一渲染器 -->
-        <div class="full">
-          <div class="md-head">
-            <label class="label">介绍 (Markdown)</label>
-            <span class="md-count">{{ form.info_md.length }} 字符</span>
-          </div>
-          <p v-if="legacyHtmlOnly" class="md-warn">
-            这条作品的正文还是旧的 HTML 格式（info_html）。跑完 sql/005 迁移后才会显示在这里；
-            现在保存不会覆盖原 HTML，正文留空也没关系。
-          </p>
-          <div class="md-editor">
-            <div class="md-pane">
-              <textarea
-                v-model="form.info_md"
-                class="input md-input"
-                spellcheck="false"
-                placeholder="用 Markdown 写：## 小标题、`行内代码`、[链接](https://...)、**加粗**，代码块用三个反引号包裹"
-              ></textarea>
-            </div>
-            <div class="md-pane md-preview">
-              <MarkdownBody v-if="form.info_md.trim()" :content="form.info_md" />
-              <p v-else class="md-empty">预览区：左边写 Markdown，这里实时渲染</p>
-            </div>
+      <!-- 正文区：关闭预览时 880 居中；开启时跳出限宽铺满屏幕。两种状态都是左右 32px，与汉堡图标的笔画左缘对齐 -->
+      <div
+        class="box-border mx-auto flex min-h-0 w-full min-w-0 flex-1 flex-col px-8 pb-6 max-md:px-3.5 max-md:pb-4"
+        :class="previewOpen ? 'max-w-none' : 'max-w-[880px]'"
+      >
+        <div class="flex shrink-0 items-center justify-between gap-3">
+          <label class="block text-xs font-medium tracking-[0.03em] text-stone-600">介绍 (Markdown)</label>
+          <div class="flex items-center gap-2.5">
+            <span class="text-[11px] text-stone-400">{{ form.info_md.length }} 字符</span>
+            <button
+              class="inline-flex cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors"
+              :class="previewOpen ? 'border-stone-800 bg-stone-800 text-white hover:bg-stone-900' : 'border-stone-200 bg-transparent text-stone-600 hover:bg-stone-100 hover:text-stone-800'"
+              :title="previewOpen ? '关闭预览' : '打开预览 (⌘/Ctrl + ⇧ + P)'"
+              @click="togglePreview"
+            >
+              <EyeOff v-if="previewOpen" :size="13" />
+              <Eye v-else :size="13" />
+              {{ previewOpen ? '关闭预览' : '预览' }}
+            </button>
           </div>
         </div>
-
-        <!-- 标签 -->
-        <div class="full">
-          <label class="label">标签</label>
-          <div class="tags-input">
-            <span v-for="(tag, idx) in tags" :key="tag + idx" class="tag" @click="removeTag(idx)">{{ tag }}</span>
-            <input
-              ref="tagInputRef"
-              v-model="tagInput"
-              class="input tag-add"
-              placeholder="+ 添加"
-              @keydown.enter.prevent="addTag"
-              @keydown.backspace="onTagBackspace"
-            />
+        <p v-if="legacyHtmlOnly" class="mt-2 shrink-0 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-800">
+          这条作品的正文还是旧的 HTML 格式（info_html）。跑完 sql/005 迁移后才会显示在这里；
+          现在保存不会覆盖原 HTML，正文留空也没关系。
+        </p>
+        <div
+          class="mt-2 grid min-h-0 flex-1 grid-cols-1 gap-3.5"
+          :class="{ 'lg:grid-cols-2': previewOpen }"
+        >
+          <div class="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-lg border border-stone-200 bg-stone-50 max-lg:min-h-[240px] max-lg:max-h-[420px]">
+            <textarea
+              v-model="form.info_md"
+              class="box-border min-h-0 flex-1 resize-none overflow-auto rounded-none border-0 bg-transparent p-3.5 font-mono text-[13px] leading-[1.7] text-stone-800 outline-none placeholder:text-stone-400"
+              spellcheck="false"
+              placeholder="用 Markdown 写：## 小标题、`行内代码`、[链接](https://...)、**加粗**，代码块用三个反引号包裹"
+            ></textarea>
+          </div>
+          <div
+            v-if="previewOpen"
+            class="min-h-0 min-w-0 overflow-y-auto rounded-lg border border-stone-200 bg-white px-4 py-3 max-lg:min-h-[240px] max-lg:max-h-[420px]"
+          >
+            <MarkdownBody v-if="form.info_md.trim()" :content="form.info_md" />
+            <p v-else class="m-0 text-[13px] text-stone-400">预览区：左边写 Markdown，这里实时渲染</p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 元信息弹框：点发布/更新才出现，单列。挂到 #app（tailwind important 前缀是 #app，挂 body 会丢样式） -->
+    <Teleport to="#app">
+      <div
+        v-if="metaOpen"
+        class="meta-surface fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(28,25,23,0.45)] p-6 backdrop-blur-[2px] max-md:p-3"
+        @click.self="closeMeta"
+      >
+        <div
+          class="flex max-h-[80vh] w-[480px] max-w-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_24px_64px_rgba(0,0,0,0.18)] max-md:max-h-[88vh]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="作品信息"
+        >
+          <div class="flex shrink-0 items-center justify-between border-b border-stone-100 px-5 py-4">
+            <h2 class="m-0 text-[15px] font-semibold text-stone-800">{{ form.id ? '更新作品' : '发布作品' }}</h2>
+            <button
+              class="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-[15px] leading-none text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-800"
+              aria-label="关闭"
+              @click="closeMeta"
+            >✕</button>
+          </div>
+
+          <div ref="metaBodyRef" class="grid min-h-0 flex-1 content-start gap-3.5 overflow-y-auto px-5 py-[18px] outline-none" tabindex="-1">
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">Slug</label>
+              <input
+                v-model="form.slug"
+                :disabled="!!form.id"
+                :class="[
+                  'box-border w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-sm outline-none transition-colors',
+                  form.id
+                    ? 'cursor-not-allowed bg-stone-100 text-stone-400'
+                    : 'bg-stone-50 text-stone-800 placeholder:text-stone-400 focus:border-stone-700'
+                ]"
+                placeholder="/external/..."
+                @input="onSlugInput"
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">日期</label>
+              <input
+                v-model="form.date"
+                type="date"
+                class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-stone-800 outline-none transition-colors focus:border-stone-700"
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">代码地址</label>
+              <input
+                v-model="form.code_url"
+                class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+                placeholder="https://github.com/..."
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">文章链接</label>
+              <input
+                v-model="form.link_url"
+                class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+                placeholder="https://juejin.cn/..."
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">CodePen</label>
+              <input
+                v-model="form.codepen_url"
+                class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+                placeholder="https://codepen.io/..."
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">打开地址</label>
+              <input
+                v-model="form.open_url"
+                class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-3.5 py-2.5 text-sm text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+                placeholder="https://..."
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">标签</label>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span
+                  v-for="(tag, idx) in tags"
+                  :key="tag + idx"
+                  class="cursor-pointer whitespace-nowrap rounded border border-stone-200 bg-stone-100 px-2 py-px text-[11px] text-stone-700"
+                  @click="removeTag(idx)"
+                >{{ tag }}</span>
+                <input
+                  ref="tagInputRef"
+                  v-model="tagInput"
+                  class="box-border w-[90px] rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1.5 text-xs text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+                  placeholder="+ 添加"
+                  @keydown.enter.prevent="addTag"
+                  @keydown.backspace="onTagBackspace"
+                />
+              </div>
+            </div>
+
+            <div class="flex cursor-pointer items-center gap-2.5 pt-1" @click="form.is_published = !form.is_published">
+              <div
+                class="relative h-[18px] w-[34px] shrink-0 cursor-pointer rounded-full transition-colors"
+                :class="form.is_published ? 'bg-stone-800' : 'bg-stone-300'"
+                role="switch"
+                :aria-checked="form.is_published"
+              >
+                <div
+                  class="absolute left-0.5 top-0.5 h-3.5 w-3.5 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-transform"
+                  :class="form.is_published ? 'translate-x-4' : ''"
+                ></div>
+              </div>
+              <div>
+                <span class="block text-[13px] text-stone-800">发布到前台</span>
+                <span class="mt-0.5 block text-[11px] text-stone-400">关闭后前台不可见，等同草稿</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex shrink-0 justify-end gap-2 border-t border-stone-100 px-5 py-3.5">
+            <button
+              class="cursor-pointer rounded-lg border border-stone-200 bg-transparent px-4 py-2 text-[13px] text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800"
+              @click="closeMeta"
+            >
+              取消
+            </button>
+            <button
+              class="cursor-pointer rounded-lg border-0 bg-stone-800 px-[22px] py-[9px] text-[13px] font-medium text-white transition-colors hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-70"
+              :disabled="saving"
+              @click="confirmSave"
+            >
+              {{ saving ? '保存中...' : (form.id ? '确认更新' : '确认发布') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { toast } from 'vue-sonner'
-import { ImageIcon } from 'lucide-vue-next'
+import { ImageIcon, Eye, EyeOff } from 'lucide-vue-next'
 import { upsertWork } from '@/api/works'
 import MarkdownBody from '@/components/markdown/MarkdownBody.vue'
 
@@ -138,6 +269,11 @@ const tagInput = ref('')
 const tagInputRef = ref(null)
 // 仅在「有旧 HTML 正文、尚无 Markdown 正文」时为 true，用于提示先跑 005 迁移
 const legacyHtmlOnly = ref(false)
+// 元信息弹框
+const metaOpen = ref(false)
+const metaBodyRef = ref(null)
+// 预览开关：默认关闭，只显示 Markdown 输入，打开后右侧并排渲染
+const previewOpen = ref(false)
 
 const form = reactive({
   id: null,
@@ -158,6 +294,12 @@ const form = reactive({
 const tags = computed({
   get: () => form.tags || [],
   set: (val) => { form.tags = val }
+})
+
+// 主按钮文案：新建=发布/存为草稿，编辑=更新
+const primaryText = computed(() => {
+  if (form.id) return '更新'
+  return form.is_published ? '发布' : '存为草稿'
 })
 
 let prevAutoSlug = '/external/'
@@ -197,6 +339,11 @@ function onTagBackspace(e) {
   }
 }
 
+function onClear() {
+  if (!window.confirm('确定清空当前表单？未保存的内容会丢失')) return
+  resetForm()
+}
+
 function resetForm() {
   Object.assign(form, {
     id: null,
@@ -216,6 +363,8 @@ function resetForm() {
   prevAutoSlug = '/external/'
   slugManuallyEdited = false
   legacyHtmlOnly.value = false
+  tagInput.value = ''
+  closeMeta()
   emit('reset')
 }
 
@@ -229,13 +378,73 @@ function editWork(work) {
   legacyHtmlOnly.value = !work.info_md && !!work.info_html
   prevAutoSlug = work.slug || '/external/'
   slugManuallyEdited = true
+  tagInput.value = ''
+  closeMeta()
+}
+
+// ====== 元信息弹框 ======
+function onKeydown(e) {
+  if (e.key === 'Escape') closeMeta()
+}
+
+function lockScroll(locked) {
+  document.body.style.overflow = locked ? 'hidden' : ''
+}
+
+function openMeta() {
+  if (!form.name.trim()) {
+    toast.warning('先填作品名称')
+    return
+  }
+  metaOpen.value = true
+  lockScroll(true)
+  document.addEventListener('keydown', onKeydown)
+  nextTick(() => metaBodyRef.value?.focus())
+}
+
+function closeMeta() {
+  if (!metaOpen.value) return
+  metaOpen.value = false
+  lockScroll(false)
+  document.removeEventListener('keydown', onKeydown)
+}
+
+// ====== 预览开关 ======
+function togglePreview() {
+  previewOpen.value = !previewOpen.value
+}
+
+// 快捷键 ⌘/Ctrl + Shift + P 切换预览（弹框打开时不响应）
+function onPreviewKeydown(e) {
+  if (metaOpen.value) return
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+    e.preventDefault()
+    togglePreview()
+  }
+}
+
+onMounted(() => document.addEventListener('keydown', onPreviewKeydown))
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('keydown', onPreviewKeydown)
+  lockScroll(false)
+})
+
+async function confirmSave() {
+  if (!form.slug.trim()) {
+    toast.warning('Slug 不能为空')
+    return
+  }
+  await saveWork()
 }
 
 async function saveWork() {
-  if (!form.name || !form.slug) {
+  if (!form.name.trim() || !form.slug.trim()) {
     toast.warning('名称和 Slug 不能为空')
     return
   }
+  const isEdit = !!form.id
   emit('save-start')
   try {
     const payload = {
@@ -256,7 +465,9 @@ async function saveWork() {
       payload.id = form.id
     }
     await upsertWork(payload)
-    toast.success('保存成功')
+    // 先关弹框再通知父组件（父组件会切到列表页，弹框挂在 #app 上，不关会浮在上面）
+    closeMeta()
+    toast.success(isEdit ? '更新成功' : '发布成功')
     emit('saved')
   } catch (e) {
     console.error(e)
@@ -270,146 +481,16 @@ defineExpose({ editWork, resetForm })
 </script>
 
 <style scoped>
-.panel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
-}
-.panel-title { font-size: 20px; font-weight: 600; color: #292524; }
-.panel-desc { font-size: 13px; color: #a8a29e; margin-top: 4px; }
-.panel-actions { display: flex; gap: 8px; }
-
-.card { background: #fff; border-radius: 12px; border: 1px solid #e7e5e4; overflow: hidden; }
-.input {
-  width: 100%; padding: 10px 14px;
-  background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 8px;
-  font-size: 14px; color: #292524; outline: none; transition: border 0.2s;
-  box-sizing: border-box;
-}
-.input:focus { border-color: #44403c; }
-.input::placeholder { color: #a8a29e; }
-textarea.input { resize: vertical; min-height: 90px; line-height: 1.6; }
-.label {
-  font-size: 12px; color: #78716c; font-weight: 500;
-  letter-spacing: 0.03em; margin-bottom: 6px; display: block;
-}
-.btn-primary {
-  background: #292524; color: #fff; border: none;
-  padding: 9px 22px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
-}
-.btn-primary:hover:not(:disabled) { background: #1c1917; }
-.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-.btn-ghost {
-  background: transparent; color: #78716c; border: 1px solid #e7e5e4;
-  padding: 8px 16px; border-radius: 8px; font-size: 13px;
-  cursor: pointer; transition: all 0.15s;
-}
-.btn-ghost:hover { background: #f5f5f4; color: #292524; }
-
-.toggle-track {
-  width: 34px; height: 18px; border-radius: 9px;
-  background: #d6d3d1; position: relative; cursor: pointer; transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle-track.on { background: #292524; }
-.toggle-dot {
-  width: 14px; height: 14px; border-radius: 50%; background: #fff;
-  position: absolute; top: 2px; left: 2px; transition: transform 0.2s;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-.toggle-track.on .toggle-dot { transform: translateX(16px); }
-
-.tag {
-  font-size: 11px; padding: 2px 8px; border-radius: 4px;
-  background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
-  white-space: nowrap; cursor: pointer;
-}
-
-/* ===== Markdown 编辑器 ===== */
-.md-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-}
-.md-count { font-size: 11px; color: #a8a29e; }
-.md-warn {
-  margin: 0 0 10px; padding: 8px 12px; border-radius: 8px;
-  background: #fffbeb; border: 1px solid #fde68a;
-  font-size: 12px; line-height: 1.6; color: #92400e;
-}
-.md-editor {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-}
-.md-pane {
-  height: 340px; overflow: hidden;
-  display: flex; flex-direction: column;
-  background: #fafaf9;
-  border: 1px solid #e7e5e4; border-radius: 8px;
-}
-/* 用 textarea.md-input 提升优先级，覆盖上方 textarea.input 的 min-height / resize */
-textarea.md-input {
-  flex: 1; min-height: 0; resize: none;
-  border: none; border-radius: 0; background: transparent;
-  padding: 12px 14px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 13px; line-height: 1.7;
-}
-textarea.md-input:focus { border-color: transparent; }
-.md-preview {
-  display: block; overflow-y: auto;
-  padding: 12px 16px; background: #fff;
-}
-.md-empty { margin: 0; font-size: 13px; color: #a8a29e; }
-
-@media (max-width: 1023px) {
-  .md-editor { grid-template-columns: 1fr; }
-  .md-pane { height: 240px; }
-}
-
-.form-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px;
-  padding: 28px;
-}
-.form-grid .full { grid-column: 1 / -1; }
-.cover-preview {
-  width: 100%; max-width: 480px; aspect-ratio: 16/9;
-  border-radius: 8px; object-fit: cover;
-  border: 1px solid #e7e5e4; background: #fafaf9;
-}
-.cover-placeholder {
-  width: 100%; max-width: 480px; aspect-ratio: 16/9;
-  border-radius: 8px;
-  border: 2px dashed #d6d3d1; background: #fafaf9;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 6px;
-  color: #a8a29e; font-size: 13px;
-}
-.cover-placeholder .lucide { width: 28px; height: 28px; opacity: 0.5; }
-.cover-row { display: flex; gap: 24px; }
-.cover-left { flex: 1; min-width: 0; }
-.cover-center { display: flex; justify-content: center; margin-top: 8px; }
-.cover-right { flex-shrink: 0; padding-top: 2px; }
-.tags-input {
-  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-}
-.input.tag-add { width: 90px; padding: 6px 10px; font-size: 12px; }
-.toggles { display: flex; gap: 28px; }
-.toggle-row {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: #57534e; cursor: pointer;
-}
-
-@media (max-width: 767px) {
-  .panel-header { flex-direction: column; align-items: flex-start !important; gap: 10px; }
-  .panel-actions { width: 100%; justify-content: flex-end; }
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 18px;
-  }
-  .cover-preview, .cover-placeholder { max-width: 100%; }
-  .toggles { gap: 16px; }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .form-grid { padding: 22px; gap: 16px 20px; }
+/*
+ * 弹框 Teleport 到 #app，已经不在 WorksAdmin 的 .admin-works 内，
+ * 那份 border 重置管不到这里。preflight 关闭时 input/select 默认是
+ * border-style: inset，只有宽度和颜色被工具类覆盖，会渲染出内阴影感，
+ * 所以这里单独补一份等价的重置。
+ */
+.meta-surface :deep(*),
+.meta-surface :deep(*::before),
+.meta-surface :deep(*::after) {
+  border-width: 0;
+  border-style: solid;
 }
 </style>

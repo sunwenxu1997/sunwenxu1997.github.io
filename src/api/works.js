@@ -124,16 +124,32 @@ export async function fetchWorkBySlug(slug) {
 }
 
 /**
- * 按 slug 查询单条作品（详情页）
+ * 按 id 查询单条作品
+ * @param {string} id - works_meta.id（本地数据源时 id 等于 slug）
+ * @returns {Promise<Object|null>} 单条记录或 null
+ */
+export async function fetchWorkById(id) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .select(SELECT_COLUMNS)
+    .eq('id', id)
+    .maybeSingle()
+  if (error) throw error
+  return data
+}
+
+/**
+ * 查询单条作品（详情页）：优先按 id，未命中回退按 slug（兼容旧链接）
  * useLocalWorks 开启时改读本地静态数据
- * @param {string} slug - '/anime/anime-切割模糊文字'
+ * @param {string} key - 作品 id 或旧版 slug
  * @returns {Promise<Object|null>}
  */
-export async function fetchWorkDetail(slug) {
+export async function fetchWorkDetail(key) {
   if (defaultSet.useLocalWorks) {
-    return fetchLocalWorks().find((item) => item.slug === slug) || null
+    const list = fetchLocalWorks()
+    return list.find((item) => item.id === key) || list.find((item) => item.slug === key) || null
   }
-  return fetchWorkBySlug(slug)
+  return (await fetchWorkById(key)) || (await fetchWorkBySlug(key))
 }
 
 /**

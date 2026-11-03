@@ -1,45 +1,54 @@
 <template>
-  <div class="panel">
-    <div class="panel-header">
-      <div>
-        <h1 class="panel-title">全部作品</h1>
-        <p class="panel-desc">点击编辑跳转至编辑页</p>
-      </div>
-      <button class="btn-primary" @click="$emit('create')">+ 新建</button>
-    </div>
-
-    <div class="card">
-      <!-- filter -->
-      <div class="filter-bar">
-        <div class="filter-bar-search">
-          <Search class="search-icon" :size="13" />
-          <input v-model="searchInput" class="input" placeholder="搜索列表..." />
+  <div class="min-h-full bg-white">
+    <div class="w-full overflow-hidden">
+      <!-- 搜索 + 新建（同一行，按钮贴右） -->
+      <div class="flex items-center gap-2.5 px-8 py-3 max-md:px-3.5 max-md:py-2.5">
+        <div class="relative min-w-0 max-w-[280px] flex-1 max-md:max-w-none">
+          <Search class="absolute left-2.5 top-1/2 h-[13px] w-[13px] -translate-y-1/2 text-stone-400" :size="13" />
+          <input
+            v-model="searchInput"
+            class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 py-1.5 pl-[30px] pr-2.5 text-[13px] text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
+            placeholder="搜索列表..."
+          />
         </div>
+        <button
+          class="ml-auto shrink-0 cursor-pointer rounded-lg bg-stone-800 px-4 py-[7px] text-[13px] font-medium text-white transition-colors hover:bg-stone-900 max-md:px-3 max-md:py-1.5 max-md:text-xs"
+          @click="$emit('create')"
+        >
+          + 新建
+        </button>
       </div>
-      <div class="filter-tags-row">
-        <button class="filter-btn" :class="{ active: activeTags.length === 0 }" @click="activeTags = []">All</button>
+      <div class="flex flex-wrap gap-1 px-8 py-2 max-md:px-3.5 max-md:py-1.5">
+        <button
+          class="cursor-pointer whitespace-nowrap rounded-md border px-3 py-[5px] text-xs transition-colors max-md:px-2.5 max-md:py-1 max-md:text-[11px]"
+          :class="activeTags.length === 0 ? 'border-stone-800 bg-stone-800 text-white' : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-100'"
+          @click="activeTags = []"
+        >
+          All
+        </button>
         <button
           v-for="tag in allTags"
           :key="tag"
-          class="filter-btn"
-          :class="{ active: activeTags.includes(tag) }"
+          class="cursor-pointer whitespace-nowrap rounded-md border px-3 py-[5px] text-xs transition-colors max-md:px-2.5 max-md:py-1 max-md:text-[11px]"
+          :class="activeTags.includes(tag) ? 'border-stone-800 bg-stone-800 text-white' : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-100'"
           @click="toggleTag(tag)"
-        >{{ tag }}</button>
+        >
+          {{ tag }}
+        </button>
       </div>
 
       <!-- list -->
-      <div v-if="loading" class="empty-state">加载中...</div>
-      <div v-else-if="works.length === 0" class="empty-state">暂无数据</div>
-      <div v-else class="works-list">
+      <div v-if="loading" class="py-10 text-center text-sm text-stone-400">加载中...</div>
+      <div v-else-if="works.length === 0" class="py-10 text-center text-sm text-stone-400">暂无数据</div>
+      <div v-else>
         <div
           v-for="work in works"
           :key="work.id"
-          class="work-row"
+          class="work-row relative grid grid-cols-[28px_96px_1fr_auto] items-stretch gap-3 px-8 py-3 transition-colors hover:bg-stone-50 max-md:grid-cols-[64px_1fr] max-md:px-3.5 max-md:py-3"
           :class="{
-            dragging: draggedId === work.id,
+            'bg-stone-50 opacity-50': draggedId === work.id,
             'drop-before': dropTargetId === work.id && dropPosition === 'before',
-            'drop-after': dropTargetId === work.id && dropPosition === 'after',
-            'sort-disabled': !canSort
+            'drop-after': dropTargetId === work.id && dropPosition === 'after'
           }"
           :draggable="canSort && draggedId === work.id"
           @dragstart="onDragStart($event, work.id)"
@@ -47,56 +56,105 @@
           @drop="onDrop($event, work.id)"
           @dragend="onDragEnd"
         >
-          <button class="drag-handle" aria-label="拖拽排序" @mousedown="onDragHandleMouseDown">
+          <button
+            class="inline-flex h-7 w-7 shrink-0 items-center justify-center self-center rounded-md border-0 bg-transparent text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-800 active:cursor-grabbing max-md:hidden"
+            :class="canSort ? 'cursor-grab' : 'cursor-not-allowed opacity-40'"
+            aria-label="拖拽排序"
+            @mousedown="onDragHandleMouseDown"
+          >
             <GripVertical :size="14" />
           </button>
-          <img class="thumb" :src="work.cover_url || placeholderCover" alt="" />
-          <div class="row-content">
-            <div class="row-title">{{ work.name }}</div>
-            <div class="row-meta">
+          <!-- 封面：高度跟随行内信息，绝对定位的 img 不会反向撑高行 -->
+          <div class="relative h-full w-full overflow-hidden rounded-md border border-stone-200 bg-stone-50 max-md:h-10 max-md:self-center">
+            <img class="absolute inset-0 h-full w-full object-cover" :src="work.cover_url || placeholderCover" alt="" />
+          </div>
+          <div class="min-w-0 self-center">
+            <div class="truncate text-sm font-medium text-stone-800 max-md:text-[13px]">{{ work.name }}</div>
+            <div class="mt-1 flex items-center gap-2.5 text-xs text-stone-400 max-md:flex-wrap max-md:gap-1.5">
               <span>{{ work.slug }}</span>
               <span>{{ work.date }}</span>
             </div>
-            <div v-if="work.tags && work.tags.length" class="row-tags">
-              <span v-for="tag in work.tags" :key="tag" class="tag">{{ tag }}</span>
+            <div v-if="work.tags && work.tags.length" class="row-tags mt-1.5 flex gap-1 overflow-x-auto whitespace-nowrap">
+              <span
+                v-for="tag in work.tags"
+                :key="tag"
+                class="shrink-0 whitespace-nowrap rounded bg-stone-100 px-2 py-px text-[11px] text-stone-700"
+              >{{ tag }}</span>
             </div>
           </div>
-          <div class="row-right">
-            <div class="toggle-track" :class="{ on: work.is_published }" @click="$emit('toggle-publish', work)">
-              <div class="toggle-dot"></div>
+          <div class="flex shrink-0 items-center gap-2 self-center max-md:col-span-full max-md:justify-end max-md:gap-1.5 max-md:border-t max-md:border-dashed max-md:border-stone-100 max-md:pt-2">
+            <div
+              class="relative h-[18px] w-[34px] shrink-0 cursor-pointer rounded-full transition-colors"
+              :class="work.is_published ? 'bg-stone-800' : 'bg-stone-300'"
+              @click="$emit('toggle-publish', work)"
+            >
+              <div
+                class="absolute left-0.5 top-0.5 h-3.5 w-3.5 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] transition-transform"
+                :class="work.is_published ? 'translate-x-4' : ''"
+              ></div>
             </div>
-            <button class="icon-btn" title="编辑" @click="$emit('edit', work)">
-              <Pencil :size="15" />
+            <button
+              class="group inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent transition-colors hover:bg-stone-100"
+              title="编辑"
+              @click="$emit('edit', work)"
+            >
+              <Pencil :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
             </button>
-            <button class="icon-btn danger" title="删除" @click="$emit('remove', work)">
-              <Trash2 :size="15" />
+            <button
+              class="group inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent transition-colors hover:bg-red-50"
+              title="删除"
+              @click="$emit('remove', work)"
+            >
+              <Trash2 :size="15" class="text-stone-400 transition-colors group-hover:text-red-600" />
             </button>
-            <button class="icon-btn" title="打开" @click="openWork(work)">
-              <ExternalLink :size="15" />
+            <button
+              class="group inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent transition-colors hover:bg-stone-100"
+              title="打开"
+              @click="openWork(work)"
+            >
+              <ExternalLink :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
             </button>
           </div>
         </div>
       </div>
 
       <!-- pagination -->
-      <div class="pagination">
-        <div class="page-size-select">
-          <span class="page-info">每页</span>
-          <select class="page-size-dropdown" :value="pageSize" @change="onPageSizeChange($event.target.value)">
+      <div class="flex items-center justify-between gap-3 px-8 py-3 max-md:flex-col max-md:items-stretch max-md:gap-2 max-md:px-3.5">
+        <div class="flex items-center gap-1.5 max-md:justify-center">
+          <span class="text-[13px] text-stone-600">每页</span>
+          <select
+            class="cursor-pointer rounded-md border border-stone-200 bg-stone-50 px-2 py-1 text-[13px] text-stone-700 outline-none"
+            :value="pageSize"
+            @change="onPageSizeChange($event.target.value)"
+          >
             <option :value="10">10</option>
             <option :value="20">20</option>
             <option :value="50">50</option>
           </select>
-          <span class="page-info">条</span>
+          <span class="text-[13px] text-stone-600">条</span>
         </div>
-        <div class="page-nav">
-          <button class="btn-ghost" :disabled="currentPage === 1" @click="currentPage--">上一页</button>
-          <span class="page-info">第 {{ currentPage }} / {{ totalPages }} 页（共 {{ total }} 条）</span>
-          <button class="btn-ghost" :disabled="currentPage === totalPages" @click="currentPage++">下一页</button>
+        <div class="flex items-center gap-3 max-md:justify-between max-md:gap-2">
+          <button
+            class="cursor-pointer whitespace-nowrap rounded-lg border border-stone-200 bg-transparent px-4 py-2 text-[13px] text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-50 max-md:flex-1 max-md:px-2 max-md:text-xs"
+            :disabled="currentPage === 1"
+            @click="currentPage--"
+          >
+            上一页
+          </button>
+          <span class="whitespace-nowrap text-center text-[13px] text-stone-600 max-md:text-xs">
+            第 {{ currentPage }} / {{ totalPages }} 页<span class="max-md:hidden">（共 {{ total }} 条）</span>
+          </span>
+          <button
+            class="cursor-pointer whitespace-nowrap rounded-lg border border-stone-200 bg-transparent px-4 py-2 text-[13px] text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-50 max-md:flex-1 max-md:px-2 max-md:text-xs"
+            :disabled="currentPage === totalPages"
+            @click="currentPage++"
+          >
+            下一页
+          </button>
         </div>
       </div>
 
-      <div v-if="!canSort && works.length" class="sort-hint">
+      <div v-if="!canSort && works.length" class="px-8 py-2.5 text-center text-xs text-stone-400 max-md:px-3.5">
         搜索或筛选状态下暂不支持拖拽排序
       </div>
     </div>
@@ -325,188 +383,25 @@ defineExpose({ loadData })
 </script>
 
 <style scoped>
-.panel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px;
-}
-.panel-title { font-size: 20px; font-weight: 600; color: #292524; }
-.panel-desc { font-size: 13px; color: #a8a29e; margin-top: 4px; }
-
-.card { background: #fff; border-radius: 12px; border: 1px solid #e7e5e4; overflow: hidden; }
-.input {
-  width: 100%; padding: 10px 14px;
-  background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 8px;
-  font-size: 14px; color: #292524; outline: none; transition: border 0.2s;
-  box-sizing: border-box;
-}
-.input:focus { border-color: #44403c; }
-.input::placeholder { color: #a8a29e; }
-.btn-primary {
-  background: #292524; color: #fff; border: none;
-  padding: 9px 22px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
-}
-.btn-primary:hover:not(:disabled) { background: #1c1917; }
-.btn-ghost {
-  background: transparent; color: #78716c; border: 1px solid #e7e5e4;
-  padding: 8px 16px; border-radius: 8px; font-size: 13px;
-  cursor: pointer; transition: all 0.15s;
-}
-.btn-ghost:hover { background: #f5f5f4; color: #292524; }
-
-.toggle-track {
-  width: 34px; height: 18px; border-radius: 9px;
-  background: #d6d3d1; position: relative; cursor: pointer; transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle-track.on { background: #292524; }
-.toggle-dot {
-  width: 14px; height: 14px; border-radius: 50%; background: #fff;
-  position: absolute; top: 2px; left: 2px; transition: transform 0.2s;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-.toggle-track.on .toggle-dot { transform: translateX(16px); }
-
-.tag {
-  font-size: 11px; padding: 2px 8px; border-radius: 4px;
-  background: #f5f5f4; color: #57534e; border: 1px solid #e7e5e4;
-  white-space: nowrap; cursor: pointer;
-}
-
-.empty-state {
-  padding: 40px; text-align: center; color: #a8a29e; font-size: 14px;
-}
-.filter-bar {
-  padding: 12px 20px; border-bottom: 1px solid #f5f5f4;
-  display: flex; align-items: center; gap: 10px;
-}
-.filter-bar-search {
-  position: relative; flex: 0 0 180px;
-}
-.filter-bar-search .search-icon {
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  width: 13px; height: 13px; color: #a8a29e;
-}
-.filter-bar-search .input { padding: 6px 10px 6px 30px; font-size: 13px; }
-.filter-tags-row {
-  display: flex; gap: 4px; padding: 8px 20px;
-  border-bottom: 1px solid #e7e5e4; flex-wrap: wrap;
-}
+/* tailwind 无法表达的伪元素：横向滚动条美化 + 拖拽插入指示线 */
 .row-tags {
-  display: flex; gap: 4px; margin-top: 6px;
-  overflow-x: auto; white-space: nowrap;
-  scrollbar-width: thin; scrollbar-color: #d6d3d1 transparent;
+  scrollbar-width: thin;
+  scrollbar-color: #d6d3d1 transparent;
 }
 .row-tags::-webkit-scrollbar { height: 3px; }
 .row-tags::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 2px; }
 .row-tags::-webkit-scrollbar-track { background: transparent; }
-.row-tags .tag { cursor: default; flex-shrink: 0; }
-.filter-btn {
-  padding: 5px 12px; border-radius: 6px; border: 1px solid #e7e5e4;
-  background: #fff; font-size: 12px; color: #78716c;
-  cursor: pointer; transition: all 0.15s; white-space: nowrap;
-}
-.filter-btn:hover { background: #f5f5f4; }
-.filter-btn.active { background: #292524; color: #fff; border-color: #292524; }
 
-.work-row {
-  display: grid;
-  grid-template-columns: 28px 48px 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  border-bottom: 1px solid #f5f5f4;
-  transition: background 0.15s;
-}
-.work-row:last-child { border-bottom: none; }
-.work-row:hover { background: #fafaf9; }
-.drag-handle {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px;
-  border-radius: 6px; border: none; background: transparent;
-  cursor: grab; flex-shrink: 0;
-  color: #a8a29e; transition: all 0.15s;
-}
-.drag-handle:hover { background: #f5f5f4; color: #292524; }
-.drag-handle:active { cursor: grabbing; }
-.drag-handle .lucide { width: 14px; height: 14px; }
-.thumb {
-  width: 48px; height: 32px; border-radius: 6px;
-  object-fit: cover; border: 1px solid #e7e5e4; flex-shrink: 0;
-}
-.row-content { min-width: 0; }
-.row-title {
-  font-size: 14px; font-weight: 500; color: #292524;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.row-meta {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 12px; color: #a8a29e; margin-top: 4px;
-}
-.row-right {
-  display: flex; align-items: center; gap: 8px;
-  flex-shrink: 0;
-}
-.icon-btn {
-  width: 32px; height: 32px; border-radius: 6px;
-  display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.15s; border: none; background: transparent;
-}
-.icon-btn:hover { background: #f5f5f4; }
-.icon-btn.danger:hover { background: #fef2f2; }
-.icon-btn .lucide { width: 15px; height: 15px; color: #a8a29e; transition: color 0.15s; }
-.icon-btn:hover .lucide { color: #292524; }
-.icon-btn.danger:hover .lucide { color: #dc2626; }
-
-.pagination {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 16px 20px; border-top: 1px solid #f5f5f4;
-}
-.page-size-select { display: flex; align-items: center; gap: 6px; }
-.page-size-dropdown {
-  padding: 4px 8px; font-size: 13px; color: #57534e;
-  background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 6px;
-  outline: none; cursor: pointer;
-}
-.page-nav { display: flex; align-items: center; gap: 12px; }
-.page-info { font-size: 13px; color: #78716c; }
-.sort-hint {
-  padding: 10px 20px; font-size: 12px; color: #a8a29e;
-  text-align: center; border-top: 1px solid #f5f5f4;
-}
-
-.work-row.dragging { opacity: 0.5; background: #fafaf9; }
-.work-row.sort-disabled .drag-handle { opacity: 0.4; cursor: not-allowed; }
-.work-row.drop-before,
-.work-row.drop-after { position: relative; }
 .work-row.drop-before::before,
 .work-row.drop-after::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 2px;
-  background: #292524; z-index: 2;
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #292524;
+  z-index: 2;
 }
 .work-row.drop-before::before { top: -1px; }
 .work-row.drop-after::after { bottom: -1px; }
-
-@media (max-width: 767px) {
-  .panel-header { flex-direction: column; align-items: flex-start !important; gap: 10px; }
-  .drag-handle { display: none; }
-  .work-row {
-    grid-template-columns: 48px 1fr;
-    gap: 12px;
-    padding: 12px 14px;
-  }
-  .row-right {
-    grid-column: 1 / -1;
-    justify-content: flex-end;
-    padding-top: 8px;
-    border-top: 1px dashed #f5f5f4;
-    gap: 6px;
-  }
-  .row-meta { gap: 6px; flex-wrap: wrap; }
-  .row-title { font-size: 13px; }
-  .filter-bar { padding: 10px 14px; }
-  .filter-bar-search { flex: 1 1 100%; }
-  .filter-tags-row { padding: 6px 14px; }
-  .filter-btn { padding: 4px 10px; font-size: 11px; }
-}
 </style>
