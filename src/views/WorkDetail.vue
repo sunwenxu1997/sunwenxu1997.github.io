@@ -22,6 +22,8 @@ const work = ref(null)
 const loading = ref(true)
 const toc = ref([])
 const actionsRef = ref(null)
+// 当前标签页是否存在上级历史：直接打开详情链接时隐藏悬浮条返回按钮
+const hasHistory = ref(false)
 
 /** 悬浮操作条入场：自上而下依次淡入下落 */
 function playActionsEnter() {
@@ -72,6 +74,8 @@ const nextWork = computed(() => {
 async function load() {
   loading.value = true
   toc.value = []
+  // SPA 会话内是否存在上级路由：直接打开链接（新标签/地址栏输入）时 state.back 为 null，隐藏返回按钮
+  hasHistory.value = router.options.history.state?.back != null
   try {
     work.value = await fetchWorkDetail(workKey.value)
   } catch (err) {
@@ -151,12 +155,14 @@ watch(workKey, load)
       </a>
     </aside>
 
-    <!-- 右侧悬浮操作条：返回 / 复制 / 外链，图标 + hover 提示文本；移动端贴右下角 -->
+    <!-- 右侧悬浮操作条：返回 / 复制 / 外链，图标 + hover 提示文本；作品不存在时不渲染 -->
     <div
+      v-if="work"
       ref="actionsRef"
       class="fixed bottom-4 right-4 z-30 flex flex-col gap-2 min-[1240px]:bottom-10 min-[1240px]:right-[max(24px,calc(50vw_-_610px))] min-[1240px]:gap-2.5"
     >
       <button
+        v-if="hasHistory"
         type="button"
         class="group relative inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white p-0 text-stone-600 opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 hover:text-stone-800 [&>svg]:h-4 [&>svg]:w-4"
         @click="goBack"
@@ -215,7 +221,7 @@ watch(workKey, load)
       </template>
     </div>
 
-    <div class="mx-auto w-full max-w-[780px]">
+    <div class="mx-auto flex w-full max-w-[780px] flex-1 flex-col">
       <!-- 骨架 -->
       <div v-if="loading">
         <div class="mb-6 aspect-video w-full animate-pulse rounded-xl bg-stone-100"></div>
@@ -278,15 +284,20 @@ watch(workKey, load)
         </nav>
       </article>
 
-      <div v-else class="flex flex-col items-start gap-4 py-10 text-[13px] text-stone-400">
-        <p>作品不存在或已下线</p>
-        <button
-          type="button"
-          class="inline-flex cursor-pointer items-center gap-1 rounded-full border border-stone-200 bg-white px-3 py-1.5 text-[11px] font-bold tracking-[0.12em] text-stone-500 transition-colors hover:border-stone-400 hover:text-stone-800"
-          @click="goBack"
-        >
-          返回作品列表
-        </button>
+      <!-- 作品不存在：复用 404 页视觉效果；flex-1 撑满剩余高度避免溢出滚动条；保留返回按钮作为唯一出口 -->
+      <div v-else class="flex flex-1 flex-col items-center justify-center text-center">
+        <h1 class="m-4 mt-0 animate-pulse font-mono text-9xl font-bold text-stone-800">404</h1>
+        <p class="text-2xl font-medium text-stone-600">作品未找到</p>
+        <p class="text-stone-500">抱歉，您访问的作品不存在或已下线</p>
+        <div class="pt-4">
+          <button
+            type="button"
+            class="cursor-pointer border-0 bg-white px-6 py-3 font-medium text-stone-800 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 rounded-lg"
+            @click="goBack"
+          >
+            返回作品列表
+          </button>
+        </div>
       </div>
     </div>
   </div>

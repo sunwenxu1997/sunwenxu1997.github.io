@@ -109,10 +109,10 @@
             </button>
             <button
               class="group inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent transition-colors hover:bg-stone-100"
-              title="打开"
-              @click="openWork(work)"
+              title="复制链接"
+              @click="copyWorkLink(work)"
             >
-              <ExternalLink :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
+              <Copy :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
             </button>
           </div>
         </div>
@@ -164,7 +164,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
-import { Search, GripVertical, Pencil, Trash2, ExternalLink } from 'lucide-vue-next'
+import { Search, GripVertical, Pencil, Trash2, Copy } from 'lucide-vue-next'
 import { fetchWorksPage, bulkUpdateSortWeights } from '@/api/works'
 
 const emit = defineEmits(['edit', 'create', 'toggle-publish', 'remove', 'count-change'])
@@ -272,10 +272,14 @@ function onPageSizeChange(val) {
   loadData()
 }
 
-function openWork(work) {
-  const url = work.open_url || work.slug
-  if (!url) return
-  window.open(url.startsWith('http') ? url : window.location.origin + '/#' + url, '_blank')
+async function copyWorkLink(work) {
+  if (!work.id) return
+  try {
+    await navigator.clipboard.writeText(`${window.location.origin}/#/work/${work.id}`)
+    toast.success('详情链接已复制')
+  } catch {
+    toast.error('复制失败，请手动复制')
+  }
 }
 
 // ====== Drag & Drop ======

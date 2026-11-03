@@ -464,10 +464,21 @@ async function saveWork() {
     if (form.id) {
       payload.id = form.id
     }
-    await upsertWork(payload)
+    const saved = await upsertWork(payload)
     // 先关弹框再通知父组件（父组件会切到列表页，弹框挂在 #app 上，不关会浮在上面）
     closeMeta()
-    toast.success(isEdit ? '更新成功' : '发布成功')
+    // 发布/存草稿/更新成功后默认复制带 id 的详情链接，方便直接分享
+    let copied = false
+    if (saved?.id) {
+      try {
+        await navigator.clipboard.writeText(`${window.location.origin}/#/work/${saved.id}`)
+        copied = true
+      } catch {
+        /* 复制失败（如权限被拒）只提示保存成功，不影响主流程 */
+      }
+    }
+    const action = isEdit ? '更新' : form.is_published ? '发布' : '存草稿'
+    toast.success(`${action}成功${copied ? '，详情链接已复制' : ''}`)
     emit('saved')
   } catch (e) {
     console.error(e)
