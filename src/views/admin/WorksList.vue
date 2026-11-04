@@ -235,11 +235,15 @@ watch(total, (val) => {
 }, { immediate: true })
 
 // ====== 数据请求 ======
+// 请求序号：连续点翻页会并发多个请求，旧响应后到会覆盖新页数据（表现为相邻两页内容重复）
+let loadSeq = 0
+
 /**
  * @param {Object} [options]
  * @param {boolean} [options.silent] - 静默刷新：已有数据时不显示"加载中"，避免列表高度塌陷、滚动位置丢失
  */
 async function loadData({ silent = false } = {}) {
+  const seq = ++loadSeq
   if (!silent || !works.value.length) loading.value = true
   try {
     const res = await fetchWorksPage({
@@ -248,28 +252,24 @@ async function loadData({ silent = false } = {}) {
       search: search.value.trim(),
       tags: activeTags.value
     })
-    works.value = res.data
-    total.value = res.total
+    // 已有更新的请求发出，丢弃这次结果
+    if (seq !== loadSeq) return
 
-    // 自动回退到有效页码（删除最后一页唯一条目时）
+    // 当前页已超出有效范围（如删掉最后一页唯一一条）：回退页码，交给 watch 重新请求
     const maxPage = Math.ceil(res.total / pageSize.value) || 1
     if (currentPage.value > maxPage) {
       currentPage.value = maxPage
-      // 重新请求正确页码的数据
-      const retry = await fetchWorksPage({
-        page: currentPage.value,
-        pageSize: pageSize.value,
-        search: search.value.trim(),
-        tags: activeTags.value
-      })
-      works.value = retry.data
-      total.value = retry.total
+      return
     }
+
+    works.value = res.data
+    total.value = res.total
   } catch (e) {
+    if (seq !== loadSeq) return
     console.error(e)
     toast.error('加载失败: ' + (e.message || e))
   } finally {
-    loading.value = false
+    if (seq === loadSeq) loading.value = false
   }
 }
 

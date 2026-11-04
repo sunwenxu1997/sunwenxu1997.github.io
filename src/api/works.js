@@ -16,11 +16,17 @@ const SELECT_COLUMNS = '*'
 // works_meta.id 为 uuid 类型：非 uuid 的值（空串、旧版 slug）直接走 eq('id') 会被数据库拒绝（22P02）
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-/** 默认排序：sort_weight DESC → date DESC → created_at DESC */
+/**
+ * 默认排序：sort_weight DESC → date DESC → created_at DESC → id ASC
+ * 最后一列 id 是唯一键兑底：种子数据里大量记录 sort_weight=0、date=NULL、
+ * created_at 相同（同一个事务插入），没有唯一列时 Postgres 对并列行的返回
+ * 顺序不确定，LIMIT/OFFSET 分页会出现重复或漏行。
+ */
 const DEFAULT_ORDER = [
   { column: 'sort_weight', ascending: false },
   { column: 'date', ascending: false, nullsFirst: false },
-  { column: 'created_at', ascending: false }
+  { column: 'created_at', ascending: false },
+  { column: 'id', ascending: true }
 ]
 
 function applyOrder(query) {
