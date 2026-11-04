@@ -217,7 +217,7 @@ const openChatbot = () => {
         <div :class="currentView === 'grid' ? 'pt-3' : 'sm:px-0'">
           <div
             class="flex justify-between title-ref"
-            :class="currentView === 'grid' ? 'py-0' : 'py-6'"
+            :class="currentView === 'grid' ? 'pb-2' : 'pt-6 pb-2'"
           >
             <div
               class="work-title uppercase text-stone-800 text-sm font-bold"
@@ -362,7 +362,7 @@ const openChatbot = () => {
   display: flex;
   gap: 6px;
   margin-bottom: 8px;
-  margin-top: 8px;
+  margin-top: 4px;
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: thin;
