@@ -38,24 +38,74 @@
         <!-- 上：封面（整块 420px 居中，内部标签/缩略图/URL 左对齐同宽） -->
         <div class="mx-auto flex w-full max-w-[420px] flex-col gap-2.5">
           <label class="block text-xs font-medium tracking-[0.03em] text-stone-600">封面</label>
-          <img
-            v-if="form.cover_url"
-            class="box-border block w-full rounded-lg border border-stone-200 bg-stone-50 object-cover [aspect-ratio:16/9]"
-            :src="form.cover_url"
-            alt="cover"
-            @error="form.cover_url = ''"
-          />
+          <!-- 预览区同时是拖拽上传区：点一下即可选本地图片 -->
           <div
-            v-else
-            class="box-border flex w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-stone-300 bg-stone-50 text-[11px] text-stone-400 [aspect-ratio:16/9]"
+            class="relative box-border block w-full cursor-pointer overflow-hidden rounded-lg bg-stone-50 transition-colors [aspect-ratio:16/9]"
+            :class="dragOver
+              ? 'border-2 border-stone-700'
+              : form.cover_url
+                ? 'border border-stone-200'
+                : 'border-2 border-dashed border-stone-300'"
+            @click="pickCover"
+            @dragover.prevent="dragOver = true"
+            @dragleave.prevent="dragOver = false"
+            @drop.prevent="onCoverDrop"
           >
-            <ImageIcon :size="16" class="opacity-60" />
-            <span>暂无封面</span>
+            <img
+              v-if="form.cover_url"
+              class="block h-full w-full object-cover"
+              :src="form.cover_url"
+              alt="cover"
+              @error="form.cover_url = ''"
+            />
+            <div
+              v-else
+              class="flex h-full w-full flex-col items-center justify-center gap-1 text-[11px] text-stone-400"
+            >
+              <ImageIcon :size="16" class="opacity-60" />
+              <span>{{ uploading ? '上传中...' : '点击或拖拽图片到此处' }}</span>
+            </div>
+            <div
+              v-if="uploading"
+              class="absolute inset-0 flex items-center justify-center bg-white/70 text-xs text-stone-700"
+            >
+              上传中...
+            </div>
           </div>
+
+          <!-- 本地文件选择：原生 input 隐藏，按钮和预览区都触发它 -->
+          <input
+            ref="coverInputRef"
+            type="file"
+            class="hidden"
+            :accept="COVER_ACCEPT"
+            @change="onCoverChange"
+          />
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-stone-200 bg-transparent px-2.5 py-1 text-xs text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-60"
+              :disabled="uploading"
+              @click="pickCover"
+            >
+              <Upload :size="13" />
+              {{ uploading ? '上传中...' : form.cover_url ? '更换图片' : '上传图片' }}
+            </button>
+            <button
+              v-if="form.cover_url"
+              class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-stone-200 bg-transparent px-2.5 py-1 text-xs text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800"
+              @click="copyCoverUrl"
+            >
+              <Copy :size="13" />
+              复制链接
+            </button>
+            <span class="ml-auto text-[11px] text-stone-400">{{ COVER_SIZE_HINT }}</span>
+          </div>
+
           <input
             v-model="form.cover_url"
             class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-[7px] text-[13px] text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
-            placeholder="封面图 URL"
+            placeholder="封面图 URL（也可直接粘贴外链）"
           />
         </div>
       </div>
@@ -255,8 +305,9 @@
 <script setup>
 import { ref, reactive, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { toast } from 'vue-sonner'
-import { ImageIcon, Eye, EyeOff } from 'lucide-vue-next'
+import { ImageIcon, Eye, EyeOff, Upload, Copy } from 'lucide-vue-next'
 import { upsertWork } from '@/api/works'
+import { uploadCover, deleteCoverByUrl, COVER_ACCEPT, COVER_SIZE_HINT } from '@/api/storage'
 import MarkdownBody from '@/components/markdown/MarkdownBody.vue'
 
 defineProps({
@@ -274,6 +325,12 @@ const metaOpen = ref(false)
 const metaBodyRef = ref(null)
 // 预览开关：默认关闭，只显示 Markdown 输入，打开后右侧并排渲染
 const previewOpen = ref(false)
+// 封面本地文件上传：隐藏的 file input、上传中状态、拖拽高亮
+const coverInputRef = ref(null)
+const uploading = ref(false)
+const dragOver = ref(false)
+// 本次编辑中被替换掉的封面 URL，保存成功后才真正删除文件
+const replacedCovers = ref([])
 
 const form = reactive({
   id: null,
@@ -339,6 +396,64 @@ function onTagBackspace(e) {
   }
 }
 
+// ====== 封面：本地图片上传 ======
+function markCoverReplaced(oldUrl) {
+  if (!oldUrl || replacedCovers.value.includes(oldUrl)) return
+  replacedCovers.value.push(oldUrl)
+}
+
+function pickCover() {
+  if (uploading.value) return
+  coverInputRef.value?.click()
+}
+
+function onCoverChange(e) {
+  const file = e.target.files?.[0]
+  // 清空 value，同一张图再选一次也能触发 change
+  e.target.value = ''
+  handleCoverFile(file)
+}
+
+function onCoverDrop(e) {
+  dragOver.value = false
+  handleCoverFile(e.dataTransfer?.files?.[0])
+}
+
+async function handleCoverFile(file) {
+  if (!file || uploading.value) return
+  uploading.value = true
+  try {
+    const url = await uploadCover(file)
+    markCoverReplaced(form.cover_url)
+    form.cover_url = url
+    toast.success('封面上传成功')
+  } catch (e) {
+    console.error(e)
+    toast.error('上传失败: ' + (e.message || e))
+  } finally {
+    uploading.value = false
+  }
+}
+
+async function copyCoverUrl() {
+  if (!form.cover_url) return
+  try {
+    await navigator.clipboard.writeText(form.cover_url)
+    toast.success('封面链接已复制')
+  } catch {
+    toast.error('复制失败，请手动选择链接')
+  }
+}
+
+/** 保存成功后清理本次被替换掉的封面文件；失败只告警，不影响保存结果 */
+async function cleanupReplacedCovers(currentUrl) {
+  const stale = replacedCovers.value.filter((url) => url && url !== currentUrl)
+  replacedCovers.value = []
+  for (const url of stale) {
+    await deleteCoverByUrl(url)
+  }
+}
+
 function onClear() {
   if (!window.confirm('确定清空当前表单？未保存的内容会丢失')) return
   resetForm()
@@ -364,6 +479,9 @@ function resetForm() {
   slugManuallyEdited = false
   legacyHtmlOnly.value = false
   tagInput.value = ''
+  replacedCovers.value = []
+  uploading.value = false
+  dragOver.value = false
   closeMeta()
   emit('reset')
 }
@@ -379,6 +497,9 @@ function editWork(work) {
   prevAutoSlug = work.slug || '/external/'
   slugManuallyEdited = true
   tagInput.value = ''
+  replacedCovers.value = []
+  uploading.value = false
+  dragOver.value = false
   closeMeta()
 }
 
@@ -467,6 +588,8 @@ async function saveWork() {
     const saved = await upsertWork(payload)
     // 先关弹框再通知父组件（父组件会切到列表页，弹框挂在 #app 上，不关会浮在上面）
     closeMeta()
+    // 保存成功后再清理被替换掉的旧封面文件，中途取消不会误删线上仍在引用的图
+    await cleanupReplacedCovers(saved?.cover_url)
     // 发布/存草稿/更新成功后默认复制带 id 的详情链接，方便直接分享
     let copied = false
     if (saved?.id) {

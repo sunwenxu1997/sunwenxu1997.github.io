@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import defaultSet from '@/settings'
+import { deleteCoverByUrl } from './storage'
 import { fetchLocalWorks } from './works.local'
 
 /**
@@ -216,9 +217,17 @@ export async function bulkUpdateSortWeights(records) {
 
 /**
  * 删除作品（admin only）
+ * 记录删成功后连带清理 Storage 里的封面文件（外链封面会被 deleteCoverByUrl 忽略）
  * @param {string} id - works_meta.id (UUID)
  */
 export async function deleteWork(id) {
-  const { error } = await supabase.from(TABLE).delete().eq('id', id)
+  const { data, error } = await supabase
+    .from(TABLE)
+    .delete()
+    .eq('id', id)
+    .select('cover_url')
+    .maybeSingle()
   if (error) throw error
+  // 先删记录再删文件：文件清理失败只告警，不会让作品删不掉
+  await deleteCoverByUrl(data?.cover_url)
 }
