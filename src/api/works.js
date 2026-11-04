@@ -12,6 +12,8 @@ import { fetchLocalWorks } from './works.local'
 
 const TABLE = 'works_meta'
 const SELECT_COLUMNS = '*'
+// works_meta.id 为 uuid 类型：非 uuid 的值（空串、旧版 slug）直接走 eq('id') 会被数据库拒绝（22P02）
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /** 默认排序：sort_weight DESC → date DESC → created_at DESC */
 const DEFAULT_ORDER = [
@@ -114,6 +116,7 @@ export async function fetchWorksStats() {
  * @returns {Promise<Object|null>} 单条记录或 null
  */
 export async function fetchWorkBySlug(slug) {
+  if (!slug) return null
   const { data, error } = await supabase
     .from(TABLE)
     .select(SELECT_COLUMNS)
@@ -129,6 +132,7 @@ export async function fetchWorkBySlug(slug) {
  * @returns {Promise<Object|null>} 单条记录或 null
  */
 export async function fetchWorkById(id) {
+  if (!id) return null
   const { data, error } = await supabase
     .from(TABLE)
     .select(SELECT_COLUMNS)
@@ -145,10 +149,14 @@ export async function fetchWorkById(id) {
  * @returns {Promise<Object|null>}
  */
 export async function fetchWorkDetail(key) {
+  // 空 key（如 /work/ 无参数）直接视为不存在，不发起请求
+  if (!key) return null
   if (defaultSet.useLocalWorks) {
     const list = fetchLocalWorks()
     return list.find((item) => item.id === key) || list.find((item) => item.slug === key) || null
   }
+  // 非 uuid（旧版 slug 链接）直接按 slug 查，避开 uuid 类型校验报错
+  if (!UUID_RE.test(key)) return fetchWorkBySlug(key)
   return (await fetchWorkById(key)) || (await fetchWorkBySlug(key))
 }
 
@@ -214,4 +222,3 @@ export async function deleteWork(id) {
   const { error } = await supabase.from(TABLE).delete().eq('id', id)
   if (error) throw error
 }
-
