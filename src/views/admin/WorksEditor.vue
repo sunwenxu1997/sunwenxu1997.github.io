@@ -586,7 +586,9 @@ async function saveWork() {
       payload.id = form.id
     }
     const saved = await upsertWork(payload)
-    // 先关弹框再通知父组件（父组件会切到列表页，弹框挂在 #app 上，不关会浮在上面）
+    // 新建成功后回填 id：留在编辑页继续点保存时走 update，避免又插入一条重复记录
+    if (!isEdit && saved?.id) form.id = saved.id
+    // 先关弹框（挂在 #app 上，不关会一直浮在编辑页上方）
     closeMeta()
     // 保存成功后再清理被替换掉的旧封面文件，中途取消不会误删线上仍在引用的图
     await cleanupReplacedCovers(saved?.cover_url)

@@ -1,7 +1,7 @@
 <template>
   <div class="admin-works grid min-h-screen grid-cols-1 grid-rows-[56px_1fr] bg-stone-100 font-sans text-stone-800 antialiased">
     <!-- ========== TOP NAV ========== -->
-    <nav class="relative col-span-full flex h-14 items-center justify-center border-b border-stone-200 bg-white px-6 max-md:px-3.5">
+    <nav class="sticky top-0 z-30 col-span-full flex h-14 items-center justify-center border-b border-stone-200 bg-white px-6 max-md:px-3.5">
       <button
         class="absolute left-6 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent transition-colors hover:bg-stone-100 max-md:left-3.5"
         aria-label="菜单"
@@ -89,7 +89,7 @@
     </aside>
 
     <!-- ========== MAIN ========== -->
-    <main class="overflow-y-auto bg-stone-100">
+    <main ref="mainRef" class="overflow-y-auto bg-stone-100">
       <WorksEditor
         v-show="activeTab === 'editor'"
         ref="editorRef"
@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { supabase } from '@/lib/supabase'
@@ -133,14 +133,43 @@ const stats = ref({ total: 0, published: 0, withCover: 0, vueDemo: 0 })
 const listCount = ref(0)
 const editorRef = ref(null)
 const listRef = ref(null)
+const mainRef = ref(null)
+// 每个 tab 的滚动位置：v-show 切走时另一侧是 display:none，整页高度塌陷会把
+// scrollTop 夹回顶部，所以每次切换前自己记一份，切回来后写回去
+const scrollPositions = { editor: 0, list: 0 }
 
 const avatarInitials = computed(() => {
   const name = profile.value?.username || authStore.user?.email || 'A'
   return name.slice(0, 2).toUpperCase()
 })
 
-function switchTab(tab) {
+/** 当前滚动位置：兼容 main 内部滚动与 body 滚动两种情形 */
+function readScroll() {
+  return mainRef.value?.scrollTop || window.scrollY || 0
+}
+
+function writeScroll(top) {
+  if (mainRef.value) mainRef.value.scrollTop = top
+  window.scrollTo(0, top)
+}
+
+/** 记下当前 tab 的位置并切到目标 tab，恢复目标 tab 上次的位置 */
+async function switchTab(tab) {
+  if (tab === activeTab.value) return
+  scrollPositions[activeTab.value] = readScroll()
   activeTab.value = tab
+  await nextTick()
+  writeScroll(scrollPositions[tab])
+}
+
+/** 从列表进编辑器：列表位置留档，编辑器每次从顶部开始看表单 */
+async function enterEditor() {
+  if (activeTab.value === 'editor') return
+  scrollPositions[activeTab.value] = readScroll()
+  scrollPositions.editor = 0
+  activeTab.value = 'editor'
+  await nextTick()
+  writeScroll(0)
 }
 
 function toggleDrawer() {
@@ -172,18 +201,17 @@ async function logout() {
 
 function onCreateNew() {
   editorRef.value?.resetForm()
-  activeTab.value = 'editor'
+  enterEditor()
 }
 
 function onEditWork(work) {
   editorRef.value?.editWork(work)
-  activeTab.value = 'editor'
+  enterEditor()
 }
 
 async function onSaved() {
-  // 静默刷新：已有列表数据时不显示"加载中"，避免切回列表时整页重置
+  // 保存后留在当前编辑页，只静默刷新统计与列表缓存（下次切到列表时数据已是新的）
   await Promise.all([loadStats(), listRef.value?.loadData({ silent: true })])
-  activeTab.value = 'list'
 }
 
 async function onTogglePublish(work) {
