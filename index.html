@@ -61,7 +61,7 @@
         height: 2px;
         background-color: #333333;
         margin-top: 0.33rem;
-        transition: 0.3s;
+        /* 不要写在 CSS 里：进度由 rAF 逐帧驱动，transition 会让数字追上目标的动画互相干扰 */
       }
 
       #loading-progress .progress::after {
@@ -77,74 +77,51 @@
   </head>
 
   <body>
-    <div id="app">
-      <div id="loading-progress">
-        <div class="loading">
-          <div><span class="value">0</span>%</div>
-          <div class="progress"></div>
-        </div>
+    <!-- 加载遮罩放在 #app 外面，避免 Vue 挂载时被一起替换掉 -->
+    <div id="loading-progress">
+      <div class="loading">
+        <div><span class="value">0</span>%</div>
+        <div class="progress"></div>
       </div>
     </div>
+    <div id="app"></div>
+    <!-- 首屏进度工具：以 module 引入，模块执行即开始统计真实加载事件 -->
+    <script type="module" src="/src/utils/loading.js"></script>
     <script type="module" src="/src/main.js"></script>
   </body>
-  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.1.0-beta.3/libs/cn/index.js"></script>
+  <script defer src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.1.0-beta.3/libs/cn/index.js"></script>
   <script>
-    const token = 'pat_jdhg7lITLl35eC8kdmlBsrohuTuwj0VRc17Dxe4NykmK8LYaRLq6ZuGliQDTQPQ0'
-    window.cozeWebSDK = new CozeWebSDK.WebChatClient({
-      auth: {
-        // 身份验证方法，默认类型为‘unauth’，这意味着不需要身份验证；建议设置为“token”，表示通过PAT （Personal Access token）或OAuth进行身份验证
-        type: 'token',
-        // 当类型设置为“令牌”时，需要配置PAT（个人访问令牌）或OAuth访问令牌进行身份验证。
-        token: token,
-        // 当访问令牌过期时，请使用新的令牌并根据需要进行设置。
-        onRefreshToken: () => token
-      },
-      config: {
-        bot_id: '7472275735093395482'
-      },
-      componentProps: {
-        title: '誰在花里胡哨'
-      },
-      ui: {
-        base: {
-          zIndex: 99
+    // 等 SDK（defer）执行完再初始化，避免阻塞首屏加载进度起步
+    window.addEventListener('DOMContentLoaded', function () {
+      if (!window.CozeWebSDK) return
+      const token = 'pat_jdhg7lITLl35eC8kdmlBsrohuTuwj0VRc17Dxe4NykmK8LYaRLq6ZuGliQDTQPQ0'
+      window.cozeWebSDK = new CozeWebSDK.WebChatClient({
+        auth: {
+          // 身份验证方法，默认类型为‘unauth’，这意味着不需要身份验证；建议设置为“token”，表示通过PAT （Personal Access token）或OAuth进行身份验证
+          type: 'token',
+          // 当类型设置为“令牌”时，需要配置PAT（个人访问令牌）或OAuth访问令牌进行身份验证。
+          token: token,
+          // 当访问令牌过期时，请使用新的令牌并根据需要进行设置。
+          onRefreshToken: () => token
         },
-        asstBtn: {
-          isNeed: false
+        config: {
+          bot_id: '7472275735093395482'
         },
-        footer: {
-          isShow: false
+        componentProps: {
+          title: '誰在花里胡哨'
+        },
+        ui: {
+          base: {
+            zIndex: 99
+          },
+          asstBtn: {
+            isNeed: false
+          },
+          footer: {
+            isShow: false
+          }
         }
-      }
-    })
-  </script>
-  <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
-  <script>
-    window.NProgress = NProgress
-    window.NProgress.configure({ showSpinner: false }) // NProgress Configuration
-    window.NProgress.start()
-    window.NProgress.inc(0.8)
-    const elValue = document.querySelector('#loading-progress .value')
-    const elProgress = document.querySelector('#loading-progress .progress')
-    window.NProgressTimer = setInterval(() => {
-      let value = Math.floor(window.NProgress.status * 100)
-      elValue.innerHTML = value
-      elProgress.style.width = value + '%'
-    }, 100)
-    window.NProgress.close = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          elValue.innerHTML = 100
-          elProgress.style.width = 100 + '%'
-          window.NProgress.done()
-          clearInterval(window.NProgressTimer)
-          // 防止app挂载过快导致没有加载到100%的进度
-          setTimeout(() => {
-            resolve()
-          }, 300)
-          // 默认给一个0.5s的延迟，主要是为了实现效果
-        }, 500)
       })
-    }
+    })
   </script>
 </html>
