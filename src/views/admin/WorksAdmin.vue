@@ -181,7 +181,8 @@ function onEditWork(work) {
 }
 
 async function onSaved() {
-  await Promise.all([loadStats(), listRef.value?.loadData()])
+  // 静默刷新：已有列表数据时不显示"加载中"，避免切回列表时整页重置
+  await Promise.all([loadStats(), listRef.value?.loadData({ silent: true })])
   activeTab.value = 'list'
 }
 
@@ -190,7 +191,9 @@ async function onTogglePublish(work) {
   try {
     await upsertWork({ ...work, is_published: willPublish })
     toast.success(willPublish ? '已发布' : '已取消发布')
-    await Promise.all([loadStats(), listRef.value?.loadData()])
+    // 只翻转该行开关状态，不重拉整页：保留页码、筛选与滚动位置
+    listRef.value?.applyPublished(work.id, willPublish)
+    await loadStats()
   } catch (e) {
     console.error(e)
     toast.error('更新失败: ' + (e.message || e))
@@ -202,7 +205,9 @@ async function onRemoveWork(work) {
   try {
     await deleteWork(work.id)
     toast.success('删除成功')
-    await Promise.all([loadStats(), listRef.value?.loadData()])
+    // 只移除该行，不重拉整页：保留页码、筛选与滚动位置；删空当前页时内部回上一页
+    listRef.value?.removeRow(work.id)
+    await loadStats()
   } catch (e) {
     console.error(e)
     toast.error('删除失败: ' + (e.message || e))

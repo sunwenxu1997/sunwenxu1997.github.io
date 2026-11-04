@@ -109,10 +109,10 @@
             </button>
             <button
               class="group inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent transition-colors hover:bg-stone-100"
-              title="复制链接"
-              @click="copyWorkLink(work)"
+              title="打开详情"
+              @click="openWorkLink(work)"
             >
-              <Copy :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
+              <ExternalLink :size="15" class="text-stone-400 transition-colors group-hover:text-stone-800" />
             </button>
           </div>
         </div>
@@ -163,11 +163,14 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
-import { Search, GripVertical, Pencil, Trash2, Copy } from 'lucide-vue-next'
+import { Search, GripVertical, Pencil, Trash2, ExternalLink } from 'lucide-vue-next'
 import { fetchWorksPage, bulkUpdateSortWeights } from '@/api/works'
 
 const emit = defineEmits(['edit', 'create', 'toggle-publish', 'remove', 'count-change'])
+
+const router = useRouter()
 
 const placeholderCover = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
@@ -232,8 +235,12 @@ watch(total, (val) => {
 }, { immediate: true })
 
 // ====== 数据请求 ======
-async function loadData() {
-  loading.value = true
+/**
+ * @param {Object} [options]
+ * @param {boolean} [options.silent] - 静默刷新：已有数据时不显示"加载中"，避免列表高度塌陷、滚动位置丢失
+ */
+async function loadData({ silent = false } = {}) {
+  if (!silent || !works.value.length) loading.value = true
   try {
     const res = await fetchWorksPage({
       page: currentPage.value,
@@ -272,14 +279,36 @@ function onPageSizeChange(val) {
   loadData()
 }
 
-async function copyWorkLink(work) {
-  if (!work.id) return
-  try {
-    await navigator.clipboard.writeText(`${window.location.origin}/#/work/${work.id}`)
-    toast.success('详情链接已复制')
-  } catch {
-    toast.error('复制失败，请手动复制')
+/**
+ * 局部更新某行的发布状态（列表开关用），不重载整页
+ * @param {string} id - works_meta.id
+ * @param {boolean} isPublished - 新的发布状态
+ */
+function applyPublished(id, isPublished) {
+  const row = works.value.find((w) => w.id === id)
+  if (row) row.is_published = isPublished
+}
+
+/**
+ * 局部移除某行，不重载整页
+ * 当前页被删空且下面还有数据时回上一页（currentPage 变化会触发 watch 自动重拉）
+ * @param {string} id - works_meta.id
+ */
+function removeRow(id) {
+  const idx = works.value.findIndex((w) => w.id === id)
+  if (idx === -1) return
+  works.value.splice(idx, 1)
+  total.value = Math.max(0, total.value - 1)
+  if (!works.value.length && total.value > 0 && currentPage.value > 1) {
+    currentPage.value -= 1
   }
+}
+
+/** 打开作品详情页（新标签页），用 router 解析以兼容 base 路径 */
+function openWorkLink(work) {
+  if (!work.id) return
+  const { href } = router.resolve({ path: `/work/${work.id}` })
+  window.open(href, '_blank', 'noopener,noreferrer')
 }
 
 // ====== Drag & Drop ======
@@ -383,7 +412,7 @@ onMounted(() => {
   loadData()
 })
 
-defineExpose({ loadData })
+defineExpose({ loadData, applyPublished, removeRow })
 </script>
 
 <style scoped>
