@@ -74,6 +74,8 @@ const nextWork = computed(() => {
 async function load() {
   loading.value = true
   toc.value = []
+  // 进入详情（含上下篇切换）回到顶部，避免带着列表页的滚动偏移打开
+  window.scrollTo(0, 0)
   // SPA 会话内是否存在上级路由：直接打开链接（新标签/地址栏输入）时 state.back 为 null，隐藏返回按钮
   hasHistory.value = router.options.history.state?.back != null
   try {

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onActivated, watch, onDeactivated, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useWorksStore } from '@/stores/works'
 import IconGithub from '@/components/icons/github.vue'
 import IconLink from '@/components/icons/link.vue'
@@ -39,16 +39,32 @@ watch(workRoutes, () => {
     initWorkAnimations()
   })
 })
-onActivated(() => {
+// 记录列表滚动位置：keep-alive 只缓存组件状态，窗口滚动值需要自己存取
+let savedScrollY = 0
+// 上次离开列表后落在哪个路由：用于判断返回时能不能直接复用缓存数据
+let leftToPath = ''
+const route = useRoute()
+onActivated(async () => {
   desktopQuery.addEventListener('change', syncIsDesktop)
   onBus('searchInput', searchInput)
   searchIconShow.value = true
-  worksStore.init()
   gsap.registerPlugin(ScrollTrigger)
+  // 从作品详情返回时复用缓存，不再重复请求；列表为空或从其它页面（如后台改过数据）返回时照常刷新
+  const fromDetail = leftToPath.startsWith('/work')
+  if (!worksStore.works.length || !fromDetail) await worksStore.init()
+  // 先回滚位置、再建滚动动画：恢复到的视口内元素才会被判定为已进入，入场动画不丢
+  await nextTick()
+  if (savedScrollY > 0) {
+    window.scrollTo(0, savedScrollY)
+    bodyScrollTop.value = savedScrollY
+  }
   bodyScrollTrigger()
   initWorkAnimations()
 })
 onDeactivated(() => {
+  // 组件 DOM 卸下后 window.scrollY 可能已被夹到 0，优先用滚动监听记录的值
+  savedScrollY = bodyScrollTop.value || window.scrollY
+  leftToPath = route.path
   desktopQuery.removeEventListener('change', syncIsDesktop)
   ScrollTrigger.killAll()
 })
