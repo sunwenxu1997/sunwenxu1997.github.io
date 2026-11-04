@@ -16,6 +16,13 @@ import { onBus } from '@/utils/bus.js'
 const bodyScrollTop = ref(0)
 // 视图模式：list 竖列（默认）/ grid 平铺卡片，localStorage 记住选择
 const viewMode = ref(localStorage.getItem('works-view-mode') === 'grid' ? 'grid' : 'list')
+// 移动端（<640px）固定竖列：不展示切换按钮，也不套用平铺样式
+const desktopQuery = window.matchMedia('(min-width: 640px)')
+const isDesktop = ref(desktopQuery.matches)
+const syncIsDesktop = (e) => {
+  isDesktop.value = e.matches
+}
+const currentView = computed(() => (isDesktop.value ? viewMode.value : 'list'))
 const workItemRef = ref(),
   searchValue = ref(''),
   searchButtonRef = ref(null),
@@ -33,6 +40,7 @@ watch(workRoutes, () => {
   })
 })
 onActivated(() => {
+  desktopQuery.addEventListener('change', syncIsDesktop)
   onBus('searchInput', searchInput)
   searchIconShow.value = true
   worksStore.init()
@@ -41,6 +49,7 @@ onActivated(() => {
   initWorkAnimations()
 })
 onDeactivated(() => {
+  desktopQuery.removeEventListener('change', syncIsDesktop)
   ScrollTrigger.killAll()
 })
 const toTop = () => {
@@ -138,12 +147,12 @@ const openChatbot = () => {
   <div
     id="works-page"
     class="px-4 pt-28 selection:bg-stone-700 selection:text-white sm:m-auto"
-    :class="viewMode === 'grid' ? 'sm:px-24' : 'sm:max-w-screen-sm sm:px-60'"
+    :class="currentView === 'grid' ? 'sm:px-24' : 'sm:max-w-screen-sm sm:px-60'"
   >
     <!-- 列表容器：平铺模式下变栅格（移动端单列 / sm 两列 / lg 三列 / 2xl 四列），竖列模式保持原单列流式布局 -->
     <div
       :class="
-        viewMode === 'grid'
+        currentView === 'grid'
           ? 'grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4'
           : ''
       "
@@ -152,12 +161,12 @@ const openChatbot = () => {
         cursor="search"
         ref="workItemRef"
         class="w-full relative"
-        :class="viewMode === 'grid' ? 'mb-0 pt-0' : 'pt-12 mb-12'"
+        :class="currentView === 'grid' ? 'mb-0 mt-0' : 'mt-12'"
         v-for="(item, index) in workRoutes"
         :key="index"
       >
         <div
-          v-if="item.date && viewMode === 'list'"
+          v-if="item.date && currentView === 'list'"
           class="hidden text-xs font-bold -mb-4 leading-4 translate-x-28 items-center justify-end sticky top-16 text-black sm:flex"
         >
           <IconDate class="mr-1 relative -top-[1px]" />
@@ -166,7 +175,7 @@ const openChatbot = () => {
         <div
           class="work-cover w-full aspect-video relative bg-stone-100 cursor-pointer"
           :class="
-            viewMode === 'grid' &&
+            currentView === 'grid' &&
             'overflow-hidden rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)]'
           "
           title="查看详情"
@@ -188,14 +197,15 @@ const openChatbot = () => {
             alt=""
           />
         </div>
-        <div :class="viewMode === 'grid' ? 'pt-3' : 'px-8 sm:px-0'">
+        <!-- 文本区：移动端不再额外缩进，让标题/标签/日期与封面左缘对齐 -->
+        <div :class="currentView === 'grid' ? 'pt-3' : 'sm:px-0'">
           <div
             class="flex justify-between title-ref"
-            :class="viewMode === 'grid' ? 'py-0' : 'py-6'"
+            :class="currentView === 'grid' ? 'py-0' : 'py-6'"
           >
             <div
               class="work-title uppercase text-stone-800 text-sm font-bold"
-              :class="viewMode === 'grid' && 'truncate'"
+              :class="currentView === 'grid' && 'truncate'"
               title="查看详情"
               @click="goDetail(item)"
               @mouseenter="onMouseenterElement"
@@ -204,7 +214,7 @@ const openChatbot = () => {
               {{ item.name }}
             </div>
             <div
-              v-if="viewMode === 'list'"
+              v-if="currentView === 'list'"
               class="group grid grid-rows-1 grid-flow-col gap-4"
               @mouseenter="onMouseenterElement"
               @mouseleave="onMouseleaveElement"
@@ -232,8 +242,8 @@ const openChatbot = () => {
           </div>
           <div
             v-if="item.date"
-            class="text-stone-500 flex items-center"
-            :class="viewMode === 'grid' ? 'mt-2 mb-0' : 'mb-2 sm:hidden'"
+            class="text-black flex items-center"
+            :class="currentView === 'grid' ? 'mt-2 mb-0' : 'mb-2 sm:hidden'"
           >
             <IconDate class="mr-1 relative -top-[1px]" />
             <span class="text-xs font-bold">{{ item.date }}</span>
@@ -288,15 +298,19 @@ const openChatbot = () => {
         ></path>
       </svg>
     </div>
-    <!-- 视图切换：单按钮在竖列 / 平铺之间切换，图标展示即将切换到的视图 -->
-    <div @mouseenter="onMouseenterElement" @mouseleave="onMouseleaveElement">
+    <!-- 视图切换：单按钮在竖列 / 平铺之间切换，图标展示即将切换到的视图；移动端固定竖列，不展示 -->
+    <div
+      class="hidden sm:block"
+      @mouseenter="onMouseenterElement"
+      @mouseleave="onMouseleaveElement"
+    >
       <button
         type="button"
-        :title="viewMode === 'list' ? '切换为平铺卡片' : '切换为竖列'"
+        :title="currentView === 'list' ? '切换为平铺卡片' : '切换为竖列'"
         class="w-8 h-8 flex justify-center items-center rounded-full border-0 bg-white text-stone-600 shadow-md cursor-pointer transition-colors hover:text-stone-800 hover:shadow"
-        @click="setViewMode(viewMode === 'list' ? 'grid' : 'list')"
+        @click="setViewMode(currentView === 'list' ? 'grid' : 'list')"
       >
-        <LayoutGrid v-if="viewMode === 'list'" :size="16" />
+        <LayoutGrid v-if="currentView === 'list'" :size="16" />
         <List v-else :size="16" />
       </button>
     </div>
@@ -332,6 +346,7 @@ const openChatbot = () => {
   display: flex;
   gap: 6px;
   margin-bottom: 8px;
+  margin-top: 8px;
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: thin;
@@ -346,6 +361,15 @@ const openChatbot = () => {
 }
 .works-tags::-webkit-scrollbar-track {
   background: transparent;
+}
+/* 移动端标签换行展示，避免横向溢出只能滑动；同时加大标签与日期的间距 */
+@media (max-width: 639.98px) {
+  .works-tags {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    white-space: normal;
+    margin-bottom: 14px;
+  }
 }
 .works-tag {
   font-size: 11px;
