@@ -147,12 +147,6 @@ const goDetail = (item) => {
   if (!item.id) return
   $router.push('/work/' + encodeURI(item.id))
 }
-/** 优先 slug（不含 /external），其次 code_url，最后 open_url */
-const resolveContentPath = (item) => {
-  if (item.slug && !item.slug.includes('/external')) return item.slug
-  if (item.code_url) return item.code_url
-  return item.open_url
-}
 const openChatbot = () => {
   window.cozeWebSDK.showChatBot()
 }
@@ -242,9 +236,9 @@ const openChatbot = () => {
                 <IconGithub class="group-hover:opacity-50 hover:!opacity-100" />
               </a>
               <a
-                v-if="resolveContentPath(item)"
+                v-if="item.open_url"
                 title="打开内容"
-                @click="toPath(resolveContentPath(item))"
+                @click="toPath(item.open_url)"
               >
                 <IconSkip class="group-hover:opacity-50 hover:!opacity-100" />
               </a>

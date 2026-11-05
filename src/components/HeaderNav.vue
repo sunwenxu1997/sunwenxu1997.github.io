@@ -1,5 +1,4 @@
 <script setup>
-import 'element-plus/es/components/message/style/css'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { emitBus } from '@/utils/bus.js'

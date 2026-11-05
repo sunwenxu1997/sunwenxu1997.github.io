@@ -2,7 +2,7 @@ export default {
   /**
    * useLocalWorks 作品数据源开关
    *  false → 走 Supabase works_meta 表（线上行为，默认）
-   *  true  → 直接读 settings.js externalRoutes + src/views/works 组件 meta 的静态数据
+   *  true  → 直接读下方 externalRoutes 的静态数据
    * 仅本地调试时改为 true，提交前记得改回 false
    */
   useLocalWorks: false,
@@ -76,7 +76,6 @@ export default {
       name: 'animejs-鼠标跟随赞助爱心',
       meta: {
         codepen: 'https://codepen.io/sunwenxu1997/pen/azvNBVY',
-        code: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io/blob/main/src/views/works/anime/anime-%E8%B7%9F%E9%9A%8F%E5%B0%8F%E7%88%B1%E5%BF%83',
         date: '2025-07-22',
         cover: 'https://iili.io/FND8Vl2.gif',
         link: 'https://juejin.cn/post/7529834029219856399',
@@ -87,7 +86,6 @@ export default {
       name: 'Animejs-draggable导航拖拽切换',
       meta: {
         codepen: 'https://codepen.io/sunwenxu1997/pen/azzxeXo',
-        code: 'https://github.com/sunwenxu1997/sunwenxu1997.github.io/blob/main/src/views/works/anime/anime-draggable%E6%A0%87%E7%AD%BE%E5%86%85%E5%AE%B9%E5%88%87%E6%8D%A2.vue',
         date: '2025-05-26',
         cover: 'https://iili.io/3bObz9j.gif',
         link: 'https://juejin.cn/post/7508556336540745728',

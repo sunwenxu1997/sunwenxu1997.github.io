@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import IconGithub from '@/components/icons/github.vue'
 import IconEmail from '@/components/icons/email.vue'
 import defaultSet from '../settings'

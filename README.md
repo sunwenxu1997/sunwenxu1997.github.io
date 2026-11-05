@@ -165,7 +165,7 @@ flowchart TD
 |-- tsconfig.json           // TypeScript 配置
 |-- public/                 // 静态资源
 |-- src/
-    |-- settings.js         // 设置项（externalRoutes 外部路由配置）
+    |-- settings.js         // 设置项（externalRoutes 外部作品配置）
     |-- lib/
     |   |-- supabase.js     // Supabase 客户端初始化
     |-- api/
@@ -177,37 +177,36 @@ flowchart TD
     |-- components/         // 公共组件
     |-- router/
     |   |-- index.js        // 路由配置 + 守卫
-    |   |-- works.js        // 作品路由自动生成
     |-- utils/
     |-- views/
         |-- Home.vue        // 首页
         |-- Works.vue       // 作品列表
+        |-- WorkDetail.vue  // 作品详情
         |-- About.vue       // 关于
         |-- Login.vue       // 管理员登录
         |-- admin/
-        |   |-- WorksAdmin.vue  // 后台管理
-        |-- works/          // 作品目录，可自定义分类
-            |-- cssHtml/
-            |-- gsap/
-            |-- anime/
-            |-- svg/
-            |-- three/
-            |-- other/
+            |-- WorksAdmin.vue  // 后台管理
 ```
 
 ### 作品配置
-其中 `router/works.js` 为作品目录的配置：
+作品数据分为两部分：
+
+- **线上数据**：Supabase 的 `works_meta` 表，通过 `/admin/works` 后台维护（字段 `name`/`slug`/`cover_url`/`info_md`/`code_url`/`link_url`/`codepen_url`/`open_url`/`date`/`tags`/`sort_weight`/`is_published` 等）。
+- **本地静态数据**：`settings.js` 的 `externalRoutes`，仅在 `useLocalWorks: true` 时作为数据源（本地调试用），字段结构如下：
 
 | 字段 | 描述 |
 | --- | --- |
-| path | 功能代码地址 |
-| name | 标题（项目内文件无需配置，自动匹配当前文件名） |
-| code | github 代码地址（项目内文件无需配置，自动匹配当前文件路径） |
-| link | 掘金文章地址 |
-| cover | 封面图 |
-| info | 内容信息描述 |
-| sort | 排序数值越大越靠前 |
-| date | 日期（年月日） |
+| name | 标题（同时作为 slug 的一部分，形如 `/external/<name>`） |
+| meta.open | 打开地址 |
+| meta.code | github 代码地址 |
+| meta.link | 掘金文章地址 |
+| meta.codepen | codepen 在线地址 |
+| meta.cover | 封面图 |
+| meta.info | 内容信息描述（Markdown，支持 ``` 围栏代码块） |
+| meta.sort | 排序数值越大越靠前 |
+| meta.date | 日期（年月日） |
+| meta.hidden | 是否隐藏 |
+| meta.tags | 标签，不写时默认为 `external` |
 
 <center><img src="https://sunwenxu1997.github.io/images/readme_3.jpg"  width="800"></center>
 

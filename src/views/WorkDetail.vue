@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
-import { animate, stagger } from 'animejs'
+import { gsap } from 'gsap'
 import { fetchWorkDetail } from '@/api/works'
 import { useWorksStore } from '@/stores/works'
 import MarkdownBody from '@/components/markdown/MarkdownBody.vue'
@@ -29,13 +29,11 @@ const hasHistory = ref(false)
 function playActionsEnter() {
   const els = actionsRef.value?.children
   if (!els || !els.length) return
-  animate(els, {
-    opacity: [0, 1],
-    translateY: [-16, 0],
-    duration: 600,
-    delay: stagger(120),
-    ease: 'out(3)'
-  })
+  gsap.fromTo(
+    els,
+    { opacity: 0, y: -16 },
+    { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'power3.out' }
+  )
 }
 
 /** 路由参数：作品 id；多段路径视为旧版 slug 链接（补前导斜杠），单段视为 id */
@@ -51,13 +49,8 @@ const workKey = computed(() => {
   return key.includes('/') ? `/${key}` : key
 })
 
-const contentPath = computed(() => {
-  const item = work.value
-  if (!item) return ''
-  // 组件作品：打开对应 demo 页面；外部作品：打开 open_url
-  if (item.slug && !item.slug.includes('/external')) return item.slug
-  return item.open_url || item.code_url || ''
-})
+/** 打开内容：统一取 open_url（本地 demo 路由已下线，slug 不再可访问） */
+const contentPath = computed(() => work.value?.open_url || '')
 
 const currentIndex = computed(() =>
   worksStore.works.findIndex((item) => item.id === work.value?.id)
@@ -104,10 +97,8 @@ function scrollTo(id) {
 }
 
 function openContent() {
-  const path = contentPath.value
-  if (!path) return
-  if (path.startsWith('http')) window.open(path, '_blank')
-  else router.push(encodeURI(path))
+  if (!contentPath.value) return
+  window.open(contentPath.value, '_blank')
 }
 
 async function copyLink() {

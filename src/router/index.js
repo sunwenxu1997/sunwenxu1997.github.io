@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import routes from './works'
 import { useAuthStore } from '../stores/auth'
 
 const router = createRouter({
@@ -34,7 +33,6 @@ const router = createRouter({
       component: () => import('../views/admin/WorksAdmin.vue'),
       meta: { title: '作品管理', requiresAdmin: true }
     },
-    ...routes,
     {
       path: '/work/:id(.*)',
       name: 'WorkDetail',

@@ -6,16 +6,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue({
-      template: {
-        compilerOptions: {
-          // 为 css-doodle 组件添加自定义元素标签
-          isCustomElement: (tag) => tag.startsWith('css-doodle') || tag.startsWith('style')
-        }
-      }
-    })
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
