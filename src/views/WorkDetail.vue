@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { gsap } from 'gsap'
@@ -13,6 +13,7 @@ import IconCodepen from '@/components/icons/codepen.vue'
 import IconSkip from '@/components/icons/IconSkip.vue'
 import IconBack from '@/components/icons/back.vue'
 import IconCopy from '@/components/icons/copy.vue'
+import { burstConfetti, disposeConfetti } from '@/utils/confetti'
 
 const route = useRoute()
 const router = useRouter()
@@ -116,16 +117,56 @@ const previewCover = () => {
   if (work.value?.cover_url) window.open(work.value.cover_url, '_blank')
 }
 
+// 点空白彩蛋：正文、目录、操作按钮及各类可交互元素不参与
+const CELEBRATE_IGNORE = [
+  'article', // 正文内容
+  'aside', // 目录
+  '[data-no-confetti]', // 右侧悬浮操作条
+  'a',
+  'button',
+  'input',
+  'textarea',
+  'select',
+  'label',
+  '[role="button"]'
+].join(',')
+
+/** 点击非内容 / 目录 / 操作按钮区域时，以点击点为圆心炸开礼花（可反复触发） */
+function onBackgroundClick(evt) {
+  // 只在作品正常渲染后响应：加载骨架与 404 页不触发
+  if (!work.value) return
+  if (evt.target.closest?.(CELEBRATE_IGNORE)) return
+  burstConfetti(evt.clientX, evt.clientY)
+}
+
+/**
+ * 连点空白处会被浏览器识别为双击/三击，默认行为会把附近整段正文（含封面）选中。
+ * 在空白区按下时直接阻止默认的选区行为，并清掉之前残留的误选。
+ */
+function onBackgroundMouseDown(evt) {
+  if (!work.value) return
+  if (evt.target.closest?.(CELEBRATE_IGNORE)) return
+  evt.preventDefault()
+  window.getSelection?.()?.removeAllRanges()
+}
+
 onMounted(async () => {
   if (!worksStore.works.length) await worksStore.init()
   await load()
 })
 
+// 路由切走后清理画布与动画循环，避免泄漏
+onUnmounted(disposeConfetti)
+
 watch(workKey, load)
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col bg-white px-4 pb-24 pt-12 max-sm:pb-20 max-sm:pt-10">
+  <div
+    class="flex min-h-screen flex-col bg-white px-4 pb-24 pt-12 max-sm:pb-20 max-sm:pt-10"
+    @mousedown="onBackgroundMouseDown"
+    @click="onBackgroundClick"
+  >
     <!-- 目录：独立于内容列，固定在左侧空白区，不挤占正文宽度；<1240 隐藏 -->
     <aside
       v-if="toc.length"
@@ -152,6 +193,7 @@ watch(workKey, load)
     <div
       v-if="work"
       ref="actionsRef"
+      data-no-confetti
       class="fixed bottom-4 right-4 z-30 flex flex-col gap-2 min-[1240px]:bottom-10 min-[1240px]:right-[max(24px,calc(50vw_-_610px))] min-[1240px]:gap-2.5"
     >
       <button

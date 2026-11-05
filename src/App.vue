@@ -13,7 +13,7 @@ const keepAliveRoutes = computed(() => {
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
+  <Toaster position="top-right" />
   <HeaderNav />
   <router-view v-slot="{ Component }">
     <keep-alive :include="keepAliveRoutes">
