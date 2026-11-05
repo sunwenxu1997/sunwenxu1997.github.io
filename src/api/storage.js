@@ -44,7 +44,7 @@ function extOf(file) {
 
 /**
  * 生成对象路径：covers/年月/时间戳-随机串.扩展名
- * 不用作品 slug：中文会被 URL 编码，且同一作品多次上传会互相覆盖
+ * 不用作品名：中文会被 URL 编码，且同一作品多次上传会互相覆盖
  */
 function buildPath(file) {
   const now = new Date()

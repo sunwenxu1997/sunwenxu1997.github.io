@@ -36,7 +36,7 @@ function playActionsEnter() {
   )
 }
 
-/** 路由参数：作品 id；多段路径视为旧版 slug 链接（补前导斜杠），单段视为 id */
+/** 路由参数：作品 id；id 含 /（如本地静态数据的 /external/<name>）时补前导斜杠 */
 const workKey = computed(() => {
   const raw = route.params.id
   const path = Array.isArray(raw) ? raw.join('/') : raw || ''
@@ -49,7 +49,7 @@ const workKey = computed(() => {
   return key.includes('/') ? `/${key}` : key
 })
 
-/** 打开内容：统一取 open_url（本地 demo 路由已下线，slug 不再可访问） */
+/** 打开内容：统一取 open_url */
 const contentPath = computed(() => work.value?.open_url || '')
 
 const currentIndex = computed(() =>

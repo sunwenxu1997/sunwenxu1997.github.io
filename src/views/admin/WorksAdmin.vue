@@ -70,8 +70,8 @@
           <div class="mt-0.5 text-[11px] text-stone-400">有封面</div>
         </div>
         <div class="rounded-[10px] border border-stone-100 bg-stone-50 px-2 py-2.5 text-center">
-          <div class="text-lg font-bold text-stone-800">{{ stats.vueDemo }}</div>
-          <div class="mt-0.5 text-[11px] text-stone-400">Vue Demo</div>
+          <div class="text-lg font-bold text-stone-800">{{ stats.withLink }}</div>
+          <div class="mt-0.5 text-[11px] text-stone-400">已配置链接</div>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ const activeTab = ref('editor')
 const drawerOpen = ref(false)
 const saving = ref(false)
 const profile = ref(null)
-const stats = ref({ total: 0, published: 0, withCover: 0, vueDemo: 0 })
+const stats = ref({ total: 0, published: 0, withCover: 0, withLink: 0 })
 const listCount = ref(0)
 const editorRef = ref(null)
 const listRef = ref(null)

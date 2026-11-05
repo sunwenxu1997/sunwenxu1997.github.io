@@ -7,7 +7,6 @@
           v-model="form.name"
           class="min-w-0 flex-1 border-0 bg-transparent py-1 text-[17px] font-semibold text-stone-800 outline-none placeholder:font-medium placeholder:text-stone-400 max-md:basis-[60%] max-md:text-base"
           placeholder="作品名称"
-          @input="autoSlug"
         />
         <div class="flex shrink-0 gap-2 max-md:ml-auto">
           <button
@@ -182,22 +181,6 @@
 
           <div ref="metaBodyRef" class="grid min-h-0 flex-1 content-start gap-3.5 overflow-y-auto px-5 py-[18px] outline-none" tabindex="-1">
             <div class="flex flex-col">
-              <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">Slug</label>
-              <input
-                v-model="form.slug"
-                :disabled="!!form.id"
-                :class="[
-                  'box-border w-full rounded-lg border border-stone-200 px-3.5 py-2.5 text-sm outline-none transition-colors',
-                  form.id
-                    ? 'cursor-not-allowed bg-stone-100 text-stone-400'
-                    : 'bg-stone-50 text-stone-800 placeholder:text-stone-400 focus:border-stone-700'
-                ]"
-                placeholder="/external/..."
-                @input="onSlugInput"
-              />
-            </div>
-
-            <div class="flex flex-col">
               <label class="mb-1.5 block text-xs font-medium tracking-[0.03em] text-stone-600">日期</label>
               <input
                 v-model="form.date"
@@ -291,7 +274,7 @@
             <button
               class="cursor-pointer rounded-lg border-0 bg-stone-800 px-[22px] py-[9px] text-[13px] font-medium text-white transition-colors hover:bg-stone-900 disabled:cursor-not-allowed disabled:opacity-70"
               :disabled="saving"
-              @click="confirmSave"
+              @click="saveWork"
             >
               {{ saving ? '保存中...' : (form.id ? '确认更新' : '确认发布') }}
             </button>
@@ -334,7 +317,6 @@ const replacedCovers = ref([])
 
 const form = reactive({
   id: null,
-  slug: '/external/',
   name: '',
   cover_url: '',
   info_md: '',
@@ -358,22 +340,6 @@ const primaryText = computed(() => {
   if (form.id) return '更新'
   return form.is_published ? '发布' : '存为草稿'
 })
-
-let prevAutoSlug = '/external/'
-let slugManuallyEdited = false
-
-function autoSlug() {
-  const name = form.name.trim()
-  const expected = '/external/' + name
-  if (!slugManuallyEdited || form.slug === prevAutoSlug || !form.slug) {
-    form.slug = name ? expected : '/external/'
-    prevAutoSlug = form.slug
-  }
-}
-
-function onSlugInput() {
-  slugManuallyEdited = form.slug !== prevAutoSlug
-}
 
 function addTag() {
   const raw = tagInput.value.trim()
@@ -462,7 +428,6 @@ function onClear() {
 function resetForm() {
   Object.assign(form, {
     id: null,
-    slug: '/external/',
     name: '',
     cover_url: '',
     info_md: '',
@@ -475,8 +440,6 @@ function resetForm() {
     is_published: true,
     tags: []
   })
-  prevAutoSlug = '/external/'
-  slugManuallyEdited = false
   legacyHtmlOnly.value = false
   tagInput.value = ''
   replacedCovers.value = []
@@ -494,8 +457,6 @@ function editWork(work) {
     tags: Array.isArray(work.tags) ? [...work.tags] : []
   })
   legacyHtmlOnly.value = !work.info_md && !!work.info_html
-  prevAutoSlug = work.slug || '/external/'
-  slugManuallyEdited = true
   tagInput.value = ''
   replacedCovers.value = []
   uploading.value = false
@@ -552,24 +513,15 @@ onUnmounted(() => {
   lockScroll(false)
 })
 
-async function confirmSave() {
-  if (!form.slug.trim()) {
-    toast.warning('Slug 不能为空')
-    return
-  }
-  await saveWork()
-}
-
 async function saveWork() {
-  if (!form.name.trim() || !form.slug.trim()) {
-    toast.warning('名称和 Slug 不能为空')
+  if (!form.name.trim()) {
+    toast.warning('作品名称不能为空')
     return
   }
   const isEdit = !!form.id
   emit('save-start')
   try {
     const payload = {
-      slug: form.slug,
       name: form.name,
       cover_url: form.cover_url || null,
       // 只写 info_md；info_html 保持原样，作为迁移前的回滚备份

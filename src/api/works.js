@@ -13,7 +13,7 @@ import { fetchLocalWorks } from './works.local'
 
 const TABLE = 'works_meta'
 const SELECT_COLUMNS = '*'
-// works_meta.id 为 uuid 类型：非 uuid 的值（空串、旧版 slug）直接走 eq('id') 会被数据库拒绝（22P02）
+// works_meta.id 为 uuid 类型：非 uuid 的值（空串、非法路由参数）直接走 eq('id') 会被数据库拒绝（22P02）
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 /**
@@ -71,7 +71,7 @@ export async function fetchAllWorks() {
  * @param {Object} params
  * @param {number} params.page - 页码（从 1 开始）
  * @param {number} params.pageSize - 每页条数
- * @param {string} [params.search] - 搜索关键词（匹配 name / slug）
+ * @param {string} [params.search] - 搜索关键词（匹配 name）
  * @param {string[]} [params.tags] - 标签过滤（多选，AND 关系）
  * @returns {Promise<{data: Array, total: number}>}
  */
@@ -79,7 +79,7 @@ export async function fetchWorksPage({ page = 1, pageSize = 10, search = '', tag
   let query = supabase.from(TABLE).select(SELECT_COLUMNS, { count: 'exact' })
 
   if (search) {
-    query = query.or(`name.ilike.%${search}%,slug.ilike.%${search}%`)
+    query = query.ilike('name', `%${search}%`)
   }
   if (tags.length > 0) {
     query = query.contains('tags', tags)
@@ -98,44 +98,29 @@ export async function fetchWorksPage({ page = 1, pageSize = 10, search = '', tag
 
 /**
  * 获取作品统计信息（侧边栏数据，需登录态）
- * @returns {Promise<{total: number, published: number, withCover: number, vueDemo: number}>}
+ * @returns {Promise<{total: number, published: number, withCover: number, withLink: number}>}
  */
 export async function fetchWorksStats() {
   // 只查轻量字段，减少数据传输
   const { data, error } = await supabase
     .from(TABLE)
-    .select('id, is_published, cover_url, slug, tags')
+    .select('id, is_published, cover_url, code_url, link_url, codepen_url, open_url')
   if (error) throw error
   const list = data || []
   return {
     total: list.length,
     published: list.filter((w) => w.is_published).length,
     withCover: list.filter((w) => w.cover_url).length,
-    vueDemo: list.filter(
-      (w) => w.slug?.includes('/external/vue-') || (w.tags || []).includes('vue')
+    // 任意一个外链字段有值即算已配置链接
+    withLink: list.filter(
+      (w) => w.code_url || w.link_url || w.codepen_url || w.open_url
     ).length
   }
 }
 
 /**
- * 按 slug 查询单条作品
- * @param {string} slug - 路由标识，如 '/external/vue-组件页面装修demo'
- * @returns {Promise<Object|null>} 单条记录或 null
- */
-export async function fetchWorkBySlug(slug) {
-  if (!slug) return null
-  const { data, error } = await supabase
-    .from(TABLE)
-    .select(SELECT_COLUMNS)
-    .eq('slug', slug)
-    .maybeSingle()
-  if (error) throw error
-  return data
-}
-
-/**
  * 按 id 查询单条作品
- * @param {string} id - works_meta.id（本地数据源时 id 等于 slug）
+ * @param {string} id - works_meta.id（本地数据源时为 /external/<name>）
  * @returns {Promise<Object|null>} 单条记录或 null
  */
 export async function fetchWorkById(id) {
@@ -150,27 +135,26 @@ export async function fetchWorkById(id) {
 }
 
 /**
- * 查询单条作品（详情页）：优先按 id，未命中回退按 slug（兼容旧链接）
+ * 查询单条作品（详情页）
  * useLocalWorks 开启时改读本地静态数据
- * @param {string} key - 作品 id 或旧版 slug
+ * @param {string} key - 作品 id
  * @returns {Promise<Object|null>}
  */
 export async function fetchWorkDetail(key) {
   // 空 key（如 /work/ 无参数）直接视为不存在，不发起请求
   if (!key) return null
   if (defaultSet.useLocalWorks) {
-    const list = fetchLocalWorks()
-    return list.find((item) => item.id === key) || list.find((item) => item.slug === key) || null
+    return fetchLocalWorks().find((item) => item.id === key) || null
   }
-  // 非 uuid（旧版 slug 链接）直接按 slug 查，避开 uuid 类型校验报错
-  if (!UUID_RE.test(key)) return fetchWorkBySlug(key)
-  return (await fetchWorkById(key)) || (await fetchWorkBySlug(key))
+  // 非 uuid 的 key 直接视为不存在，避开 uuid 类型校验报错（22P02）
+  if (!UUID_RE.test(key)) return null
+  return fetchWorkById(key)
 }
 
 /**
  * 新增或更新作品（admin only）
- * slug 相同时执行更新，否则新增
- * @param {Object} record - works_meta 行对象，需包含 slug 和 name
+ * 有 id 执行更新，无 id 新增（sort_weight 自动分配）
+ * @param {Object} record - works_meta 行对象，需包含 name
  * @returns {Promise<Object>} 写入后的完整记录
  */
 export async function upsertWork(record) {

@@ -116,7 +116,7 @@ flowchart LR
 
 | 字段 | 类型 | 描述 |
 | --- | --- | --- |
-| slug | text (unique) | 路由标识，如 `/external/vue-组件页面装修demo` |
+| id | uuid | 主键，详情页路由用的是它（`/work/:id`） |
 | name | text | 作品标题 |
 | cover_url | text | 封面图地址 |
 | info_html | text | 内容描述（支持 HTML） |
@@ -191,12 +191,12 @@ flowchart TD
 ### 作品配置
 作品数据分为两部分：
 
-- **线上数据**：Supabase 的 `works_meta` 表，通过 `/admin/works` 后台维护（字段 `name`/`slug`/`cover_url`/`info_md`/`code_url`/`link_url`/`codepen_url`/`open_url`/`date`/`tags`/`sort_weight`/`is_published` 等）。
+- **线上数据**：Supabase 的 `works_meta` 表，通过 `/admin/works` 后台维护（字段 `name`/`cover_url`/`info_md`/`code_url`/`link_url`/`codepen_url`/`open_url`/`date`/`tags`/`sort_weight`/`is_published` 等）。
 - **本地静态数据**：`settings.js` 的 `externalRoutes`，仅在 `useLocalWorks: true` 时作为数据源（本地调试用），字段结构如下：
 
 | 字段 | 描述 |
 | --- | --- |
-| name | 标题（同时作为 slug 的一部分，形如 `/external/<name>`） |
+| name | 标题（同时作为 id 的一部分，形如 `/external/<name>`） |
 | meta.open | 打开地址 |
 | meta.code | github 代码地址 |
 | meta.link | 掘金文章地址 |

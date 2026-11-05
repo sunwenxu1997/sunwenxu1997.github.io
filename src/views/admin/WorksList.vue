@@ -71,7 +71,6 @@
           <div class="min-w-0 self-center">
             <div class="truncate text-sm font-medium text-stone-800 max-md:text-[13px]">{{ work.name }}</div>
             <div class="mt-1 flex items-center gap-2.5 text-xs text-stone-400 max-md:flex-wrap max-md:gap-1.5">
-              <span>{{ work.slug }}</span>
               <span>{{ work.date }}</span>
             </div>
             <div v-if="work.tags && work.tags.length" class="row-tags mt-1.5 flex gap-1 overflow-x-auto whitespace-nowrap">

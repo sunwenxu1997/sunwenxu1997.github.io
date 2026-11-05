@@ -19,13 +19,12 @@ import defaultSet from '@/settings'
  *   tags                      →  tags（不写时固定为 external）
  */
 
-/** settings.externalRoutes 条目 → works_meta 结构，slug 规则与 DB 种子数据保持一致 */
+/** settings.externalRoutes 条目 → works_meta 结构；id 用 /external/<name>，与旧版详情链接兼容 */
 function fromExternal(item) {
-  const slug = `/external/${item.name}`
+  const id = `/external/${item.name}`
   const { cover, info, code, link, codepen, open, sort, date, hidden, tags } = item.meta || {}
   return {
-    id: slug,
-    slug,
+    id,
     name: item.name,
     cover_url: cover || null,
     info_md: info || null,
