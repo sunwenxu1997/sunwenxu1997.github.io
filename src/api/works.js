@@ -67,15 +67,52 @@ export async function fetchAllWorks() {
 }
 
 /**
- * 服务端分页查询作品（含搜索/标签过滤，需登录态）
+ * 「字段是否已配置」筛选项：逻辑键 → 真实列名
+ * 编辑器保存时空串统一写成 null，种子数据也用 NULL，所以只按 null 判断即可
+ */
+const PRESENCE_COLUMNS = {
+  cover: 'cover_url',
+  date: 'date'
+}
+
+// 四个外链字段作为一个整体筛：任一有值即算已配置（与侧边栏「已配置链接」统计口径一致）
+const LINK_COLUMNS = ['code_url', 'link_url', 'codepen_url', 'open_url']
+
+/**
+ * 追加「字段是否已配置」条件
+ * @param {Object} query - supabase 查询构造器
+ * @param {Object} filters - { cover|date|links: 'any' | 'filled' | 'empty' }
+ * @returns {Object} 追加条件后的查询构造器
+ */
+function applyPresenceFilters(query, filters) {
+  let q = query
+  for (const [key, column] of Object.entries(PRESENCE_COLUMNS)) {
+    const mode = filters?.[key]
+    if (mode !== 'filled' && mode !== 'empty') continue
+    q = mode === 'filled' ? q.not(column, 'is', null) : q.is(column, null)
+  }
+
+  const linkMode = filters?.links
+  if (linkMode === 'filled') {
+    // 任一外链非空；多个同列条件与 or 组之间都是 AND，不影响其他筛选
+    q = q.or(LINK_COLUMNS.map((column) => `${column}.not.is.null`).join(','))
+  } else if (linkMode === 'empty') {
+    for (const column of LINK_COLUMNS) q = q.is(column, null)
+  }
+  return q
+}
+
+/**
+ * 服务端分页查询作品（含搜索/标签/条件筛选，需登录态）
  * @param {Object} params
  * @param {number} params.page - 页码（从 1 开始）
  * @param {number} params.pageSize - 每页条数
  * @param {string} [params.search] - 搜索关键词（匹配 name）
  * @param {string[]} [params.tags] - 标签过滤（多选，AND 关系）
+ * @param {Object} [params.filters] - 条件筛选：封面/日期/链接（links）取 'any' | 'filled' | 'empty'，status 取 'any' | 'published' | 'draft'
  * @returns {Promise<{data: Array, total: number}>}
  */
-export async function fetchWorksPage({ page = 1, pageSize = 10, search = '', tags = [] }) {
+export async function fetchWorksPage({ page = 1, pageSize = 10, search = '', tags = [], filters = {} }) {
   let query = supabase.from(TABLE).select(SELECT_COLUMNS, { count: 'exact' })
 
   if (search) {
@@ -83,6 +120,12 @@ export async function fetchWorksPage({ page = 1, pageSize = 10, search = '', tag
   }
   if (tags.length > 0) {
     query = query.contains('tags', tags)
+  }
+  query = applyPresenceFilters(query, filters)
+  if (filters?.status === 'published') {
+    query = query.eq('is_published', true)
+  } else if (filters?.status === 'draft') {
+    query = query.eq('is_published', false)
   }
 
   query = applyOrder(query)

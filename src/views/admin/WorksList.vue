@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full bg-white">
     <div class="w-full overflow-hidden">
-      <!-- 搜索 + 新建（同一行，按钮贴右） -->
+      <!-- 搜索 + 筛选 + 新建（同一行，新建按钮贴右） -->
       <div class="flex items-center gap-2.5 px-8 py-3 max-md:px-3.5 max-md:py-2.5">
         <div class="relative min-w-0 max-w-[280px] flex-1 max-md:max-w-none">
           <Search class="absolute left-2.5 top-1/2 h-[13px] w-[13px] -translate-y-1/2 text-stone-400" :size="13" />
@@ -10,6 +10,62 @@
             class="box-border w-full rounded-lg border border-stone-200 bg-stone-50 py-1.5 pl-[30px] pr-2.5 text-[13px] text-stone-800 outline-none transition-colors placeholder:text-stone-400 focus:border-stone-700"
             placeholder="搜索列表..."
           />
+        </div>
+        <!-- 筛选：点开条件浮层，有条件生效时按钮高亮并显示条数 -->
+        <div ref="filterRef" class="shrink-0">
+          <button
+            ref="filterBtnRef"
+            class="relative inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-lg border transition-colors"
+            :class="activeFilterCount
+              ? 'border-stone-800 bg-stone-800 text-white'
+              : 'border-stone-200 bg-stone-50 text-stone-500 hover:bg-stone-100 hover:text-stone-800'"
+            title="筛选条件"
+            aria-label="筛选条件"
+            :aria-expanded="filterOpen"
+            @click="toggleFilter"
+          >
+            <SlidersHorizontal :size="14" />
+            <span
+              v-if="activeFilterCount"
+              class="absolute -right-1.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-none text-white"
+            >{{ activeFilterCount }}</span>
+          </button>
+
+          <!-- fixed 定位：列表容器有 overflow-hidden，absolute 浮层会被裁掉；展开时按按钮位置算坐标 -->
+          <div
+            v-if="filterOpen"
+            class="fixed z-[35] max-h-[min(70vh,420px)] overflow-y-auto rounded-xl border border-stone-200 bg-white p-3 shadow-[0_12px_32px_rgba(0,0,0,0.14)]"
+            :style="{ top: `${filterPos.top}px`, left: `${filterPos.left}px`, width: `${filterPos.width}px` }"
+          >
+            <div class="mb-2 flex items-center justify-between">
+              <span class="text-[13px] font-semibold text-stone-800">筛选条件</span>
+              <button
+                class="cursor-pointer border-0 bg-transparent p-0 text-xs text-stone-500 transition-colors hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-40"
+                :disabled="activeFilterCount === 0"
+                @click="resetFilters"
+              >
+                重置
+              </button>
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <div v-for="group in filterGroups" :key="group.key" class="flex items-center gap-2 py-[3px]">
+                <span class="w-[56px] shrink-0 text-xs text-stone-500">{{ group.label }}</span>
+                <div class="ml-auto inline-flex gap-[2px] rounded-md bg-stone-100 p-[2px]">
+                  <button
+                    v-for="opt in group.options"
+                    :key="opt.value"
+                    class="cursor-pointer whitespace-nowrap rounded-[5px] border-0 px-2 py-[3px] text-[11px] transition-colors"
+                    :class="filters[group.key] === opt.value
+                      ? 'bg-white text-stone-800 shadow-[0_1px_2px_rgba(0,0,0,0.08)]'
+                      : 'bg-transparent text-stone-500 hover:text-stone-800'"
+                    @click="filters[group.key] = opt.value"
+                  >
+                    {{ opt.label }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <button
           class="ml-auto shrink-0 cursor-pointer rounded-lg bg-stone-800 px-4 py-[7px] text-[13px] font-medium text-white transition-colors hover:bg-stone-900 max-md:px-3 max-md:py-1.5 max-md:text-xs"
@@ -39,7 +95,9 @@
 
       <!-- list -->
       <div v-if="loading" class="py-10 text-center text-sm text-stone-400">加载中...</div>
-      <div v-else-if="works.length === 0" class="py-10 text-center text-sm text-stone-400">暂无数据</div>
+      <div v-else-if="works.length === 0" class="py-10 text-center text-sm text-stone-400">
+        {{ hasQuery ? '没有符合条件的作品' : '暂无数据' }}
+      </div>
       <div v-else>
         <div
           v-for="work in works"
@@ -161,10 +219,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
-import { Search, GripVertical, Pencil, Trash2, ExternalLink } from 'lucide-vue-next'
+import { Search, SlidersHorizontal, GripVertical, Pencil, Trash2, ExternalLink } from 'lucide-vue-next'
 import { fetchWorksPage, bulkUpdateSortWeights } from '@/api/works'
 
 const emit = defineEmits(['edit', 'create', 'toggle-publish', 'remove', 'count-change'])
@@ -184,6 +242,81 @@ const searchInput = ref('')  // 输入框绑定（带防抖）
 const search = ref('')        // 实际查询使用的关键词
 const activeTags = ref([])
 
+// ====== 条件筛选（点筛选图标弹出的浮层） ======
+// any = 不限；filled / empty = 该字段是否已配置；links 类管四个外链字段，status 单独一档
+const filters = reactive({
+  cover: 'any',
+  date: 'any',
+  links: 'any',
+  status: 'any'
+})
+const filterOpen = ref(false)
+const filterRef = ref(null)
+const filterBtnRef = ref(null)
+// 浮层用 fixed 定位，位置在展开时按按钮位置算（避免被 overflow-hidden 裁掉）
+const filterPos = ref({ top: 0, left: 0, width: 286 })
+
+const PRESENCE_OPTIONS = [
+  { value: 'any', label: '全部' },
+  { value: 'filled', label: '已配置' },
+  { value: 'empty', label: '未配置' }
+]
+
+const filterGroups = [
+  { key: 'cover', label: '封面图', options: PRESENCE_OPTIONS },
+  { key: 'date', label: '日期', options: PRESENCE_OPTIONS },
+  { key: 'links', label: '相关链接', options: PRESENCE_OPTIONS },
+  {
+    key: 'status',
+    label: '发布状态',
+    options: [
+      { value: 'any', label: '全部' },
+      { value: 'published', label: '已发布' },
+      { value: 'draft', label: '草稿' }
+    ]
+  }
+]
+
+const activeFilterCount = computed(() => Object.values(filters).filter((v) => v !== 'any').length)
+// 是否有任何查询条件（搜索 / 标签 / 筛选），用于空结果时换个提示文案
+const hasQuery = computed(() => !!search.value.trim() || activeTags.value.length > 0 || activeFilterCount.value > 0)
+
+function resetFilters() {
+  Object.keys(filters).forEach((key) => {
+    filters[key] = 'any'
+  })
+}
+
+// 浮层：点击外部或按 Esc 关闭
+function onDocumentPointerDown(evt) {
+  if (!filterOpen.value) return
+  if (filterRef.value && !filterRef.value.contains(evt.target)) filterOpen.value = false
+}
+
+function onDocumentKeydown(evt) {
+  if (evt.key === 'Escape') filterOpen.value = false
+}
+
+/** 按筛选按钮在视口中的位置摆放浮层，右边贴边时向左回收 */
+function updateFilterPos() {
+  const el = filterBtnRef.value
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  const width = Math.min(286, window.innerWidth - 24)
+  const left = Math.max(12, Math.min(rect.left, window.innerWidth - width - 12))
+  filterPos.value = { top: Math.round(rect.bottom + 8), left: Math.round(left), width: Math.round(width) }
+}
+
+function toggleFilter() {
+  filterOpen.value = !filterOpen.value
+  if (filterOpen.value) updateFilterPos()
+}
+
+// 展开期间滚动 / 窗口尺寸变化时跟进位置，避免浮层与按钮脱开
+function onViewportChange() {
+  if (filterOpen.value) updateFilterPos()
+}
+
 const draggedId = ref(null)
 const dropTargetId = ref(null)
 const dropPosition = ref('after')
@@ -200,7 +333,7 @@ watch(searchInput, (val) => {
 
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value) || 1)
 
-const canSort = computed(() => activeTags.value.length === 0 && !search.value.trim())
+const canSort = computed(() => activeTags.value.length === 0 && !search.value.trim() && activeFilterCount.value === 0)
 
 // 从当前页数据中收集标签
 const allTags = computed(() => {
@@ -209,13 +342,13 @@ const allTags = computed(() => {
   return Array.from(set).sort()
 })
 
-// 搜索词或标签变化 → 重置到第1页
-watch([search, activeTags], () => {
+// 搜索词 / 标签 / 筛选条件变化 → 重置到第1页
+watch([search, activeTags, filters], () => {
   currentPage.value = 1
 }, { deep: true })
 
-// 页码 / 搜索 / 标签任一变化 → 重新请求
-watch([currentPage, search, activeTags], () => {
+// 页码 / 搜索 / 标签 / 筛选条件任一变化 → 重新请求
+watch([currentPage, search, activeTags, filters], () => {
   loadData()
 }, { deep: true })
 
@@ -249,7 +382,8 @@ async function loadData({ silent = false } = {}) {
       page: currentPage.value,
       pageSize: pageSize.value,
       search: search.value.trim(),
-      tags: activeTags.value
+      tags: activeTags.value,
+      filters: { ...filters }
     })
     // 已有更新的请求发出，丢弃这次结果
     if (seq !== loadSeq) return
@@ -409,6 +543,17 @@ async function persistOrder(orderedList, movedIndex) {
 
 onMounted(() => {
   loadData()
+  document.addEventListener('mousedown', onDocumentPointerDown)
+  document.addEventListener('keydown', onDocumentKeydown)
+  document.addEventListener('scroll', onViewportChange, true)
+  window.addEventListener('resize', onViewportChange)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('mousedown', onDocumentPointerDown)
+  document.removeEventListener('keydown', onDocumentKeydown)
+  document.removeEventListener('scroll', onViewportChange, true)
+  window.removeEventListener('resize', onViewportChange)
 })
 
 defineExpose({ loadData, applyPublished, removeRow })
