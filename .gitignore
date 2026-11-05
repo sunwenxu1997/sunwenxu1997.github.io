@@ -20,6 +20,7 @@ coverage
 
 # Editor directories and files
 .vscode/*
+.qoder/repowiki/knowledge/
 !.vscode/extensions.json
 .idea
 *.suo
