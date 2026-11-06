@@ -96,7 +96,7 @@
       <!-- list -->
       <div v-if="loading" class="py-10 text-center text-sm text-stone-400">加载中...</div>
       <div v-else-if="works.length === 0" class="py-10 text-center text-sm text-stone-400">
-        {{ hasQuery ? '没有符合条件的作品' : '暂无数据' }}
+        {{ hasQuery ? '没有符合条件的内容' : '暂无数据' }}
       </div>
       <div v-else>
         <div

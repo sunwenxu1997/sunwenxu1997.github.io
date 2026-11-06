@@ -8,7 +8,7 @@ import IconGithub from '@/components/icons/github.vue'
 import IconEmail from '@/components/icons/email.vue'
 const navs = [
   {
-    name: '作品',
+    name: '实验室',
     path: '/works',
     dot: true //是否展示小红点
   },

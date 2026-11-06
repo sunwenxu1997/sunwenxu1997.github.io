@@ -13,7 +13,7 @@ const router = createRouter({
       path: '/works',
       name: 'Works',
       component: () => import('../views/Works.vue'),
-      meta: { title: '作品', keepAlive: true }
+      meta: { title: '实验室', keepAlive: true }
     },
     {
       path: '/about',
@@ -31,13 +31,13 @@ const router = createRouter({
       path: '/admin/works',
       name: 'AdminWorks',
       component: () => import('../views/admin/WorksAdmin.vue'),
-      meta: { title: '作品管理', requiresAdmin: true }
+      meta: { title: '实验室管理', requiresAdmin: true }
     },
     {
       path: '/work/:id(.*)',
       name: 'WorkDetail',
       component: () => import('../views/WorkDetail.vue'),
-      meta: { title: '作品详情' }
+      meta: { title: '详情' }
     },
     {
       path: '/:pathMatch(.*)*',

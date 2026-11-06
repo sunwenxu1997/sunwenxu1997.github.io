@@ -59,7 +59,7 @@
       <div class="grid grid-cols-2 gap-1.5">
         <div class="rounded-[10px] border border-stone-100 bg-stone-50 px-2 py-2.5 text-center">
           <div class="text-lg font-bold text-stone-800">{{ stats.total }}</div>
-          <div class="mt-0.5 text-[11px] text-stone-400">作品总数</div>
+          <div class="mt-0.5 text-[11px] text-stone-400">内容总数</div>
         </div>
         <div class="rounded-[10px] border border-stone-100 bg-stone-50 px-2 py-2.5 text-center">
           <div class="text-lg font-bold text-stone-800">{{ stats.published }}</div>

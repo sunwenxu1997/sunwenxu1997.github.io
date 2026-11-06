@@ -6,7 +6,7 @@
         <input
           v-model="form.name"
           class="min-w-0 flex-1 border-0 bg-transparent py-1 text-[17px] font-semibold text-stone-800 outline-none placeholder:font-medium placeholder:text-stone-400 max-md:basis-[60%] max-md:text-base"
-          placeholder="作品名称"
+          placeholder="标题"
         />
         <div class="flex shrink-0 gap-2 max-md:ml-auto">
           <button
@@ -168,10 +168,10 @@
           class="flex max-h-[80vh] w-[480px] max-w-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_24px_64px_rgba(0,0,0,0.18)] max-md:max-h-[88vh]"
           role="dialog"
           aria-modal="true"
-          aria-label="作品信息"
+          aria-label="内容信息"
         >
           <div class="flex shrink-0 items-center justify-between border-b border-stone-100 px-5 py-4">
-            <h2 class="m-0 text-[15px] font-semibold text-stone-800">{{ form.id ? '更新作品' : '发布作品' }}</h2>
+            <h2 class="m-0 text-[15px] font-semibold text-stone-800">{{ form.id ? '更新内容' : '发布内容' }}</h2>
             <button
               class="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border-0 bg-transparent text-[15px] leading-none text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-800"
               aria-label="关闭"
@@ -475,7 +475,7 @@ function lockScroll(locked) {
 
 function openMeta() {
   if (!form.name.trim()) {
-    toast.warning('先填作品名称')
+    toast.warning('先填标题')
     return
   }
   metaOpen.value = true
@@ -515,7 +515,7 @@ onUnmounted(() => {
 
 async function saveWork() {
   if (!form.name.trim()) {
-    toast.warning('作品名称不能为空')
+    toast.warning('标题不能为空')
     return
   }
   const isEdit = !!form.id

@@ -203,7 +203,7 @@ watch(workKey, load)
         @click="goBack"
       >
         <IconBack />
-        <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">作品列表</span>
+        <span class="pointer-events-none absolute right-full top-1/2 mr-2.5 -translate-y-1/2 whitespace-nowrap rounded-md bg-stone-800 px-2 py-1 text-[11px] font-normal tracking-normal text-white opacity-0 transition-opacity group-hover:opacity-100">实验室</span>
       </button>
       <button
         type="button"
@@ -322,15 +322,15 @@ watch(workKey, load)
       <!-- 作品不存在：复用 404 页视觉效果；flex-1 撑满剩余高度避免溢出滚动条；保留返回按钮作为唯一出口 -->
       <div v-else class="flex flex-1 flex-col items-center justify-center text-center">
         <h1 class="m-4 mt-0 animate-pulse font-mono text-9xl font-bold text-stone-800">404</h1>
-        <p class="text-2xl font-medium text-stone-600">作品未找到</p>
-        <p class="text-stone-500">抱歉，您访问的作品不存在或已下线</p>
+        <p class="text-2xl font-medium text-stone-600">内容未找到</p>
+        <p class="text-stone-500">抱歉，您访问的内容不存在或已下线</p>
         <div class="pt-4">
           <button
             type="button"
             class="cursor-pointer border-0 bg-white px-6 py-3 font-medium text-stone-800 shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-colors hover:bg-stone-100 rounded-lg"
             @click="goBack"
           >
-            返回作品列表
+            返回实验室
           </button>
         </div>
       </div>
